@@ -1,15 +1,16 @@
----
-sidebar_position: 2
----
-
 # 🚀 Getting Started
+
+## System Requirements
+
+.NET SDK ver.8 or later
 
 ## Example scenario
 
 For the example scenario, you already have a Blazor WebAssembly application project, "MyBlazorWasmApp1", that includes the "Button" component.
 
-> [!Note]  
-> Blazing Story supports Blazor Server application projects as well as Blazor WebAssembly application projects.
+:::note
+Blazing Story supports Blazor Server application projects as well as Blazor WebAssembly application projects.
+:::
 
 ```
 📂 (working directory)
@@ -38,17 +39,20 @@ Open the solution file (.sln) with Visual Studio, and add a new **"Blazing Story
 
 ![](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/assets/readme-images/add-a-new-project.png)
 
-> [!Note]  
-> If you are working on a Blazor Server application project, you should add a new **"Blazing Story (Server App)"** project instead of the "Blazing Story (WebAssembly App)" project.
+:::note
+If you are working on a Blazor Server application project, you should add a new **"Blazing Story (Server App)"** project instead of the "Blazing Story (WebAssembly App)" project.
+:::
 
-> [!Note]  
-> To use the MCP server feature, you need to add a new **"Blazing Story (Server App)"** project and check the "Enable the MCP server feature" checkbox in the project creation dialog.  
-> Note that the MCP server feature is not available in the Blazing Story app when running on Blazor WebAssembly.
+:::note
+To use the MCP server feature, you need to add a new **"Blazing Story (Server App)"** project and check the "Enable the MCP server feature" checkbox in the project creation dialog.  
+Note that the MCP server feature is not available in the Blazing Story app when running on Blazor WebAssembly.
+:::
 
 If you are working on dotnet CLI, you can do that with the following commands in a terminal.
 
-> [!Note]  
-> Please remind again that this example scenario assumes that there is already a solution file (.sln) in the current directory with an existing Blazor WebAssembly app project.
+:::note
+Please remind again that this example scenario assumes that there is already a solution file (.sln) in the current directory with an existing Blazor WebAssembly app project.
+:::
 
 ```shell
 # Create a new Blazing Story app
@@ -57,12 +61,14 @@ dotnet new blazingstorywasm -n MyBlazorWasmApp1.Stories
 dotnet sln add ./MyBlazorWasmApp1.Stories/
 ```
 
-> [!Note]  
-> If you are working on a Blazor Server application project, you should run the `dotnet new blazingstoryserver` command.
+:::note
+If you are working on a Blazor Server application project, you should run the `dotnet new blazingstoryserver` command.
+:::
 
-> [!Note]  
-> To use the MCP server feature, you need to run the `dotnet new blazingstoryserver -mcp` command.
-> Note that the MCP server feature is not available in the Blazing Story app when running on Blazor WebAssembly.
+:::note
+To use the MCP server feature, you need to run the `dotnet new blazingstoryserver -mcp` command.
+Note that the MCP server feature is not available in the Blazing Story app when running on Blazor WebAssembly.
+:::
 
 The file layout will be the following tree.
 
@@ -102,8 +108,9 @@ Add a new "stories" file to the Blazing Story App project "MyBlazorWasmApp1.Stor
 
 A "stories" file is a normal Razor Component file (.razor), but it is annotated with the `[Stories]` attribute and includes a markup of the `<Stories>` component. There is no restriction on file layout of "stories" files, but usually, we place it in the "Stories" subfolder.
 
-> [!Warning]  
-> Currently, The file name of the "stories" files must end with ".stories.razor". This is a requirement of the naming convention for available the "Show code" feature in the "Docs" pages.
+:::warning
+Currently, The file name of the "stories" files must end with ".stories.razor". This is a requirement of the naming convention for available the "Show code" feature in the "Docs" pages.
+:::
 
 In this example scenario, we are going to write a "stories" for the `Button` component lived in the "MyBlazorWasmApp1" project, so we would add a new story file named "Button.stories.razor" in the "Stories" subfolder where is under the "MyBlazorWasmApp1.Stories" project.
 

@@ -1,7 +1,5 @@
 ---
-sidebar_position: 1
 slug: /
-title: "Blazing Story"
 ---
 
 # ![](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/assets/icon.min.64x64.svg) Blazing Story
