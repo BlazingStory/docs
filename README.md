@@ -1,41 +1,47 @@
-# Website
+# Blazing Story Documentation
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This repository contains the documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory), a clone of "Storybook" for Blazor, a frontend workshop for building UI components and pages in isolation.
+  
+The documentation is built using [Docusaurus](https://docusaurus.io/).
 
-## Installation
+## Repository Overview
 
-```bash
-yarn
-```
+- **Purpose:** Host and manage the documentation for Blazing Story.
+- **Framework:** Built with Docusaurus for easy authoring and deployment.
 
-## Local Development
+## Related Repository
 
-```bash
-yarn start
-```
+- Main Blazing Story GitHub: [https://github.com/jsakamoto/BlazingStory](https://github.com/jsakamoto/BlazingStory)
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+## Build Instructions
 
-## Build
+> **Requirements:**  
+> - Node.js v24 or later  
+> - npm
 
-```bash
-yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
+### Setup
 
 ```bash
-USE_SSH=true yarn deploy
+npm ci
 ```
 
-Not using SSH:
+### Development Server
 
 ```bash
-GIT_USER=<Your GitHub username> yarn deploy
+npm start
 ```
 
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+### Production Build
+
+```bash
+npm run build
+```
+
+This will generate the static site in the `build` directory.
+
+## License
+
+Copyright (c) 2025 J.Sakamoto
+
+This documentation is licensed under the [CC BY-SA 4.0](LICENSE).  
+You are free to share and adapt the material as long as you provide appropriate credit and distribute your contributions under the same license.
