@@ -6,7 +6,10 @@ Blzing Story provides a **MCP server** feature that allows Blazing Story to expo
 
 To catch up he power of the Blazing Story's MCP server feature, you can watch the following introduction video.
 
-https://github.com/user-attachments/assets/1e4ced81-8d06-4714-ad89-4b0987d958c9
+<video controls width="100%" style={{maxWidth: '800px'}}>
+  <source src="https://github.com/user-attachments/assets/1e4ced81-8d06-4714-ad89-4b0987d958c9" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
 
 Currently, the MCP server feature is available only in the Blazing Story app running on Blazor Server. It is not available in the Blazing Story app running on Blazor WebAssembly.
 
