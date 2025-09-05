@@ -66,6 +66,10 @@ const config: Config = {
       },
       items: [
         {
+          type: "search",
+          position: "right",
+        },
+        {
           href: "https://github.com/jsakamoto/BlazingStory",
           label: "GitHub",
           position: "right",
@@ -96,6 +100,7 @@ const config: Config = {
         indexDocs: true,
         highlightSearchTermsOnTargetPage: true,
         docsRouteBasePath: "/",
+        searchBarShortcutHint: false,
       },
     ],
   ],
