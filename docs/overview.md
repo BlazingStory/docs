@@ -1,5 +1,6 @@
 ---
 slug: /
+title: Overview
 ---
 
 # ![](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/assets/icon.min.64x64.svg) Blazing Story
