@@ -77,6 +77,9 @@ const config: Config = {
       links: [],
       copyright: `Copyright © ${new Date().getFullYear()} @jsakamoto. Built with Docusaurus.`,
     },
+    colorMode: {
+      respectPrefersColorScheme: true,
+    },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
