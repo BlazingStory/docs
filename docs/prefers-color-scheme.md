@@ -1,4 +1,4 @@
-# ⚙️ Configure prefers color scheme
+# ⚙️ Prefers color scheme
 
 By default, the "Blazing Story" app respects the system's color scheme, such as "dark" or "light". If you want to keep the "Blazing Story" app's color scheme to be either "dark" or "light" regardless of the system's color scheme, you can do that by setting the `AvailableColorScheme` parameter of the `BlazingStoryApp` component in your `App.razor` file.
 

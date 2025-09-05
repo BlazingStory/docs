@@ -48,9 +48,9 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl: "https://github.com/BlazingStory/docs/tree/main/",
         },
-        // theme: {
-        //   customCss: "./src/css/custom.css",
-        // },
+        theme: {
+          customCss: "./src/css/custom.css",
+        },
       } satisfies Preset.Options,
     ],
   ],
