@@ -15,7 +15,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: "https://blazingstory.github.io/",
+  url: "https://blazingstory.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/docs/",
@@ -85,6 +85,20 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+  themes: [
+    [
+      "@easyops-cn/docusaurus-search-local",
+      {
+        hashed: true,
+        language: ["en"],
+        indexBlog: false,
+        indexPages: false,
+        indexDocs: true,
+        highlightSearchTermsOnTargetPage: true,
+        docsRouteBasePath: "/",
+      },
+    ],
+  ],
 };
 
 export default config;
