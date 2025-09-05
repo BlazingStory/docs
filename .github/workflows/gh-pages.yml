@@ -1,0 +1,36 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      # Checkout the code
+      - uses: actions/checkout@v4
+
+      # Install Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      # Build the site
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+
+      # Deploy the site
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build
+          force_orphan: true
