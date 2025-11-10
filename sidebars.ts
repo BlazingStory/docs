@@ -44,6 +44,7 @@ const sidebars: SidebarsConfig = {
         { type: "doc", id: "configure-layouts" },
         { type: "doc", id: "configure-arguments" },
         { type: "doc", id: "sorting-navigation-tree-items" },
+        { type: "doc", id: "configure-pathbase" },
       ],
     },
     {
