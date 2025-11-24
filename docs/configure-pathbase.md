@@ -65,4 +65,4 @@ The result will be a single Blazing Story Server application hosting multiple Bl
 
 You can get the complete source code for the sample above from the following URL:
 
-- https://github.com/sample-by-jsakamoto/BlazingStory-PathBase
+- https://github.com/BlazingStory/samples/tree/main/pathbase/multi-branches
