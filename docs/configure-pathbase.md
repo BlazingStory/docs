@@ -26,6 +26,63 @@ If you are deploying your Blazing Story Server app as a virtual application in I
 
 ![The Blazor Server app running on the subpath URL, "/foo"](assets/configure-pathbase-003-app.png)
 
+### Deploying behind a reverse proxy (nginx, etc.)
+
+If you want to deploy your Blazing Story Server app behind a reverse proxy (such as nginx, Apache, or others) under a subpath, you need to configure both the reverse proxy and the Blazing Story Server app.
+
+#### Configure the reverse proxy
+
+Configure your reverse proxy to forward requests from the target subpath to the Blazing Story Server application. **The key point is to not rewrite the URL** when forwarding the request.
+
+Here's an example nginx configuration (`nginx.conf`):
+
+```nginx
+http {
+    ...
+    upstream blazor_backend {
+        # Specify the Blazor Server app running in the same container.
+        server 127.0.0.1:5000;
+    }
+
+    server {
+        listen 80;
+        server_name localhost;
+
+        # Mount Blazor app under /foo path, without URL rewriting.
+        location /foo {
+            proxy_pass http://blazor_backend;
+            ...
+        }
+    }
+}
+```
+
+#### Configure the Blazing Story Server app
+
+On the Blazing Story Server application side, you need to configure the `UsePathBase` middleware in the `Program.cs` file to handle requests to the target subpath appropriately:
+
+```cs
+...
+app.UseHttpsRedirection();
+
+app.UsePathBase("/foo"); // Add this line
+
+app.MapBlazingStoryMcp();
+app.MapStaticAssets();
+app.UseRouting();
+app.UseAntiforgery();
+app.MapRazorComponents<BlazingStoryServerComponent<IndexPage, IFramePage>>()
+    .AddInteractiveServerRenderMode();
+
+app.Run();
+```
+
+With this combination of reverse proxy configuration and `UsePathBase` middleware, your Blazing Story Server app will work correctly under the specified subpath.
+
+You can find a complete working example using nginx as a reverse proxy in the following GitHub repository:
+
+- https://github.com/BlazingStory/samples/tree/main/pathbase/nginx
+
 ### Changing the path base of the Blazing Story App component
 
 To change the path base of the Blazing Story Server Application component (not the entire application URL), you can use the `IApplicationBuilder.Map(string pathMatch, Func<IApplicationBuilder> configuration)` method in the `Program.cs` file of your Blazing Story Server app. Here's an example:
