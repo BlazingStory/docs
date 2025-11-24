@@ -13,16 +13,18 @@ jobs:
 
     steps:
       # Checkout the code
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Install Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: "24"
+          node-version: "25"
 
       # Build the site
       - name: Build
+        env:
+          NODE_OPTIONS: '--localstorage-file=".docusaurus/localstorage.json"'
         run: |
           npm ci
           npm run build
