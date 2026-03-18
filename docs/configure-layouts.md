@@ -1,4 +1,4 @@
-# Configure layouts
+# Configure Layouts
 
 If you want to apply the same layout for every story, you can specify the layout component to use when displaying a story. This architecture is mostly the same as Blazor's standard layout mechanism (see also: _["ASP.NET Core Blazor layouts | Microsoft Learn"](https://learn.microsoft.com/aspnet/core/blazor/components/layouts)_). A layout component must inherit from the `LayoutComponentBase` class and should have the rendering `@Body` in its markup. If you apply the layout component like the one below to stories,
 
@@ -13,7 +13,7 @@ If you want to apply the same layout for every story, you can specify the layout
 
 The story which applied the layout component above will be rendered as a child component of the `<YourThemeProvider>` component (imagine you implemented that component such a component including some cascading values) and will have 24-pixel padding.
 
-## Application level layout
+## Application Level Layout
 
 The specified layout component for stories is in multiple levels.
 
@@ -27,7 +27,7 @@ First, you can specify the layout for the application level via the `DefaultLayo
 
 In the above case, the layout component `DefaultLayout.razor` will be used when displaying every story.
 
-## Component (Stories) level layout
+## Component (Stories) Level Layout
 
 ```html
 @* 📄App.razor *@
@@ -37,7 +37,7 @@ In the above case, the layout component `DefaultLayout.razor` will be used when 
 
 In the above case, the layout component `DefaultLayout.razor` will be used when displaying every story.
 
-## Component (Stories) level layout
+## Component (Stories) Level Layout
 
 Second, you can specify the layout for the component (stories) level via the `Layout` parameter of the `<Stories>` component.
 
@@ -51,7 +51,7 @@ Second, you can specify the layout for the component (stories) level via the `La
 
 In the above case, when displaying stories within the `<Stories>` markup, the layout component `StoriesLayout.razor` will be utilized.
 
-## Story level layout
+## Story Level Layout
 
 Third, you can specify the layout for the story level via the `Layout` parameter of the `<Story>` component.
 
@@ -66,7 +66,7 @@ Third, you can specify the layout for the story level via the `Layout` parameter
 
 In the above case, when displaying the story named "...", the layout component `StoryLayout.razor` will be utilized.
 
-## The order of applying the layouts
+## The Order Of Applying The Layouts
 
 The order of applying the layout component is the application level layout will use on the outermost level, and the story level layout will use on the innermost level. The component (stories) level layout will use on the middle level of them.
 

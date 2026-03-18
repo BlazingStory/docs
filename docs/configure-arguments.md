@@ -1,6 +1,6 @@
-# Configure arguments 
+# Configure Arguments
 
-## Configure the control type
+## Configure The Control Type
 
 You can configure the type of control for the component parameters via the `<ArgType>` component inside the `<Stories>` component. The `For` lambda expression parameter of the `<ArgType>` component indicates which parameters to be applied the control type configuration. And the `Control` parameter of the `<ArgType>` component is used for specifying which type of control uses in the "Control" panel to input parameter value.
 
@@ -29,7 +29,7 @@ Then, you will get the result in the following picture.
 
 ![](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/assets/readme-images/control-type-dropdownlist.png)
 
-## Configure the initial value of the component parameter
+## Configure The Initial Value Of The Component Parameter
 
 You can specify the initial value of the component parameter by using the `<Arg>` component inside the `<Arguments>` render fragment parameter of the `<Story>` component like this:
 
@@ -44,7 +44,7 @@ You can specify the initial value of the component parameter by using the `<Arg>
 
 ![](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/assets/readme-images/configure-arguments-arg.png)
 
-## Configure component parameters which type is `RenderFragment`
+## Configure Component Parameters Which Type Is `RenderFragment`
 
 Blazing Story supports the `RenderFragment` type parameter in its control panel. For example, if you have a story for a component such as having a `RenderFragment ChildContent` parameter, you can dynamically set text to that `ChildContent` parameter from the control panel UI at runtime.
 

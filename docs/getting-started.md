@@ -4,7 +4,7 @@
 
 .NET SDK ver.8 or later
 
-## Example scenario
+## Example Scenario
 
 For the example scenario, you already have a Blazor WebAssembly application project, "MyBlazorWasmApp1", that includes the "Button" component.
 
@@ -31,9 +31,9 @@ Close all Visual Studio IDE instances (if you use Visual Studio IDE), and instal
 dotnet new install BlazingStory.ProjectTemplates
 ```
 
-## Creating a Blazing Story app and stories
+## Creating A Blazing Story App And Stories
 
-### Step 1 - Create a new Blazing Story app project
+### Step 1 - Create A New Blazing Story App Project
 
 Open the solution file (.sln) with Visual Studio, and add a new **"Blazing Story (WebAssembly App)"** project from the project templates. (In this example scenario, we named it "MyBlazorWasmApp1.Stories")
 
@@ -81,7 +81,7 @@ The file layout will be the following tree.
         + 📄 MyBlazorWasmApp1.Stories.csproj✨ 👈 Add this
 ```
 
-### Step 2 - Add a project reference of the Blazor Wasm app to the Blazing Story project
+### Step 2 - Add A Project Reference Of The Blazor Wasm App To The Blazing Story Project
 
 Next, add a project reference in the Blazing Story App project "MyBlazorWasmApp1.Stories" that refers to the Blazor WebAssembly app project "MyBlazorWasmApp1".
 
@@ -102,7 +102,7 @@ dotnet add ./MyBlazorWasmApp1.Stories reference ./MyBlazorWasmApp1
         + ...
 ```
 
-### Step 3 - Add a "stories" file
+### Step 3 - Add A "stories" File
 
 Add a new "stories" file to the Blazing Story App project "MyBlazorWasmApp1.Stories".
 
@@ -125,7 +125,7 @@ In this example scenario, we are going to write a "stories" for the `Button` com
             + 📄 Button.stories.razor✨ 👈 Add this
 ```
 
-### Step 4 - Implement the "stories"
+### Step 4 - Implement The "stories"
 
 Implement a stories.
 
@@ -146,7 +146,7 @@ The "Button.stories.razor" would be like the below.
 </Stories>
 ```
 
-### Step 5 - Run it!
+### Step 5 - Run It!
 
 If you are working on Visual Studio, right-click the "MyBlazorWasmApp1.Stories" project in the solution explorer to show the context menu, click the "Set as Startup Project" menu item, and hit the `Ctrl` + `F5` key.
 

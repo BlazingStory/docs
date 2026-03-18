@@ -54,7 +54,7 @@ const sidebars: SidebarsConfig = {
       collapsible: false,
       items: [
         { type: "doc", id: "prefers-color-scheme" },
-        { type: "doc", id: "customize-title-and-brand-logo", label: "Customize title and logo" },
+        { type: "doc", id: "customize-title-and-brand-logo", label: "Customize Title And Logo" },
       ],
     },
     {
@@ -63,7 +63,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       collapsible: false,
       items: [
-        { type: "doc", id: "include-custom-css-and-js", label: "Include custom CSS and JS" },
+        { type: "doc", id: "include-custom-css-and-js", label: "Include Custom CSS And JS" },
         { type: "doc", id: "mcp-server-feature" },
         { type: "doc", id: "hot-reloading", label: "Hot Reloading [Preview]" },
       ],

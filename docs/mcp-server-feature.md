@@ -13,7 +13,7 @@ To catch up he power of the Blazing Story's MCP server feature, you can watch th
 
 Currently, the MCP server feature is available only in the Blazing Story app running on Blazor Server. It is not available in the Blazing Story app running on Blazor WebAssembly.
 
-## Create a new Blazing Story app with the MCP server feature
+## Create A New Blazing Story App With The MCP Server Feature
 
 When you create a new Blazing Story app project, you can enable the MCP server feature by checking the "Enable the MCP server feature" checkbox in the project creation dialog.
 
@@ -25,7 +25,7 @@ Or, if you are working on dotnet CLI, you can do that by running the `dotnet new
 dotnet new blazingstoryserver -mcp
 ```
 
-## Migration your Blazing Story app to enable the MCP server feature
+## Migration Your Blazing Story App To Enable The MCP Server Feature
 
 To enable the MCP server feature in your existing Blazing Story app, you need to follow these steps:
 

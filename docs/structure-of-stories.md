@@ -1,4 +1,4 @@
-# Structure of "stories"
+# Structure Of "stories"
 
 - The `[Stories]` attribute on a Razor component indicates to the Blazing Story runtime that the Razor component will include stories.
 - The slash-separated title string of the parameter of the `[Stories]` attribute configures the navigation tree and represents the title of the stories container (we called it "Component").

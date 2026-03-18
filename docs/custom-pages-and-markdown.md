@@ -20,7 +20,7 @@ After creating a custom page like the one above, you will see the custom page li
 
 You can set the custom page's position in the sidebar navigation tree by specifying the title string of the `CustomPage` attribute parameter, which includes a slash separator. The slash separator works to represent the hierarchy of the sidebar navigation tree, like the one inside the `Stories` attribute parameter.
 
-## Using Markdown files for Custom Pages
+## Using Markdown Files For Custom Pages
 
 In addition to Razor components, Blazing Story now supports using **pure** Markdown files (.md) as Custom Pages through integration with the [**"MD2RazorGenerator"**](https://github.com/jsakamoto/MD2RazorGenerator) NuGet package [![NuGet Package](https://img.shields.io/nuget/v/MD2RazorGenerator.svg)](https://www.nuget.org/packages/MD2RazorGenerator/). This allows you to write documentation in Markdown rather than Razor syntax for a more streamlined authoring experience.
 

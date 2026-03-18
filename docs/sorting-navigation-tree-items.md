@@ -1,4 +1,4 @@
-# Sorting navigation tree items
+# Sorting Navigation Tree Items
 
 By default, items at the same level in the sidebar navigation tree are sorted alphabetically by title, with containers/components listed before custom pages. (Even if a custom page’s title would come first alphabetically, it appears after all containers/components.)
 

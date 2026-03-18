@@ -1,6 +1,6 @@
-# Customize the title and brand logo
+# Customize The Title And Brand Logo
 
-## Customize the title
+## Customize The Title
 
 If you want to customize the title of your Blazing Story app, set the `Title` parameter of the `BlazingStoryApp` component in your `App.razor` file.
 
@@ -14,7 +14,7 @@ The string value specified in the `Title` parameter of the `BlazingStoryApp` wil
 
 ![](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/assets/readme-images/change-the-title.png)
 
-## Customize the brand logo
+## Customize The Brand Logo
 
 You can also replace the brand logo contents at the top of the sidebar entirely by marking up the `BrandLogoArea` render fragment parameter of the `BlazingStoryApp` component, like below.
 
