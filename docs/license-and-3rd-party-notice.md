@@ -1,4 +1,4 @@
-# 📢 License & Third Party Notice
+# License & Third Party Notice
 
 [Mozilla Public License Version 2.0](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/LICENSE)
 

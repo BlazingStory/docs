@@ -1,4 +1,4 @@
-# 🗂️ Configure path base
+# Configure path base
 
 ## Blazing Story WebAssembly App
 

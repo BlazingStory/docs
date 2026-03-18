@@ -1,4 +1,4 @@
-# ⚙️ Configure arguments 
+# Configure arguments 
 
 ## Configure the control type
 

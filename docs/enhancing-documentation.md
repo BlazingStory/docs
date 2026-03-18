@@ -1,4 +1,4 @@
-# ✍️ Enhancing Documentation
+# Enhancing Documentation
 
 By default, the "Docs" pages in Blazing Story do not contain detailed descriptions.
 

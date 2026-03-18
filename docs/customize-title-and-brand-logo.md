@@ -1,4 +1,4 @@
-# 🎀 Customize the title and brand logo
+# Customize the title and brand logo
 
 ## Customize the title
 

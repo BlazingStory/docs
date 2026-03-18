@@ -1,4 +1,4 @@
-# 📝 Custom Pages & Markdown
+# Custom Pages & Markdown
 
 Blazing Story allows you to add custom pages that can include any content you want. These pages will be shown in the sidebar's navigation tree. It is helpful for adding a "Welcome" page, "Getting Started" page, or any other custom page. The custom pages are a Razor component so you can use any Blazor features.
 

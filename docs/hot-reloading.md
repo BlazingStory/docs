@@ -1,4 +1,4 @@
-# 🔥 Hot Reloading [Preview] [Unstable]
+# Hot Reloading [Preview] [Unstable]
 
 Unfortunately, the hot reloading feature won't work well on the "Blazing Story". Now, contributors are working on enabling the hot reloading feature for Blazing Story, but it is not completed yet.
 

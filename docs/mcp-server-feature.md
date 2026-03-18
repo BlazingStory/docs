@@ -1,4 +1,4 @@
-# 🎛️ MCP Server Feature
+# MCP Server Feature
 
 ## Summary
 
