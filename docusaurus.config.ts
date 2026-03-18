@@ -50,6 +50,14 @@ const config: Config = {
           // Serve docs at the site root instead of /docs
           routeBasePath: "/",
           sidebarPath: "./sidebars.ts",
+          versions: {
+            current: {
+              badge: false,
+            },
+            "v1.0.0-preview.67": {
+              badge: false,
+            },
+          },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: "https://github.com/BlazingStory/docs/tree/main/",
