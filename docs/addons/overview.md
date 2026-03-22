@@ -2,7 +2,7 @@
 
 ## What is an Addon?
 
-Blazing Story supports an **addon mechanism** that lets you extend the UI with your own custom components. You can add items to the toolbar, add tabs to the addon panel below the canvas, or wrap the story preview with decorators — all by writing standard Blazor components.
+Blazing Story supports an **addon mechanism** that lets you extend the UI with your own custom components. You can add items to the toolbar, add tabs to the addon panel below the canvas, or place additional Blazor components alongside the story preview — all by writing standard Blazor components.
 
 An addon is a class that implements the `IAddon` interface. Through the `Initialize(IAddonBuilder builder)` method, the addon registers its Blazor component types with the Blazing Story runtime, which then renders them at the appropriate locations.
 
@@ -14,7 +14,7 @@ There are three types of component slots that an addon can contribute to:
 |------|----------|-------------|
 | **Toolbar content** | Toolbar above the story canvas | Toggle switches, drop-down menus, buttons that affect preview state |
 | **Panel** | Add-on panel tabs below the canvas | Information displays, logs, property editors |
-| **Preview decorator** | Wraps the story canvas | Applying background colors, overlays, or global style changes |
+| **Preview decorator** | Rendered alongside the story in the preview frame | Injecting CSS rules, applying JavaScript-driven side effects (e.g., background color, event interception), or rendering additional DOM content |
 
 ## NuGet Packages
 

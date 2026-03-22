@@ -31,7 +31,7 @@ public class MyCustomAddon : IAddon
             order: 300,
             match: viewMode => viewMode == ViewMode.Story);
 
-        // Register a preview decorator (wraps the canvas in all view modes)
+        // Register a preview decorator (placed alongside the story in the preview frame)
         builder.AddPreviewDecorator<MyPreviewDecorator>();
     }
 }
@@ -110,38 +110,42 @@ A panel component is a `.razor` file that appears as a new tab in the addon pane
 
 ### Preview Decorator Component
 
-A preview decorator wraps the story canvas. It must render a `ChildContent` render fragment that represents the actual story. Use `[CascadingParameter(Name = "Globals")]` to read state written by your toolbar content component.
+A preview decorator is a Blazor component that is **rendered as a sibling** of the story in the same preview frame. It does not wrap or receive the story content — instead, it renders its own HTML (for example, a `<style>` tag, an overlay `<div>`, or nothing visible at all) and uses the cascading parameters below to react to the current story and toolbar state.
+
+| Cascading parameter | Type | Description |
+|---------------------|------|-------------|
+| `[CascadingParameter(Name = "Globals")]` | `IReadOnlyDictionary<string, string>?` | Global arguments written by toolbar content components |
+| `[CascadingParameter(Name = "Args")]` | `IReadOnlyDictionary<string, string>?` | The current story's control arguments |
+| `[CascadingParameter(Name = "Story")]` | `IStory?` | The currently displayed story |
+
+A common pattern is to inject a `<style>` tag whose content depends on the `Globals` dictionary, similar to how the built-in Grid addon conditionally loads a stylesheet. The following example renders a CSS outline on the preview body when the toolbar toggle is on:
 
 ```html
 @* MyPreviewDecorator.razor *@
 
-<div style="border: 2px solid @_color;">
-    @ChildContent
-</div>
+@* Inject a CSS rule into the preview frame when the toggle is enabled. *@
+@if (_enabled)
+{
+    <style>
+        body { outline: 3px solid cornflowerblue !important; }
+    </style>
+}
 
 @code {
-    /// <summary>Render fragment for the actual story canvas content.</summary>
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
-
     /// <summary>Reads global arguments written by toolbar components.</summary>
     [CascadingParameter(Name = "Globals")]
     public IReadOnlyDictionary<string, string>? Globals { get; set; }
 
-    private string _color = "transparent";
-
-    protected override void OnParametersSet()
-    {
-        _color = (Globals?.TryGetValue("myAddon.enabled", out var v) == true && v == "True")
-            ? "cornflowerblue"
-            : "transparent";
-    }
+    private bool _enabled =>
+        Globals?.TryGetValue("myAddon.enabled", out var v) == true && v == "True";
 }
 ```
 
 :::note
-Unlike toolbar content, a preview decorator receives `Globals` as a **cascading parameter** typed as `IReadOnlyDictionary<string, string>` (values are serialized as strings). The decorator is re-rendered automatically when any global argument changes.
+Values in `Globals` are always serialized as strings. A `bool` written as `Globals["key"] = true` arrives in the decorator as the string `"True"`.
 :::
+
+For side effects that require JavaScript (such as changing background color or intercepting DOM events), inject `IJSRuntime` and invoke your JS from `OnAfterRenderAsync` — exactly how the built-in Background and Actions addons work.
 
 ## Step 3 — Register the Addon
 
@@ -214,12 +218,15 @@ public class MyBorderAddon : IAddon
 
 **`MyBorderDecorator.razor`**
 ```html
-<div style="border: 3px solid @(_on ? "royalblue" : "transparent")">
-    @ChildContent
-</div>
+@* Renders a CSS outline on the preview body when the toggle is on. *@
+@if (_on)
+{
+    <style>
+        body { outline: 3px solid royalblue !important; }
+    </style>
+}
 
 @code {
-    [Parameter] public RenderFragment? ChildContent { get; set; }
     [CascadingParameter(Name = "Globals")] public IReadOnlyDictionary<string, string>? Globals { get; set; }
     private bool _on => Globals?.TryGetValue("border.enabled", out var v) == true && v == "True";
 }
