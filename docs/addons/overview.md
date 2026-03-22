@@ -2,7 +2,7 @@
 
 ## What is an Addon?
 
-Blazing Story supports an **addon mechanism** that lets you extend the UI with your own custom components. You can add items to the toolbar, add tabs to the addon panel below the canvas, or place additional Blazor components alongside the story preview — all by writing standard Blazor components.
+Blazing Story supports an **addon mechanism** that lets you extend the UI with your own custom components. You can add items to the toolbar, add tabs to the addon panel below the canvas, or place additional Blazor components alongside the story preview, all by writing standard Blazor components.
 
 An addon is a class that implements the `IAddon` interface. Through the `Initialize(IAddonBuilder builder)` method, the addon registers its Blazor component types with the Blazing Story runtime, which then renders them at the appropriate locations.
 
@@ -52,7 +52,7 @@ Blazing Story comes with the following addons pre-installed:
 
 ## Sharing State: GlobalArguments
 
-A toolbar content component often needs to communicate its state to a preview decorator — for example, the **Background** addon toolbar sets a background color that the preview decorator then applies to the canvas.
+A toolbar content component often needs to communicate its state to a preview decorator. For example, the **Background** addon toolbar sets a background color that the preview decorator then applies to the canvas.
 
 This is done via `GlobalArguments`, a dictionary-like object provided by the Blazing Story runtime. Toolbar content components receive a `GlobalArguments` instance as a `[Parameter]`, while preview decorators receive it as a `[CascadingParameter]`. Any value written by a toolbar component is automatically propagated to the decorator.
 
