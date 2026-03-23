@@ -54,7 +54,7 @@ Blazing Story comes with the following addons pre-installed:
 
 A toolbar content component often needs to communicate its state to a preview decorator. For example, the **Background** addon toolbar sets a background color that the preview decorator then applies to the canvas.
 
-This is done via `GlobalArguments`, a dictionary-like object provided by the Blazing Story runtime. Toolbar content components receive a `GlobalArguments` instance as a `[Parameter]`, while preview decorators receive it as a `[CascadingParameter]`. Any value written by a toolbar component is automatically propagated to the decorator.
+This is done via `GlobalArguments`, a dictionary-like object provided by the Blazing Story runtime. Both toolbar content components and preview decorators receive a `GlobalArguments` instance as a `[CascadingParameter]`. Any value written by a toolbar component is automatically propagated to the decorator.
 
 ```csharp
 // Toolbar component: write a value

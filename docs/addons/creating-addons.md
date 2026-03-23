@@ -61,7 +61,7 @@ match: _ => true
 
 ### Toolbar Content Component
 
-A toolbar content component is a `.razor` file that renders a button, icon, or drop-down in the toolbar area. The `GlobalArguments` parameter is a shared key-value store for passing state from the toolbar to the preview decorator (see [Preview Decorator Component](#preview-decorator-component) below).
+A toolbar content component is a `.razor` file that renders a button, icon, or drop-down in the toolbar area. The `GlobalArguments` cascading parameter is a shared key-value store for passing state from the toolbar to the preview decorator (see [Preview Decorator Component](#preview-decorator-component) below).
 
 ```html
 @* MyToolbarContent.razor *@
@@ -72,8 +72,8 @@ A toolbar content component is a `.razor` file that renders a button, icon, or d
 
 @code {
     /// <summary>Shared state container for communicating with the preview decorator.</summary>
-    [Parameter]
-    public required GlobalArguments Globals { get; init; }
+    [CascadingParameter]
+    public GlobalArguments Globals { get; set; } = default!;
 
     private bool _enabled = false;
 
@@ -205,7 +205,7 @@ public class MyBorderAddon : IAddon
 </button>
 
 @code {
-    [Parameter] public required GlobalArguments Globals { get; init; }
+    [CascadingParameter] public GlobalArguments Globals { get; set; } = default!;
     private bool _on;
 
     private void OnClick()
