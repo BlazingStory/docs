@@ -1,6 +1,6 @@
 # Creating Custom Addons
 
-This page walks you through creating your own Blazing Story addon — a custom toolbar button, panel tab, or preview decorator — step by step.
+This page walks you through creating your own Blazing Story addon (a custom toolbar button, panel tab, or preview decorator) step by step.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ To create a custom addon, you need to reference the `BlazingStory.Addons` NuGet 
 dotnet add package BlazingStory.Addons
 ```
 
-## Step 1 — Create the Addon Class
+## Step 1: Create the Addon Class
 
 An addon is a plain C# class that implements the `IAddon` interface from the `BlazingStory.Addons` namespace. Its `Initialize` method receives an `IAddonBuilder` and registers any combination of toolbar content, panel, and preview decorator components:
 
@@ -39,7 +39,7 @@ public class MyCustomAddon : IAddon
 
 ### Order parameter
 
-The `order` parameter controls the position of the component relative to other registered toolbar items or panels. Lower values appear first (further to the left in the toolbar, or as earlier tabs in the panel). Built-in addons use orders in the range 100–500, so values like `300` or higher are safe for custom addons.
+The `order` parameter controls the position of the component relative to other registered toolbar items or panels. Lower values appear first (further to the left in the toolbar, or as earlier tabs in the panel). Built-in addons use orders in the range 100-500, so values like `300` or higher are safe for custom addons.
 
 ### ViewMode
 
@@ -57,7 +57,7 @@ Use `ViewMode.Story` for most toolbar and panel addons. To show a component in a
 match: _ => true
 ```
 
-## Step 2 — Create the Razor Components
+## Step 2: Create the Razor Components
 
 ### Toolbar Content Component
 
@@ -87,7 +87,7 @@ A toolbar content component is a `.razor` file that renders a button, icon, or d
 
 ### Panel Component
 
-A panel component is a `.razor` file that appears as a new tab in the addon panel below the canvas. Use the `<PanelTitle>` component to supply the tab label. The `<PanelTitle>` content is rendered via a `SectionContent` mechanism — it does not appear inline in your component markup.
+A panel component is a `.razor` file that appears as a new tab in the addon panel below the canvas. Use the `<PanelTitle>` component to supply the tab label. The `<PanelTitle>` content is rendered via a `SectionContent` mechanism; it does not appear inline in your component markup.
 
 ```html
 @* MyPanel.razor *@
@@ -110,7 +110,7 @@ A panel component is a `.razor` file that appears as a new tab in the addon pane
 
 ### Preview Decorator Component
 
-A preview decorator is a Blazor component that is **rendered as a sibling** of the story in the same preview frame. It does not wrap or receive the story content — instead, it renders its own HTML (for example, a `<style>` tag, an overlay `<div>`, or nothing visible at all) and uses the cascading parameters below to react to the current story and toolbar state.
+A preview decorator is a Blazor component that is **rendered as a sibling** of the story in the same preview frame. It does not wrap or receive the story content; instead, it renders its own HTML (for example, a `<style>` tag, an overlay `<div>`, or nothing visible at all) and uses the cascading parameters below to react to the current story and toolbar state.
 
 | Cascading parameter | Type | Description |
 |---------------------|------|-------------|
@@ -145,9 +145,9 @@ A common pattern is to inject a `<style>` tag whose content depends on the `Glob
 Values in `Globals` are always serialized as strings. A `bool` written as `Globals["key"] = true` arrives in the decorator as the string `"True"`.
 :::
 
-For side effects that require JavaScript (such as changing background color or intercepting DOM events), inject `IJSRuntime` and invoke your JS from `OnAfterRenderAsync` — exactly how the built-in Background and Actions addons work.
+For side effects that require JavaScript (such as changing background color or intercepting DOM events), inject `IJSRuntime` and invoke your JS from `OnAfterRenderAsync`, exactly how the built-in Background and Actions addons work.
 
-## Step 3 — Register the Addon
+## Step 3: Register the Addon
 
 Addons are registered in the `<BlazingStoryApp>` component via the `OnInitialize` callback parameter. This callback receives an `IBlazingStoryBuilder` which exposes the `Addons` property of type `IAddonStore`:
 
