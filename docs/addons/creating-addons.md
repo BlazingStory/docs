@@ -147,6 +147,14 @@ Values in `Globals` are always serialized as strings. A `bool` written as `Globa
 
 For side effects that require JavaScript (such as changing background color or intercepting DOM events), inject `IJSRuntime` and invoke your JS from `OnAfterRenderAsync`, exactly how the built-in Background and Actions addons work.
 
+## Styling Addon Components
+
+:::caution
+Blazor's **scoped CSS** (`*.razor.css`) is **not supported** in addon components at this time. This limitation applies to toolbar content, panel, and preview decorator components.
+:::
+
+Instead, define your styles in a regular `.css` file and load it using the `ImportStyleSheet` component from `BlazingStory.ToolKit` (described in the [next section](#importstylesheet)) or a standard `<link>` tag. This limitation may be removed in a future version of Blazing Story.
+
 ## Using the BlazingStory.ToolKit
 
 When building addons, you will often want toolbar buttons, popup menus, icons, and other UI elements that match the look and feel of the built-in Blazing Story addons. The **`BlazingStory.ToolKit`** NuGet package provides these reusable components. In fact, all of Blazing Story's built-in addons are built using this same toolkit.
