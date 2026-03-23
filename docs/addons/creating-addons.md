@@ -147,6 +147,117 @@ Values in `Globals` are always serialized as strings. A `bool` written as `Globa
 
 For side effects that require JavaScript (such as changing background color or intercepting DOM events), inject `IJSRuntime` and invoke your JS from `OnAfterRenderAsync`, exactly how the built-in Background and Actions addons work.
 
+## Using the BlazingStory.ToolKit
+
+When building addons, you will often want toolbar buttons, popup menus, icons, and other UI elements that match the look and feel of the built-in Blazing Story addons. The **`BlazingStory.ToolKit`** NuGet package provides these reusable components. In fact, all of Blazing Story's built-in addons are built using this same toolkit.
+
+```shell
+dotnet add package BlazingStory.ToolKit
+```
+
+:::note
+If you are adding the addon directly inside your Blazing Story app project, `BlazingStory.ToolKit` is already available transitively. You only need to add the package explicitly when creating a separate class library.
+:::
+
+### IconButton
+
+`IconButton` renders a toolbar-style button with a built-in SVG icon. When used with the `Active` parameter, it visually indicates an on/off state — perfect for toggle actions.
+
+```html
+@using BlazingStory.ToolKit.Buttons
+@using BlazingStory.ToolKit.Icons
+
+<IconButton Icon="SvgIconType.Grid"
+            Title="Toggle grid overlay"
+            Active="@_enabled"
+            OnClick="OnClick" />
+
+@code {
+    [CascadingParameter]
+    public GlobalArguments Globals { get; set; } = default!;
+
+    private bool _enabled;
+
+    private void OnClick()
+    {
+        _enabled = !_enabled;
+        Globals["myAddon.grid"] = _enabled;
+    }
+}
+```
+
+The `SvgIconType` enum includes icons for common toolbar actions such as `Grid`, `Background`, `Measure`, `Outlines`, `Gear`, `ZoomIn`, `ZoomOut`, and more.
+
+### PopupMenu / MenuItem
+
+`PopupMenu` shows a dropdown menu when a trigger element is clicked. Use it together with `MenuItem` to build selection menus, similar to the built-in **Background** addon.
+
+```html
+@using BlazingStory.ToolKit.Buttons
+@using BlazingStory.ToolKit.Icons
+@using BlazingStory.ToolKit.Menus
+
+<PopupMenu MarginTop="6">
+    <Trigger>
+        <IconButton Icon="SvgIconType.Background"
+                    Title="Choose a background"
+                    Active="@(_selected != "none")" />
+    </Trigger>
+    <MenuItems>
+        <MenuItem Active="@(_selected == "light")"
+                  OnClick="() => Select("light")">
+            Light
+        </MenuItem>
+        <MenuItem Active="@(_selected == "dark")"
+                  OnClick="() => Select("dark")">
+            Dark
+        </MenuItem>
+    </MenuItems>
+</PopupMenu>
+
+@code {
+    private string _selected = "none";
+    private void Select(string value) => _selected = value;
+}
+```
+
+You can also use `MenuItemDivider` to insert a horizontal separator between menu items.
+
+### ImportStyleSheet
+
+`ImportStyleSheet` dynamically adds or removes a `<link>` stylesheet in the document. This is particularly useful in **preview decorators** where you need to conditionally load CSS based on toolbar state.
+
+```html
+@using BlazingStory.ToolKit.Styles
+
+<ImportStyleSheet Href="./_content/MyAddonLibrary/css/my-overlay.min.css"
+                  Disabled="@(!_enabled)" />
+
+@code {
+    [CascadingParameter(Name = "Globals")]
+    public IReadOnlyDictionary<string, string>? Globals { get; set; }
+
+    private bool _enabled =>
+        Globals?.TryGetValue("myAddon.grid", out var v) == true
+        && v == "True";
+
+    protected override void OnParametersSet()
+    {
+        // _enabled is re-evaluated whenever Globals changes.
+    }
+}
+```
+
+When `Disabled` is `false` (i.e. the stylesheet should be active), the component injects the stylesheet via JavaScript. When `Disabled` becomes `true`, the stylesheet is removed from the document. This is exactly how the built-in **Grid** addon conditionally loads its background grid CSS.
+
+### Badge
+
+`Badge` renders a small label, typically placed inside a `<PanelTitle>` to add a notification indicator or counter to a panel tab.
+
+```html
+<PanelTitle>Actions <Badge Text="@_count.ToString()" /></PanelTitle>
+```
+
 ## Step 3: Register the Addon
 
 Addons are registered in the `<BlazingStoryApp>` component via the `OnInitialize` callback parameter. This callback receives an `IBlazingStoryBuilder` which exposes the `Addons` property of type `IAddonStore`:
@@ -181,28 +292,32 @@ The `IBlazingStoryBuilder` interface is in the `BlazingStory.Configurations` nam
 
 ## Complete Example
 
-Here is a minimal end-to-end example of an addon that changes the canvas border color when enabled:
+Here is a minimal end-to-end example of an addon that toggles a CSS grid overlay on the story canvas, using `BlazingStory.ToolKit` components:
 
-**`MyBorderAddon.cs`**
+**`MyGridAddon.cs`**
 ```csharp
 using BlazingStory.Addons;
 
-public class MyBorderAddon : IAddon
+public class MyGridAddon : IAddon
 {
     public void Initialize(IAddonBuilder builder)
     {
-        builder.AddToolbarContent<MyBorderToolbar>(order: 300,
+        builder.AddToolbarContent<MyGridToolbar>(order: 300,
             match: viewMode => viewMode == ViewMode.Story);
-        builder.AddPreviewDecorator<MyBorderDecorator>();
+        builder.AddPreviewDecorator<MyGridDecorator>();
     }
 }
 ```
 
-**`MyBorderToolbar.razor`**
+**`MyGridToolbar.razor`** — Uses `IconButton` from the ToolKit for a native look.
 ```html
-<button title="Toggle border" @onclick="OnClick">
-    @(_on ? "Border On" : "Border Off")
-</button>
+@using BlazingStory.ToolKit.Buttons
+@using BlazingStory.ToolKit.Icons
+
+<IconButton Icon="SvgIconType.Grid"
+            Title="Toggle grid"
+            Active="@_on"
+            OnClick="OnClick" />
 
 @code {
     [CascadingParameter] public GlobalArguments Globals { get; set; } = default!;
@@ -211,24 +326,25 @@ public class MyBorderAddon : IAddon
     private void OnClick()
     {
         _on = !_on;
-        Globals["border.enabled"] = _on;
+        Globals["myGrid.enabled"] = _on;
     }
 }
 ```
 
-**`MyBorderDecorator.razor`**
+**`MyGridDecorator.razor`** — Uses `ImportStyleSheet` from the ToolKit to conditionally load a CSS file.
 ```html
-@* Renders a CSS outline on the preview body when the toggle is on. *@
-@if (_on)
-{
-    <style>
-        body { outline: 3px solid royalblue !important; }
-    </style>
-}
+@using BlazingStory.ToolKit.Styles
+
+<ImportStyleSheet Href="./_content/MyAddonLibrary/css/grid-overlay.min.css"
+                  Disabled="@(!_on)" />
 
 @code {
-    [CascadingParameter(Name = "Globals")] public IReadOnlyDictionary<string, string>? Globals { get; set; }
-    private bool _on => Globals?.TryGetValue("border.enabled", out var v) == true && v == "True";
+    [CascadingParameter(Name = "Globals")]
+    public IReadOnlyDictionary<string, string>? Globals { get; set; }
+
+    private bool _on =>
+        Globals?.TryGetValue("myGrid.enabled", out var v) == true
+        && v == "True";
 }
 ```
 
@@ -236,5 +352,5 @@ public class MyBorderAddon : IAddon
 ```html
 <BlazingStoryApp
     Assemblies="@(new[] { typeof(App).Assembly })"
-    OnInitialize="@(b => b.Addons.Register<MyBorderAddon>())" />
+    OnInitialize="@(b => b.Addons.Register<MyGridAddon>())" />
 ```

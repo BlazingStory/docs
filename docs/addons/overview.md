@@ -24,6 +24,7 @@ The addon API is distributed in separate NuGet packages:
 |---------|---------|
 | `BlazingStory.Addons` | Public API: `IAddon`, `IAddonBuilder`, `IAddonStore`, `GlobalArguments`, `ViewMode`, `PanelTitle` |
 | `BlazingStory.Addons.BuiltIns` | Built-in addons shipped with Blazing Story |
+| `BlazingStory.ToolKit` | Reusable UI components (buttons, menus, icons, etc.) and utilities for building addons |
 
 :::note
 The main `BlazingStory` package depends on `BlazingStory.Addons.BuiltIns`, which in turn depends on `BlazingStory.Addons`. When using the standard Blazing Story project templates, all packages are already available. You only need to explicitly reference `BlazingStory.Addons` when creating a **separate class library project** for your own addon.
