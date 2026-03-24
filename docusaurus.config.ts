@@ -54,6 +54,9 @@ const config: Config = {
             current: {
               badge: false,
             },
+            "v1.0.0-preview.68": {
+              badge: false,
+            },
             "v1.0.0-preview.67": {
               badge: false,
             },
