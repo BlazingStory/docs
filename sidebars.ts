@@ -59,6 +59,16 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "🧩 Addons",
+      collapsed: false,
+      collapsible: false,
+      items: [
+        { type: "doc", id: "addons/overview", label: "Overview" },
+        { type: "doc", id: "addons/creating-addons", label: "Creating Custom Addons" },
+      ],
+    },
+    {
+      type: "category",
       label: "🛠️ Development",
       collapsed: false,
       collapsible: false,
