@@ -124,7 +124,7 @@ If you are adding the addon directly inside your Blazing Story app project, `Bla
 
 #### IconButton
 
-`IconButton` renders a toolbar-style button with a built-in SVG icon. When used with the `Active` parameter, it visually indicates an on/off state — perfect for toggle actions.
+`IconButton` renders a toolbar-style button with a built-in SVG icon. When used with the `Active` parameter, it visually indicates an on/off state, making it perfect for toggle actions.
 
 ```html
 @using BlazingStory.ToolKit.Buttons
@@ -193,7 +193,7 @@ You can also use `MenuItemDivider` to insert a horizontal separator between menu
 ```html
 @using BlazingStory.ToolKit.Styles
 
-<ImportStyleSheet Href="./_content/MyAddonLibrary/css/my-overlay.min.css"
+<ImportStyleSheet Href="./_content/MyAddonLibrary/css/my-overlay.css"
                   Disabled="@(!_enabled)" />
 
 @code {
@@ -229,12 +229,12 @@ public class MyCustomAddon : IAddon
     {
         // Register a toolbar content component (shown only in Story view)
         builder.AddToolbarContent<MyToolbarContent>(
-            order: 300,
+            order: 1000,
             match: viewMode => viewMode == ViewMode.Story);
 
         // Register a panel tab component (shown only in Story view)
         builder.AddPanel<MyPanel>(
-            order: 300,
+            order: 1000,
             match: viewMode => viewMode == ViewMode.Story);
 
         // Register a preview decorator (placed alongside the story in the preview frame)
@@ -245,7 +245,7 @@ public class MyCustomAddon : IAddon
 
 ### Order parameter
 
-The `order` parameter controls the position of the component relative to other registered toolbar items or panels. Lower values appear first (further to the left in the toolbar, or as earlier tabs in the panel). Built-in addons use orders in the range 100-500, so values like `300` or higher are safe for custom addons.
+The `order` parameter controls the position of the component relative to other registered toolbar items or panels. Lower values appear first (further to the left in the toolbar, or as earlier tabs in the panel). Built-in addons use orders in the range 100-900, so values like `1000` or higher are safe for custom addons.
 
 ### ViewMode
 
@@ -268,18 +268,18 @@ match: _ => true
 Addons are registered in the `<BlazingStoryApp>` component via the `OnInitialize` callback parameter. This callback receives an `IBlazingStoryBuilder` which exposes the `Addons` property of type `IAddonStore`:
 
 ```html
-@* e.g. Components/Pages/Index.razor in a Blazor Server app *@
+@* e.g. App.razor in a Blazing Story app *@
 
 <BlazingStoryApp
-    Assemblies="@(new[] { typeof(App).Assembly })"
-    OnInitialize="@(builder => builder.Addons.Register<MyCustomAddon>())" />
+    Assemblies="[typeof(App).Assembly]"
+    OnInitialize="builder => builder.Addons.Register<MyCustomAddon>()" />
 ```
 
 To register multiple addons, use a separate method:
 
 ```html
 <BlazingStoryApp
-    Assemblies="@(new[] { typeof(App).Assembly })"
+    Assemblies="[typeof(App).Assembly]"
     OnInitialize="@ConfigureBlazingStory" />
 
 @code {
@@ -303,19 +303,22 @@ Here is a minimal end-to-end example of an addon that toggles a CSS grid overlay
 ```csharp
 using BlazingStory.Addons;
 
+namespace MyAddonLibrary;
+
 public class MyGridAddon : IAddon
 {
     public void Initialize(IAddonBuilder builder)
     {
-        builder.AddToolbarContent<MyGridToolbar>(order: 300,
+        builder.AddToolbarContent<MyGridToolbar>(order: 1000,
             match: viewMode => viewMode == ViewMode.Story);
         builder.AddPreviewDecorator<MyGridDecorator>();
     }
 }
 ```
 
-**`MyGridToolbar.razor`** — Uses `IconButton` from the ToolKit for a native look.
+**`MyGridToolbar.razor`**: Uses `IconButton` from the ToolKit for a native look.
 ```html
+@using BlazingStory.Addons
 @using BlazingStory.ToolKit.Buttons
 @using BlazingStory.ToolKit.Icons
 
@@ -336,11 +339,11 @@ public class MyGridAddon : IAddon
 }
 ```
 
-**`MyGridDecorator.razor`** — Uses `ImportStyleSheet` from the ToolKit to conditionally load a CSS file.
+**`MyGridDecorator.razor`**: Uses `ImportStyleSheet` from the ToolKit to conditionally load a CSS file.
 ```html
 @using BlazingStory.ToolKit.Styles
 
-<ImportStyleSheet Href="./_content/MyAddonLibrary/css/grid-overlay.min.css"
+<ImportStyleSheet Href="./_content/MyAddonLibrary/css/grid-overlay.css"
                   Disabled="@(!_on)" />
 
 @code {
@@ -353,9 +356,12 @@ public class MyGridAddon : IAddon
 }
 ```
 
-**Registration in `Index.razor`**
+**Registration in `App.razor`**
+
 ```html
-<BlazingStoryApp
-    Assemblies="@(new[] { typeof(App).Assembly })"
-    OnInitialize="@(b => b.Addons.Register<MyGridAddon>())" />
+@using MyAddonLibrary
+
+<BlazingStoryApp Assemblies="[typeof(App).Assembly]"
+                 OnInitialize="b => b.Addons.Register<MyGridAddon>()">
+</BlazingStoryApp>
 ```
