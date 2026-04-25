@@ -8,6 +8,11 @@ The skills are maintained in a dedicated repository. **For the current list of s
 ➡️ **https://github.com/BlazingStory/agent-skills**
 :::
 
+<video controls width="100%" style={{maxWidth: '800px'}}>
+  <source src="https://github.com/user-attachments/assets/aeea68f9-5ff0-4edf-aa57-6d6725ea88a9" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
 ## Available Skills
 
 | Skill | What it does |
