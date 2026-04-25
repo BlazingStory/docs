@@ -11,6 +11,6 @@ The clone of ["Storybook"](https://storybook.js.org/) for Blazor, a frontend wor
 
 The "Blazing Story" is built on **almost 100% Blazor native** (except only a few JavaScript helper codes), so you don't have to care about `npm`, `package.json`, `webpack`, and any JavaScript/TypeScript code. You can create a UI catalog application **on the Blazor way!**
 
-In addition, Blazing Story also provides an **MCP server feature.** This allows Blazing Story to expose information about its components and stories to AI agents, enabling highly accurate code generation.
+In addition, Blazing Story integrates with AI coding assistants in two complementary ways: an [**MCP server feature**](./mcp-server-feature) that exposes story and component metadata to AI agents at runtime, and [**agent skills**](./agent-skills) that teach AI tools how to author stories and addons in idiomatic Blazing Story style.
 
 You can try it out from the live demonstration site at the following link: https://jsakamoto.github.io/BlazingStory/

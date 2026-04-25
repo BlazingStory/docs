@@ -45,6 +45,7 @@ const sidebars: SidebarsConfig = {
         { type: "doc", id: "configure-arguments" },
         { type: "doc", id: "sorting-navigation-tree-items" },
         { type: "doc", id: "configure-pathbase" },
+        { type: "doc", id: "include-custom-css-and-js", label: "Include Custom CSS And JS" },
       ],
     },
     {
@@ -69,12 +70,20 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "🤖 AI Integration",
+      collapsed: false,
+      collapsible: false,
+      items: [
+        { type: "doc", id: "mcp-server-feature" },
+        { type: "doc", id: "agent-skills" },
+      ],
+    },
+    {
+      type: "category",
       label: "🛠️ Development",
       collapsed: false,
       collapsible: false,
       items: [
-        { type: "doc", id: "include-custom-css-and-js", label: "Include Custom CSS And JS" },
-        { type: "doc", id: "mcp-server-feature" },
         { type: "doc", id: "hot-reloading", label: "Hot Reloading [Preview]" },
       ],
     },
