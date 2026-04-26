@@ -52,10 +52,11 @@ const config: Config = {
           includeCurrentVersion: false,
           versions: {
             "v1.0.0-preview.68": {
-              label: "v1.0.0-preview.68 or later",
+              label: "Current Version",
               badge: false,
             },
             "v1.0.0-preview.67": {
+              label: "v1.0.0-preview.67 or before",
               badge: false,
             },
           },
