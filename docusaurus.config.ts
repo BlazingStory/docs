@@ -49,11 +49,8 @@ const config: Config = {
         docs: {
           // Serve docs at the site root instead of /docs
           routeBasePath: "/",
-          sidebarPath: "./sidebars.ts",
+          includeCurrentVersion: false,
           versions: {
-            current: {
-              badge: false,
-            },
             "v1.0.0-preview.68": {
               label: "v1.0.0-preview.68 or later",
               badge: false,
@@ -123,6 +120,7 @@ const config: Config = {
         indexDocs: true,
         highlightSearchTermsOnTargetPage: true,
         docsRouteBasePath: "/",
+        docsDir: "versioned_docs",
         searchBarShortcutHint: false,
       },
     ],
