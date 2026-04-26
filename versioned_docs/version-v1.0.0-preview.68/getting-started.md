@@ -106,6 +106,10 @@ dotnet add ./MyBlazorWasmApp1.Stories reference ./MyBlazorWasmApp1
 
 Add a new "stories" file to the Blazing Story App project "MyBlazorWasmApp1.Stories".
 
+:::tip AI-Assisted Story Creation
+You can also have an AI coding assistant scaffold stories for you. Install the Blazing Story agent skills and instruct your AI agent to create a `.stories.razor` file. See [Agent Skills](./agent-skills) for details.
+:::
+
 A "stories" file is a normal Razor Component file (.razor), but it is annotated with the `[Stories]` attribute and includes a markup of the `<Stories>` component. There is no restriction on file layout of "stories" files, but usually, we place it in the "Stories" subfolder.
 
 :::warning

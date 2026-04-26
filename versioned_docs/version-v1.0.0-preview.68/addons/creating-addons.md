@@ -2,6 +2,10 @@
 
 This page walks you through creating your own Blazing Story addon (a custom toolbar button, panel tab, or preview decorator) step by step.
 
+:::tip AI-Assisted Addon Creation
+You can also have an AI coding assistant scaffold custom addons for you. Install the Blazing Story agent skills and instruct your AI agent to create and register an addon. See [Agent Skills](../agent-skills) for details.
+:::
+
 ## Prerequisites
 
 To create a custom addon, you need to reference the `BlazingStory.Addons` NuGet package. If you are adding the addon directly inside your existing Blazing Story app project, the package is already available transitively via `BlazingStory`. If you are creating a **separate Razor Class Library (RCL)** for reuse across projects, add the package explicitly:
