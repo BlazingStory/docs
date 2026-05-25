@@ -43,8 +43,7 @@ To enable the MCP server feature in your existing Blazing Story app, you need to
 
 3. Add the `AddBlazingStoryMcpServer` method call to the `Program.cs` file of your Blazing Story app project to register the MCP server services in the dependency injection container.
 
-   ```csharp
-   // 📄 Program.cs
+   ```csharp title="📄 Program.cs"
    ...
    // 👇 Add the necessary using directive for the MCP server.
    using BlazingStory.McpServer;
@@ -57,8 +56,7 @@ To enable the MCP server feature in your existing Blazing Story app, you need to
    ```  
 4. Add the `MapBlazingStoryMcp` method call to the `app` object in the `Program.cs` file to register the Blazing Story MCP server middleware.
 
-   ```csharp
-   // 📄 Program.cs
+   ```csharp title="📄 Program.cs"
    ...
    app.UseHttpsRedirection();
 

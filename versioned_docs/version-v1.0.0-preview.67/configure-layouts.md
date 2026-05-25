@@ -13,50 +13,39 @@ If you want to apply the same layout for every story, you can specify the layout
 
 The story which applied the layout component above will be rendered as a child component of the `<YourThemeProvider>` component (imagine you implemented that component such a component including some cascading values) and will have 24-pixel padding.
 
+## Layout levels
+
+You can specify a layout at three levels. These layouts do **not** override each other — instead, they are **nested**: the application-level layout wraps the outermost layer, the stories-level layout wraps inside it, and the story-level layout wraps the innermost layer around the story content.
+
 ## Application level layout
 
-The specified layout component for stories is in multiple levels.
+You can specify the layout for the application level via the `DefaultLayout` property of the `BlazingStoryApp` component, which is usually marked up in your `App.razor` file.
 
-First, you can specify the layout for the application level via the `DefaultLayout` property of the `BlazingStoryApp` component, which is usually marked up in your `App.razor` file.
-
-```html
-@* 📄App.razor *@
+```html title="📄 App.razor"
 <BlazingStoryApp ... DefaultLayout="typeof(DefaultLayout)">
 </BlazingStoryApp>
 ```
 
-In the above case, the layout component `DefaultLayout.razor` will be used when displaying every story.
+In the above case, the layout component `DefaultLayout.razor` will be used as the outermost layer when displaying every story.
 
 ## Component (Stories) level layout
 
-```html
-@* 📄App.razor *@
-<BlazingStoryApp ... DefaultLayout="typeof(DefaultLayout)">
-</BlazingStoryApp>
-```
+You can specify the layout for the component (stories) level via the `Layout` parameter of the `<Stories>` component.
 
-In the above case, the layout component `DefaultLayout.razor` will be used when displaying every story.
-
-## Component (Stories) level layout
-
-Second, you can specify the layout for the component (stories) level via the `Layout` parameter of the `<Stories>` component.
-
-```html
-@* 📄...stories.razor *@
+```html title="📄 ...stories.razor"
 @attribute [Stories(...)]
 
 <Stories ... Layout="typeof(StoriesLayout)">
     ...
 ```
 
-In the above case, when displaying stories within the `<Stories>` markup, the layout component `StoriesLayout.razor` will be utilized.
+In the above case, when displaying stories within the `<Stories>` markup, the layout component `StoriesLayout.razor` will be nested inside the application-level layout.
 
 ## Story level layout
 
-Third, you can specify the layout for the story level via the `Layout` parameter of the `<Story>` component.
+You can specify the layout for the story level via the `Layout` parameter of the `<Story>` component.
 
-```html
-@* 📄...stories.razor *@
+```html title="📄 ...stories.razor"
 @attribute [Stories(...)]
 
 <Stories ...>
@@ -64,10 +53,10 @@ Third, you can specify the layout for the story level via the `Layout` parameter
         ...
 ```
 
-In the above case, when displaying the story named "...", the layout component `StoryLayout.razor` will be utilized.
+In the above case, when displaying the story named "...", the layout component `StoryLayout.razor` will be the innermost layer, nested inside the stories-level layout.
 
 ## The order of applying the layouts
 
-The order of applying the layout component is the application level layout will use on the outermost level, and the story level layout will use on the innermost level. The component (stories) level layout will use on the middle level of them.
+The application level layout will be used on the outermost level, and the story level layout will be used on the innermost level. The component (stories) level layout will be used in the middle level of them.
 
 ![](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/assets/readme-images/order-of-applying-layouts.png)

@@ -67,7 +67,7 @@ However, if you mark up the `ChildContent` parameter inside of the component's m
 
 Instead, you should set the `ChildContent` parameter through the `<Arguments>` render fragment parameter of the `<Story>` component, like below.
 
-```html
+```razor
     <!-- 👍 DO THIS! -->
     ...
     <Story Name="Default">

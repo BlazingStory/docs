@@ -51,12 +51,16 @@ const config: Config = {
           routeBasePath: "/",
           includeCurrentVersion: false,
           versions: {
-            "v1.0.0-preview.68": {
+            "v1.0.0-preview.81": {
               label: "Current Version",
               badge: false,
             },
+            "v1.0.0-preview.68": {
+              label: "1.0.0-preview.68 ~ 80",
+              badge: false,
+            },
             "v1.0.0-preview.67": {
-              label: "v1.0.0-preview.67 or before",
+              label: "1.0.0-preview.67 or before",
               badge: false,
             },
           },
@@ -107,7 +111,7 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
-      additionalLanguages: ["csharp"],
+      additionalLanguages: ["csharp", "cshtml"],
     },
   } satisfies Preset.ThemeConfig,
   themes: [

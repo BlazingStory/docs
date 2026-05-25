@@ -11,8 +11,7 @@ Rules:
 
 Basic example (top-level and nested ordering):
 
-```razor
-@* 📄 App.razor *@
+```razor title="📄 App.razor"
 @using static BlazingStory.Types.NavigationTreeOrderBuilder
 
 <BlazingStoryApp Assemblies="[typeof(App).Assembly]" 
