@@ -56,7 +56,7 @@ const config: Config = {
               badge: false,
             },
             "v1.0.0-preview.81": {
-              label: "v1.0.0-preview.81 ~ 82",
+              label: "1.0.0-preview.81 ~ 82",
               badge: false,
             },
             "v1.0.0-preview.68": {
