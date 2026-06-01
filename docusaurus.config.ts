@@ -51,8 +51,12 @@ const config: Config = {
           routeBasePath: "/",
           includeCurrentVersion: false,
           versions: {
-            "v1.0.0-preview.81": {
+            "v1.0.0-preview.83": {
               label: "Current Version",
+              badge: false,
+            },
+            "v1.0.0-preview.81": {
+              label: "v1.0.0-preview.81 ~ 82",
               badge: false,
             },
             "v1.0.0-preview.68": {
