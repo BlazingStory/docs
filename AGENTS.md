@@ -11,7 +11,8 @@ This is the documentation site for **Blazing Story** — a Blazor reimplementati
 ## Tech Stack
 
 - Node.js / TypeScript
-- Docusaurus v3
+- Docusaurus v3.10 (with `@docusaurus/faster`)
+- React 19
 - Markdown / MDX for documentation content
 
 ## Directory Structure
@@ -31,8 +32,12 @@ This is the documentation site for **Blazing Story** — a Blazor reimplementati
 
 ## Current Published Versions
 
-- `v1.0.0-preview.68` — labeled **"Current Version"** (latest)
-- `v1.0.0-preview.67` — labeled **"v1.0.0-preview.67 or before"**
+| Version key | Label in dropdown | Notes |
+|---|---|---|
+| `v1.0.0-preview.83` | `Current Version` | latest |
+| `v1.0.0-preview.81` | `1.0.0-preview.81 ~ 82` | covers previews 81–82 |
+| `v1.0.0-preview.68` | `1.0.0-preview.68 ~ 80` | covers previews 68–80 |
+| `v1.0.0-preview.67` | `1.0.0-preview.67 or before` | oldest |
 
 ## Releasing a New Version
 
@@ -50,17 +55,31 @@ Because `includeCurrentVersion: false`, **all documentation lives in `versioned_
    > **Note:** Do NOT use the file-reading tool to check `versions.json` right after the command — it may return stale/cached content and falsely suggest the command failed. Always use the terminal to confirm.
 
 4. Update the `versions` object in `docusaurus.config.ts`:
-   - Set the new version's label to `"Current Version"`:
+   - Add the new version with label `"Current Version"`:
      ```ts
      "v1.0.0-preview.XX": {
        label: "Current Version",
        badge: false,
      },
      ```
-   - Change the previous "Current Version" entry's label to `"v1.0.0-preview.<prev> or before"`:
+   - Change the previous "Current Version" entry's label to a range covering the preview numbers it spans — from the version itself up to `XX - 1`. Do **not** include a leading `v` in the label:
      ```ts
      "v1.0.0-preview.<prev>": {
-       label: "v1.0.0-preview.<prev> or before",
+       label: "1.0.0-preview.<prev> ~ <XX-1>",
+       badge: false,
+     },
+     ```
+     For example, when adding `v1.0.0-preview.85` where the previous current was `v1.0.0-preview.83`:
+     ```ts
+     "v1.0.0-preview.83": {
+       label: "1.0.0-preview.83 ~ 84",
+       badge: false,
+     },
+     ```
+     If `XX` immediately follows `<prev>` with no gap (i.e., `XX = prev + 1`), the range collapses to just the single version number:
+     ```ts
+     "v1.0.0-preview.<prev>": {
+       label: "1.0.0-preview.<prev>",
        badge: false,
      },
      ```
