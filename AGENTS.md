@@ -45,14 +45,15 @@ Because `includeCurrentVersion: false`, **all documentation lives in `versioned_
 
 1. Edit the content files in the latest `versioned_docs/version-<current>/` directory until the new content is ready.
 
-2. Run the versioning command to snapshot the current latest versioned docs into a new version:
+2. Snapshot the latest versioned docs into a new version by **copying** the directory and its sidebar.
+   > **Note:** Do NOT use `npm run docusaurus -- docs:version v1.0.0-preview.XX`. That command snapshots the unversioned `docs/` directory, which does not exist here (`includeCurrentVersion: false`), so it fails with `no docs found in ".../docs"`. Copy manually instead:
+   ```powershell
+   Copy-Item -Recurse "versioned_docs\version-<prev>" "versioned_docs\version-v1.0.0-preview.XX"
+   Copy-Item "versioned_sidebars\version-<prev>-sidebars.json" "versioned_sidebars\version-v1.0.0-preview.XX-sidebars.json"
    ```
-   npm run docusaurus -- docs:version v1.0.0-preview.XX
-   ```
-   This creates `versioned_docs/version-v1.0.0-preview.XX/`, `versioned_sidebars/version-v1.0.0-preview.XX-sidebars.json`, and prepends the new version to `versions.json`.
 
-3. After running the command, verify `versions.json` via the **terminal** (e.g., `Get-Content versions.json`).
-   > **Note:** Do NOT use the file-reading tool to check `versions.json` right after the command — it may return stale/cached content and falsely suggest the command failed. Always use the terminal to confirm.
+3. Prepend the new version to `versions.json` (the file lists versions latest-first), then verify it via the **terminal** (e.g., `Get-Content versions.json`).
+   > **Note:** Do NOT use the file-reading tool to check `versions.json` right after editing — it may return stale/cached content and falsely suggest the edit failed. Always use the terminal to confirm.
 
 4. Update the `versions` object in `docusaurus.config.ts`:
    - Add the new version with label `"Current Version"`:
