@@ -34,7 +34,9 @@ This is the documentation site for **Blazing Story** — a Blazor reimplementati
 
 | Version key | Label in dropdown | Notes |
 |---|---|---|
-| `v1.0.0-preview.83` | `Current Version` | latest |
+| `v1.0.0-preview.89` | `Current Version` | latest |
+| `v1.0.0-preview.87` | `1.0.0-preview.87 ~ 88` | covers previews 87–88 |
+| `v1.0.0-preview.83` | `1.0.0-preview.83 ~ 86` | covers previews 83–86 |
 | `v1.0.0-preview.81` | `1.0.0-preview.81 ~ 82` | covers previews 81–82 |
 | `v1.0.0-preview.68` | `1.0.0-preview.68 ~ 80` | covers previews 68–80 |
 | `v1.0.0-preview.67` | `1.0.0-preview.67 or before` | oldest |
