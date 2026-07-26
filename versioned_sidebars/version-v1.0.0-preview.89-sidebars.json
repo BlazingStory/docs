@@ -103,6 +103,18 @@
     },
     {
       "type": "category",
+      "label": "🧪 Testing",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        {
+          "type": "doc",
+          "id": "visual-regression-testing"
+        }
+      ]
+    },
+    {
+      "type": "category",
       "label": "🤖 AI Integration",
       "collapsed": false,
       "collapsible": false,
@@ -123,6 +135,10 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
+        {
+          "type": "doc",
+          "id": "javascript-api"
+        },
         {
           "type": "doc",
           "id": "hot-reloading",

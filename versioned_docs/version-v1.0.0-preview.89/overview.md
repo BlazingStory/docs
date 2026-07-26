@@ -13,4 +13,6 @@ The "Blazing Story" is built on **almost 100% Blazor native** (except only a few
 
 In addition, Blazing Story integrates with AI coding assistants in two complementary ways: an [**MCP server feature**](./mcp-server-feature) that exposes story and component metadata to AI agents at runtime, and [**agent skills**](./agent-skills) that teach AI tools how to author stories and addons in idiomatic Blazing Story style.
 
+And once your components are cataloged, you can protect their appearance with [**visual regression testing**](./visual-regression-testing): a project template turns every story in your app into an automated screenshot test, so unintended visual changes are caught before they ship.
+
 You can try it out from the live demonstration site at the following link: https://jsakamoto.github.io/BlazingStory/
