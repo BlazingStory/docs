@@ -28,9 +28,17 @@ It is worth knowing what happens during a test run, because it explains most of 
 2. Baseline screenshots that are missing on your machine are downloaded from the storage service, so a fresh clone or a clean CI agent still compares against the team's baselines.
 3. The test file reads `tests/stories.json` and registers one Playwright test per story. This is why each story appears individually in the VS Code Test Explorer.
 4. Each test navigates to that story's isolated preview page (`/iframe.html?id=<story id>&viewMode=story`), awaits the JavaScript API's `readyView()` so that rendering, fonts, and the opening transition have settled, and then captures the preview area with Playwright's [`toHaveScreenshot()`](https://playwright.dev/docs/test-snapshots).
-5. Screenshots are compared against the baseline files in `tests/vrt.spec.ts-snapshots/`. A story that renders differently fails the test, and Playwright's HTML report shows the expected image, the actual image, and the diff.
+5. Screenshots are compared against the baseline files in `tests/vrt.spec.ts-snapshots/`, and a story that renders differently fails the test.
+6. The outcome is written as an HTML report at `playwright-report/index.html`.
 
 Note that only **stories** are captured. "Docs" pages and custom pages appear in the story index, but they are not part of the visual regression test.
+
+:::note
+**Where the baselines live**  
+`tests/vrt.spec.ts-snapshots/` is the local home of the baselines: it is where `npm run snapshots:pull` downloads into, and where `npm run snapshots:push` uploads from.
+
+Each file there is named `<story id>-<platform>.png`, for example `example-button--primary-linux.png`. Because the platform is part of the file name, a screenshot taken on Linux is only ever compared against a Linux baseline, never against one captured on Windows or macOS. That is also why one storage location can hold the sets of several platforms side by side.
+:::
 
 ## Preparation
 
@@ -187,7 +195,7 @@ npm test
 
 Baselines that are missing on your machine are downloaded from the storage service automatically before the run, so this single command is also all that a fresh clone or a CI agent needs.
 
-If differences are detected, the failing tests are listed in the console, and Playwright's HTML report (in `playwright-report/`) shows the baseline, the new screenshot, and the highlighted diff side by side.
+If differences are detected, the failing tests are listed in the console. Open the report at `playwright-report/index.html` in a browser to inspect them visually: for each failing story it shows the baseline image, the new screenshot, and the highlighted pixel diff, so you can judge at a glance whether the change was intended. `npm run test:open` runs the test and opens that report for you.
 
 ### Accepting An Intentional Change
 
@@ -203,8 +211,8 @@ npm run snapshots:push
 | Script | What it does |
 | --- | --- |
 | `npm test` | Runs the visual regression test for every story. |
-| `npm run test:open` | Runs the test and then opens the HTML report. |
-| `npm run snapshots:update` | Captures screenshots and writes them as the new baselines. |
+| `npm run test:open` | Runs the test and then opens `playwright-report/index.html`. |
+| `npm run snapshots:update` | Captures screenshots and writes them into `tests/vrt.spec.ts-snapshots/` as the new baselines. |
 | `npm run snapshots:push` | Uploads the local baselines to the storage service. |
 | `npm run snapshots:pull` | Downloads the baselines from the storage service explicitly. |
 | `npm run stories:gen` | Refreshes `tests/stories.json` from the running app without running any test. Useful to make newly added stories appear in an editor's test explorer. |
@@ -229,7 +237,7 @@ npm run snapshots:push
 | `--help` | Shows this list. |
 
 :::note
-Baseline file names carry the platform they were captured on, for example `example-button--primary-linux.png`, so a single storage location can hold the Linux, Windows, and macOS sets side by side. Every operation acts on the current platform's set unless you ask otherwise, and pruning is always limited to the current platform, so a push from one platform can never delete another platform's baselines.
+Since baseline file names carry the platform they were captured on, every operation acts on the current platform's set unless you ask otherwise. Pruning is always limited to the current platform, so a push from one platform can never delete another platform's baselines.
 :::
 
 ## Running In A Dev Container (Recommended)
