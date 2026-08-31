@@ -1,0 +1,18 @@
+﻿@inherits LayoutComponentBase
+@inject ThemeService ThemeService
+
+<NavBar />
+
+<main class="site-main">
+    @Body
+</main>
+
+<SiteFooter />
+
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) await this.ThemeService.InitializeAsync();
+    }
+}

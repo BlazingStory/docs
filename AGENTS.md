@@ -1,90 +1,46 @@
-# Agents Instructions
+# Blazing Story Docs (Blazor)
 
-## Project Overview
+Documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory) (a Storybook clone for Blazor). A .NET 10 Blazor WebAssembly single-page app that fetches versioned Markdown from `wwwroot` at runtime and renders it client-side.
 
-This is the documentation site for **Blazing Story** — a Blazor reimplementation (clone) of [Storybook](https://storybook.js.org/), providing a UI component catalog for Blazor applications.
+## Project layout
 
-- **Blazing Story repository**: https://github.com/jsakamoto/BlazingStory
-- **Site framework**: [Docusaurus](https://docusaurus.io/)
-- **Deployment**: GitHub Pages via GitHub Actions
+- `Docs/` — the Blazor WASM app (`BlazingStory.Docs.csproj`).
+  - `Pages/DocPage.razor` — the single route (`/` and `/{*Path}`) that resolves `{version}/{slug}` from the URL, loads the sidebar and Markdown, and renders the page.
+  - `Layout/` — chrome components: `Sidebar`, `TableOfContents`, `NavBar`, `Breadcrumbs`, `DocPagination`, `VersionSelector`, `ThemeToggle`, `SiteFooter`, `MainLayout`.
+  - `Services/`
+    - `DocsCatalogService` — fetches and caches `Docs/versions.json` and each version's `sidebar.json`.
+    - `MarkdownService` — fetches a `.md` file, strips YAML front matter, runs it through the Markdig pipeline, and caches the rendered `DocContent`.
+    - `DocRoutes` — the single source of truth for every URL/path shape (version catalog, sidebar file, markdown file, content/asset file, doc link). Route logic changes belong here.
+    - `DocsUiState`, `ThemeService` — sidebar open/close and light/dark theme state.
+  - `Models/` — POCOs deserialized from `versions.json` / `sidebar.json`, plus `DocContent`/`TocEntry`.
+  - `MarkdownRendering/`
+    - `DocumentPostProcessor` — rewrites relative Markdown links/images into app routes, normalizes code fence languages (e.g. `cs` → `csharp`, `razor` → `cshtml`), extracts the H1 title, and builds the H2/H3 table of contents.
+    - `CodeBlockTitleExtension` — Markdig extension for Docusaurus-style code fence titles.
+  - `wwwroot/Docs/` — the actual content, **not** the razor app:
+    - `versions.json` — `{ defaultVersion, versions: [{ version, displayText }] }`.
+    - `v{version}/sidebar.json` — `{ defaultSlug, sections: [{ displayText, items: [{ slug, displayText }] }] }` per version.
+    - `v{version}/EN/*.md` (+ `addons/*.md`, `assets/*`) — the Markdown content and images for that version. Only `EN` exists today (see `DocRoutes.Language`).
 
-## Tech Stack
+## How content resolves
 
-- Node.js / TypeScript
-- Docusaurus v3.10 (with `@docusaurus/faster`)
-- React 19
-- Markdown / MDX for documentation content
+`DocPage.razor` parses the URL path as `{version}/{slug}`; if the first segment isn't a known version it falls back to `versions.json`'s `defaultVersion` and treats the whole path as the slug. The default version's docs are served at the bare slug (no version prefix) — see `DocRoutes.Doc`. Every relative link/image in a Markdown file is rewritten at render time by `DocumentPostProcessor.RewriteLinks`, so authors write plain relative Markdown links/paths and never hand-craft app routes.
 
-## Directory Structure
+## Adding or editing a documentation page
 
-- `versioned_docs/version-<X>/` — versioned documentation source files (Markdown/MDX); **there is no `docs/` directory** because `includeCurrentVersion: false` is set in `docusaurus.config.ts`
-- `versioned_sidebars/` — sidebar configuration for each versioned snapshot
-- `versions.json` — ordered list of published versions (latest first)
-- `src/css/` — global CSS overrides (`custom.css`)
-- `static/` — static assets (images, favicon, etc.)
+1. Add/edit the `.md` file under `wwwroot/Docs/v{version}/EN/`. Images go in that version's `assets/` folder; link to them with a relative path.
+2. Add the page to the matching `sidebar.json` (`slug` = filename without `.md`, relative to the `EN` folder — e.g. `addons/overview`). A page not listed in `sidebar.json` cannot be reached from the sidebar and its prev/next pagination won't include it, even if the file exists.
+3. Only touch `versions.json` / create a new `v{version}` folder when cutting a new documentation version, not for routine content edits — existing published versions are treated as frozen snapshots (each has its own copy of every file).
+4. Admonitions use GFM alert syntax (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]`), not Docusaurus `:::` fences — `UseAlertBlocks()` in `MarkdownService` is what renders these.
+5. Code fences use the language identifiers Markdig/highlighting expect after `DocumentPostProcessor` normalization (`csharp`, `bash`, `cshtml`, `markup`, etc., or their common aliases like `cs`/`sh`/`razor`/`html`).
 
-## Common Commands
+## Running / building
 
-- `npm install` — install dependencies
-- `npm start` — start local dev server
-- `npm run build` — production build (output to `build/`)
-- `npm run typecheck` — TypeScript type check
+- Run locally: `dotnet run --project "Docs/BlazingStory.Docs.csproj"` (dev server at `http://localhost:5030`, per `Properties/launchSettings.json`).
+- Build: `dotnet build "Docs/BlazingStory.Docs.csproj"`.
+- No test suite in this repo.
 
-## Current Published Versions
+## Conventions
 
-| Version key | Label in dropdown | Notes |
-|---|---|---|
-| `v1.0.0-preview.89` | `Current Version` | latest |
-| `v1.0.0-preview.87` | `1.0.0-preview.87 ~ 88` | covers previews 87–88 |
-| `v1.0.0-preview.83` | `1.0.0-preview.83 ~ 86` | covers previews 83–86 |
-| `v1.0.0-preview.81` | `1.0.0-preview.81 ~ 82` | covers previews 81–82 |
-| `v1.0.0-preview.68` | `1.0.0-preview.68 ~ 80` | covers previews 68–80 |
-| `v1.0.0-preview.67` | `1.0.0-preview.67 or before` | oldest |
-
-## Releasing a New Version
-
-Because `includeCurrentVersion: false`, **all documentation lives in `versioned_docs/`**. To publish a new version (e.g., `v1.0.0-preview.XX`):
-
-1. Edit the content files in the latest `versioned_docs/version-<current>/` directory until the new content is ready.
-
-2. Snapshot the latest versioned docs into a new version by **copying** the directory and its sidebar.
-   > **Note:** Do NOT use `npm run docusaurus -- docs:version v1.0.0-preview.XX`. That command snapshots the unversioned `docs/` directory, which does not exist here (`includeCurrentVersion: false`), so it fails with `no docs found in ".../docs"`. Copy manually instead:
-   ```powershell
-   Copy-Item -Recurse "versioned_docs\version-<prev>" "versioned_docs\version-v1.0.0-preview.XX"
-   Copy-Item "versioned_sidebars\version-<prev>-sidebars.json" "versioned_sidebars\version-v1.0.0-preview.XX-sidebars.json"
-   ```
-
-3. Prepend the new version to `versions.json` (the file lists versions latest-first), then verify it via the **terminal** (e.g., `Get-Content versions.json`).
-   > **Note:** Do NOT use the file-reading tool to check `versions.json` right after editing — it may return stale/cached content and falsely suggest the edit failed. Always use the terminal to confirm.
-
-4. Update the `versions` object in `docusaurus.config.ts`:
-   - Add the new version with label `"Current Version"`:
-     ```ts
-     "v1.0.0-preview.XX": {
-       label: "Current Version",
-       badge: false,
-     },
-     ```
-   - Change the previous "Current Version" entry's label to a range covering the preview numbers it spans — from the version itself up to `XX - 1`. Do **not** include a leading `v` in the label:
-     ```ts
-     "v1.0.0-preview.<prev>": {
-       label: "1.0.0-preview.<prev> ~ <XX-1>",
-       badge: false,
-     },
-     ```
-     For example, when adding `v1.0.0-preview.85` where the previous current was `v1.0.0-preview.83`:
-     ```ts
-     "v1.0.0-preview.83": {
-       label: "1.0.0-preview.83 ~ 84",
-       badge: false,
-     },
-     ```
-     If `XX` immediately follows `<prev>` with no gap (i.e., `XX = prev + 1`), the range collapses to just the single version number:
-     ```ts
-     "v1.0.0-preview.<prev>": {
-       label: "1.0.0-preview.<prev>",
-       badge: false,
-     },
-     ```
-
-5. Verify the build succeeds: `npm run build`
+- Target framework is `net10.0` with nullable reference types and implicit usings enabled — keep new C# consistent with that.
+- Async I/O uses `async`/`await` throughout (`ValueTask` for the cached service methods); follow the same pattern for new async code.
+- This is a content-heavy repo: most changes are Markdown edits under `wwwroot/Docs/`, not C# changes. Treat past published version folders as read-only history unless explicitly asked to backport a fix.

@@ -1,0 +1,61 @@
+@implements IDisposable
+@inject DocsCatalogService Catalog
+@inject DocsUiState UiState
+@inject NavigationManager NavigationManager
+
+<div class="version-selector">
+    <button type="button" class="version-selector-button" aria-expanded="@this._isOpen" @onclick="this.Toggle">
+        @this.CurrentLabel
+        <span class="version-selector-caret" aria-hidden="true"></span>
+    </button>
+
+    @if (this._isOpen && this._catalog is not null)
+    {
+        <ul class="version-selector-menu">
+            @foreach (var version in this._catalog.Versions)
+            {
+                <li>
+                    <a class="version-selector-item @(version.Version == this.UiState.Version ? "active" : "")"
+                       href="@this.UrlFor(version.Version)" @onclick="() => this.SelectAsync(version.Version)"
+                       @onclick:preventDefault>
+                        @version.DisplayText.Text(version.Version)
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+@code
+{
+    private VersionCatalog? _catalog;
+
+    private bool _isOpen;
+
+    private string CurrentLabel => this._catalog?.Versions
+        .FirstOrDefault(version => version.Version == this.UiState.Version)?.DisplayText.Text(this.UiState.Version) ?? "";
+
+    protected override void OnInitialized() => this.UiState.Changed += this.OnUiStateChanged;
+
+    protected override async Task OnInitializedAsync() => this._catalog = await this.Catalog.GetVersionCatalogAsync();
+
+    private void Toggle() => this._isOpen = !this._isOpen;
+
+    private string UrlFor(string version) => DocRoutes.Doc(version, this.UiState.DefaultVersion, this.UiState.Slug);
+
+    private async Task SelectAsync(string version)
+    {
+        this._isOpen = false;
+        if (version == this.UiState.Version) return;
+
+        // Fall back to the landing page of the target version when the current document does not exist there.
+        var sidebar = await this.Catalog.GetSidebarAsync(version);
+        var slug = sidebar?.FindItem(this.UiState.Slug) is not null ? this.UiState.Slug : sidebar?.DefaultSlug ?? "";
+
+        this.NavigationManager.NavigateTo(DocRoutes.Doc(version, this.UiState.DefaultVersion, slug));
+    }
+
+    private void OnUiStateChanged() => this.InvokeAsync(this.StateHasChanged);
+
+    public void Dispose() => this.UiState.Changed -= this.OnUiStateChanged;
+}

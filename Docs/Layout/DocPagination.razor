@@ -1,0 +1,35 @@
+@if (this.Previous is not null || this.Next is not null)
+{
+    <nav class="doc-pagination" aria-label="Documentation pages">
+        @if (this.Previous is not null)
+        {
+            <a class="doc-pagination-link previous"
+               href="@DocRoutes.Doc(this.Version, this.DefaultVersion, this.Previous.Slug)">
+                <span class="doc-pagination-label">Previous</span>
+                <span class="doc-pagination-title">@this.Previous.DisplayText.Text(this.Previous.Slug)</span>
+            </a>
+        }
+        @if (this.Next is not null)
+        {
+            <a class="doc-pagination-link next" href="@DocRoutes.Doc(this.Version, this.DefaultVersion, this.Next.Slug)">
+                <span class="doc-pagination-label">Next</span>
+                <span class="doc-pagination-title">@this.Next.DisplayText.Text(this.Next.Slug)</span>
+            </a>
+        }
+    </nav>
+}
+
+@code
+{
+    [Parameter]
+    public SidebarItem? Previous { get; set; }
+
+    [Parameter]
+    public SidebarItem? Next { get; set; }
+
+    [Parameter, EditorRequired]
+    public required string Version { get; set; }
+
+    [Parameter, EditorRequired]
+    public required string DefaultVersion { get; set; }
+}

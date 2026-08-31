@@ -1,0 +1,114 @@
+@page "/"
+@page "/{*Path}"
+@inject DocsCatalogService Catalog
+@inject MarkdownService MarkdownService
+@inject DocsUiState UiState
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<PageTitle>@(this._document is null ? "Blazing Story" : $"{this._document.Title} | Blazing Story")</PageTitle>
+
+@if (this._sidebar is null)
+{
+    <div class="doc-loading">Loading&hellip;</div>
+}
+else
+{
+    <div class="doc-layout">
+        <Sidebar Definition="this._sidebar" Version="@this._version" DefaultVersion="@this._defaultVersion"
+                 CurrentSlug="@this._slug" />
+
+        <div class="doc-body">
+            @if (this._document is null)
+            {
+                <NotFound />
+            }
+            else
+            {
+                <Breadcrumbs Section="@this._sidebar.FindSection(this._slug)?.DisplayText.Text()"
+                             Title="@this._document.Title" />
+                <article class="markdown">@this._document.Html</article>
+                <DocPagination Previous="this._previous" Next="this._next" Version="@this._version"
+                               DefaultVersion="@this._defaultVersion" />
+            }
+        </div>
+
+        <TableOfContents Entries="this._document?.TableOfContents ?? []"
+                         CurrentUrl="@DocRoutes.Doc(this._version, this._defaultVersion, this._slug)" />
+    </div>
+}
+
+@code
+{
+    [Parameter]
+    public string? Path { get; set; }
+
+    private string _version = "";
+
+    private string _defaultVersion = "";
+
+    private string _slug = "";
+
+    private SidebarDefinition? _sidebar;
+
+    private DocContent? _document;
+
+    private SidebarItem? _previous;
+
+    private SidebarItem? _next;
+
+    private bool _scrollPending;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var catalog = await this.Catalog.GetVersionCatalogAsync();
+        this._defaultVersion = catalog.DefaultVersion;
+
+        var (version, slug) = ResolvePath(this.Path, catalog);
+
+        var sidebar = await this.Catalog.GetSidebarAsync(version);
+        if (sidebar is null)
+        {
+            this._sidebar = null;
+            return;
+        }
+
+        if (slug.Length == 0) slug = sidebar.DefaultSlug;
+
+        // Navigating to another fragment of the same document must not reload the content.
+        var isSameDocument = this._sidebar is not null && this._version == version && this._slug == slug;
+        this._scrollPending = true;
+        if (isSameDocument) return;
+
+        this._version = version;
+        this._slug = slug;
+        this._sidebar = sidebar;
+        this._document = sidebar.FindItem(slug) is null ? null : await this.MarkdownService.GetDocumentAsync(version, slug,
+this._defaultVersion);
+        (this._previous, this._next) = sidebar.FindNeighbors(slug);
+
+        this.UiState.SetCurrentDocument(version, this._defaultVersion, slug);
+        this.UiState.CloseSidebar();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!this._scrollPending) return;
+        this._scrollPending = false;
+
+        var fragment = Uri.UnescapeDataString(new Uri(this.NavigationManager.Uri).Fragment.TrimStart('#'));
+        await this.JSRuntime.InvokeVoidAsync("blazingStoryDocs.scrollToAnchor", fragment);
+        await this.JSRuntime.InvokeVoidAsync("blazingStoryDocs.highlightCode");
+    }
+
+    private static (string Version, string Slug) ResolvePath(string? path, VersionCatalog catalog)
+    {
+        var trimmed = (path ?? "").Trim('/');
+        var separator = trimmed.IndexOf('/');
+        var firstSegment = separator < 0 ? trimmed : trimmed[..separator];
+
+        return catalog.Contains(firstSegment)
+            ? (firstSegment, separator < 0 ? "" : trimmed[(separator + 1)..])
+            : (catalog.DefaultVersion, trimmed);
+    }
+}

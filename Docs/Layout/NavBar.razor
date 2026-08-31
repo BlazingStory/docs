@@ -1,0 +1,39 @@
+@implements IDisposable
+@inject DocsUiState UiState
+
+<header class="navbar">
+    <div class="navbar-inner">
+        <button type="button" class="navbar-hamburger" aria-label="Toggle the navigation menu"
+                @onclick="this.UiState.ToggleSidebar">
+            <svg width="24" height="24" viewBox="0 0 30 30" aria-hidden="true">
+                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h22M4 15h22M4 23h22" />
+            </svg>
+        </button>
+
+        <a class="navbar-brand" href="@DocRoutes.Home">
+            <img src="img/logo.svg" alt="Blazing Story Logo" width="32" height="32" />
+            <b>Blazing Story</b>
+        </a>
+
+        <div class="navbar-items">
+            <VersionSelector />
+            <a class="navbar-link" href="https://github.com/jsakamoto/BlazingStory" target="_blank"
+               rel="noopener noreferrer">GitHub</a>
+            <ThemeToggle />
+        </div>
+    </div>
+</header>
+
+@if (this.UiState.IsSidebarOpen)
+{
+    <div class="sidebar-backdrop" @onclick="this.UiState.CloseSidebar"></div>
+}
+
+@code
+{
+    protected override void OnInitialized() => this.UiState.Changed += this.OnUiStateChanged;
+
+    private void OnUiStateChanged() => this.InvokeAsync(this.StateHasChanged);
+
+    public void Dispose() => this.UiState.Changed -= this.OnUiStateChanged;
+}

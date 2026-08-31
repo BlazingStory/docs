@@ -1,0 +1,23 @@
+<nav class="doc-toc">
+    @if (this.Entries.Count > 0)
+    {
+        <div class="doc-toc-title">On this page</div>
+        <ul>
+            @foreach (var entry in this.Entries)
+            {
+                <li class="toc-level-@entry.Level">
+                    <a href="@($"{this.CurrentUrl}#{entry.Id}")">@entry.Text</a>
+                </li>
+            }
+        </ul>
+    }
+</nav>
+
+@code
+{
+    [Parameter, EditorRequired]
+    public required IReadOnlyList<TocEntry> Entries { get; set; }
+
+    [Parameter, EditorRequired]
+    public required string CurrentUrl { get; set; }
+}

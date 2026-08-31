@@ -1,0 +1,563 @@
+/* Design tokens taken from the Infima defaults that the Docusaurus version of this site uses. */
+:root {
+    --bs-color-primary: #3578e5;
+    --bs-color-primary-dark: #306cce;
+    --bs-color-primary-darker: #2d66c3;
+    --bs-color-primary-darkest: #2554a0;
+    --bs-color-primary-light: #538ce9;
+    --bs-color-primary-lighter: #72a1ed;
+    --bs-color-primary-lightest: #9abcf2;
+
+    --bs-background: #ffffff;
+    --bs-surface: #ffffff;
+    --bs-text: #1c1e21;
+    --bs-text-secondary: #525860;
+    --bs-menu-text: #606770;
+    --bs-border: #dadde1;
+    --bs-hover-overlay: rgba(0, 0, 0, .05);
+    --bs-active-overlay: rgba(53, 120, 229, .1);
+    --bs-code-background: #f6f7f8;
+    --bs-code-block-background: #f6f8fa;
+    --bs-table-stripe: rgba(0, 0, 0, .03);
+    --bs-footer-background: #303846;
+    --bs-footer-text: #ebedf0;
+    --bs-shadow-low: 0 1px 2px 0 rgba(0, 0, 0, .1);
+    --bs-shadow-menu: 0 5px 40px rgba(0, 0, 0, .2);
+    --bs-scrollbar-thumb: rgba(0, 0, 0, .25);
+
+    --bs-radius: .4rem;
+    --bs-navbar-height: 3.75rem;
+    --bs-sidebar-width: 300px;
+    --bs-toc-width: 240px;
+    --bs-container-width: 1320px;
+
+    --bs-font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, BlinkMacSystemFont, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --bs-font-family-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+[data-theme='dark'] {
+    --bs-background: #1b1b1d;
+    --bs-surface: #242526;
+    --bs-text: #e3e3e3;
+    --bs-text-secondary: #dadde1;
+    --bs-menu-text: #dadde1;
+    --bs-border: #444950;
+    --bs-hover-overlay: rgba(255, 255, 255, .05);
+    --bs-active-overlay: rgba(53, 120, 229, .2);
+    --bs-code-background: rgba(255, 255, 255, .1);
+    --bs-code-block-background: #282a36;
+    --bs-table-stripe: rgba(255, 255, 255, .07);
+    --bs-shadow-menu: 0 5px 40px rgba(0, 0, 0, .5);
+    --bs-scrollbar-thumb: #5a5a5f;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ---------------------------------------------------------------- scrollbars */
+
+html,
+.doc-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--bs-scrollbar-thumb) transparent;
+}
+
+html::-webkit-scrollbar,
+.doc-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+html::-webkit-scrollbar-track,
+.doc-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+.doc-sidebar::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb:hover,
+.doc-sidebar::-webkit-scrollbar-thumb:hover,
+html::-webkit-scrollbar-thumb:active,
+.doc-sidebar::-webkit-scrollbar-thumb:active {
+    background-color: var(--bs-scrollbar-thumb);
+    border-radius: 3px;
+}
+
+body {
+    margin: 0;
+    font-family: var(--bs-font-family);
+    font-size: 100%;
+    line-height: 1.65;
+    color: var(--bs-text);
+    background-color: var(--bs-background);
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a {
+    color: var(--bs-color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--bs-color-primary-darker);
+    text-decoration: underline;
+}
+
+[data-theme='dark'] a:hover {
+    color: var(--bs-color-primary-lighter);
+}
+
+button {
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+/* ---------------------------------------------------------------- navigation bar */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    height: var(--bs-navbar-height);
+    background-color: var(--bs-surface);
+    box-shadow: var(--bs-shadow-low);
+}
+
+.navbar-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+    max-width: var(--bs-container-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.navbar-hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: .25rem;
+    border: none;
+    border-radius: var(--bs-radius);
+    background: transparent;
+    color: var(--bs-menu-text);
+}
+
+.navbar-hamburger:hover {
+    background-color: var(--bs-hover-overlay);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: var(--bs-text);
+    font-size: 1.25rem;
+}
+
+.navbar-brand:hover {
+    color: var(--bs-text);
+    text-decoration: none;
+}
+
+.navbar-items {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-left: auto;
+}
+
+.navbar-link {
+    padding: .25rem .75rem;
+    border-radius: var(--bs-radius);
+    color: var(--bs-text);
+    font-weight: 500;
+}
+
+.navbar-link:hover {
+    color: var(--bs-text);
+    background-color: var(--bs-hover-overlay);
+    text-decoration: none;
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .35rem;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--bs-text);
+}
+
+.theme-toggle:hover {
+    background-color: var(--bs-hover-overlay);
+}
+
+/* ---------------------------------------------------------------- version selector */
+
+.version-selector {
+    position: relative;
+}
+
+.version-selector-button {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .25rem .75rem;
+    border: none;
+    border-radius: var(--bs-radius);
+    background: transparent;
+    color: var(--bs-text);
+    font-weight: 500;
+}
+
+.version-selector-button:hover {
+    background-color: var(--bs-hover-overlay);
+}
+
+.version-selector-caret {
+    border: .3rem solid transparent;
+    border-top-color: currentColor;
+    margin-top: .3rem;
+}
+
+.version-selector-menu {
+    position: absolute;
+    top: calc(100% + .5rem);
+    right: 0;
+    z-index: 300;
+    min-width: 14rem;
+    margin: 0;
+    padding: .5rem;
+    list-style: none;
+    background-color: var(--bs-surface);
+    border-radius: var(--bs-radius);
+    box-shadow: var(--bs-shadow-menu);
+}
+
+.version-selector-item {
+    display: block;
+    padding: .35rem .75rem;
+    border-radius: var(--bs-radius);
+    color: var(--bs-menu-text);
+    white-space: nowrap;
+}
+
+.version-selector-item:hover {
+    background-color: var(--bs-hover-overlay);
+    text-decoration: none;
+}
+
+.version-selector-item.active {
+    color: var(--bs-color-primary);
+    background-color: var(--bs-active-overlay);
+    font-weight: 500;
+}
+
+/* ---------------------------------------------------------------- page layout */
+
+.site-main {
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: var(--bs-container-width);
+    margin: 0 auto;
+}
+
+.doc-layout {
+    display: grid;
+    grid-template-columns: var(--bs-sidebar-width) minmax(0, 1fr) var(--bs-toc-width);
+    align-items: start;
+}
+
+.doc-body {
+    min-width: 0;
+    padding: 1rem 2rem 3rem;
+}
+
+.doc-loading {
+    padding: 3rem 2rem;
+    color: var(--bs-text-secondary);
+}
+
+.doc-not-found {
+    padding: 2rem 0;
+}
+
+/* ---------------------------------------------------------------- sidebar */
+
+.doc-sidebar {
+    position: sticky;
+    top: var(--bs-navbar-height);
+    height: calc(100vh - var(--bs-navbar-height));
+    overflow-y: auto;
+    padding: 1rem .5rem 2rem;
+    border-right: 1px solid var(--bs-border);
+}
+
+.sidebar-section {
+    margin-bottom: 1rem;
+}
+
+.sidebar-section-title {
+    padding: .375rem .75rem;
+    color: var(--bs-text);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.sidebar-items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-item {
+    display: block;
+    padding: .375rem .75rem .375rem 1.5rem;
+    border-radius: .25rem;
+    color: var(--bs-menu-text);
+    line-height: 1.25;
+}
+
+.sidebar-item:hover {
+    color: var(--bs-menu-text);
+    background-color: var(--bs-hover-overlay);
+    text-decoration: none;
+}
+
+.sidebar-item.active {
+    color: var(--bs-color-primary);
+    background-color: var(--bs-active-overlay);
+    font-weight: 500;
+}
+
+.sidebar-backdrop {
+    display: none;
+}
+
+/* ---------------------------------------------------------------- table of contents */
+
+.doc-toc {
+    position: sticky;
+    top: var(--bs-navbar-height);
+    max-height: calc(100vh - var(--bs-navbar-height));
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+    font-size: .875rem;
+}
+
+.doc-toc-title {
+    margin-bottom: .5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: .75rem;
+    letter-spacing: .05em;
+    color: var(--bs-text-secondary);
+}
+
+.doc-toc ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid var(--bs-border);
+}
+
+.doc-toc li a {
+    display: block;
+    padding: .25rem 0 .25rem 1rem;
+    color: var(--bs-menu-text);
+}
+
+.doc-toc li a:hover {
+    color: var(--bs-color-primary);
+    text-decoration: none;
+}
+
+.doc-toc .toc-level-3 a {
+    padding-left: 2rem;
+}
+
+/* ---------------------------------------------------------------- breadcrumbs */
+
+.breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+    font-size: .875rem;
+}
+
+.breadcrumbs li {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumbs li+li::before {
+    content: "\203A";
+    margin-right: .5rem;
+    color: var(--bs-text-secondary);
+}
+
+.breadcrumb-home,
+.breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    padding: .25rem .5rem;
+    border-radius: var(--bs-radius);
+    color: var(--bs-menu-text);
+}
+
+.breadcrumb-home:hover {
+    background-color: var(--bs-hover-overlay);
+}
+
+.breadcrumb-item.active {
+    background-color: var(--bs-hover-overlay);
+    color: var(--bs-text);
+}
+
+/* ---------------------------------------------------------------- pagination */
+
+.doc-pagination {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+}
+
+.doc-pagination-link {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    padding: 1rem;
+    border: 1px solid var(--bs-border);
+    border-radius: var(--bs-radius);
+    color: var(--bs-color-primary);
+}
+
+.doc-pagination-link:hover {
+    border-color: var(--bs-color-primary);
+    text-decoration: none;
+}
+
+.doc-pagination-link.next {
+    margin-left: auto;
+    text-align: right;
+}
+
+.doc-pagination-label {
+    color: var(--bs-text-secondary);
+    font-size: .875rem;
+}
+
+.doc-pagination-title {
+    font-weight: 500;
+}
+
+/* ---------------------------------------------------------------- footer */
+
+.site-footer {
+    flex-shrink: 0;
+    padding: 2rem 1rem;
+    background-color: var(--bs-footer-background);
+    color: var(--bs-footer-text);
+    text-align: center;
+    font-size: .875rem;
+}
+
+/* ---------------------------------------------------------------- responsive */
+
+@media (max-width: 1200px) {
+    .doc-layout {
+        grid-template-columns: var(--bs-sidebar-width) minmax(0, 1fr);
+    }
+
+    .doc-toc {
+        display: none;
+    }
+}
+
+@media (max-width: 996px) {
+    .navbar-hamburger {
+        display: inline-flex;
+    }
+
+    .doc-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .doc-body {
+        padding: 1rem 1rem 3rem;
+    }
+
+    .doc-sidebar {
+        position: fixed;
+        top: var(--bs-navbar-height);
+        left: 0;
+        bottom: 0;
+        z-index: 150;
+        width: var(--bs-sidebar-width);
+        max-width: 80vw;
+        height: auto;
+        background-color: var(--bs-surface);
+        transform: translateX(-100%);
+        transition: transform .2s ease-out;
+    }
+
+    .doc-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-backdrop {
+        display: block;
+        position: fixed;
+        top: var(--bs-navbar-height);
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 140;
+        background-color: rgba(0, 0, 0, .4);
+    }
+
+    .navbar-link {
+        display: none;
+    }
+}
+
+/* ---------------------------------------------------------------- Blazor error UI */
+
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: .6rem 1.25rem;
+    background: #ffffe0;
+    color: #1c1e21;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, .2);
+}
+
+#blazor-error-ui .dismiss {
+    position: absolute;
+    top: .75rem;
+    right: .75rem;
+    cursor: pointer;
+}

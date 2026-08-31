@@ -1,0 +1,44 @@
+@implements IDisposable
+@inject DocsUiState UiState
+
+<nav class="doc-sidebar @(this.UiState.IsSidebarOpen ? "open" : "")">
+    @foreach (var section in this.Definition.Sections)
+    {
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">@section.DisplayText.Text()</div>
+            <ul class="sidebar-items">
+                @foreach (var item in section.Items)
+                {
+                    <li>
+                        <a class="sidebar-item @(item.Slug == this.CurrentSlug ? "active" : "")"
+                           href="@DocRoutes.Doc(this.Version, this.DefaultVersion, item.Slug)"
+                           @onclick="this.UiState.CloseSidebar">
+                            @item.DisplayText.Text(item.Slug)
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</nav>
+
+@code
+{
+    [Parameter, EditorRequired]
+    public required SidebarDefinition Definition { get; set; }
+
+    [Parameter, EditorRequired]
+    public required string Version { get; set; }
+
+    [Parameter, EditorRequired]
+    public required string DefaultVersion { get; set; }
+
+    [Parameter, EditorRequired]
+    public required string CurrentSlug { get; set; }
+
+    protected override void OnInitialized() => this.UiState.Changed += this.OnUiStateChanged;
+
+    private void OnUiStateChanged() => this.InvokeAsync(this.StateHasChanged);
+
+    public void Dispose() => this.UiState.Changed -= this.OnUiStateChanged;
+}
