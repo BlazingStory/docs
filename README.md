@@ -39,9 +39,11 @@ dotnet publish Docs -c Release
 
 This generates the static site under `Docs/bin/Release/net10.0/publish/wwwroot`.
 
-## License
+## License and Third-Party Notices
 
 Copyright (c) 2025-2026 J.Sakamoto
 
 This documentation is licensed under the [CC BY-SA 4.0](LICENSE).  
 You are free to share and adapt the material as long as you provide appropriate credit and distribute your contributions under the same license.
+
+This site also uses third-party libraries and resources; see [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) for details.
