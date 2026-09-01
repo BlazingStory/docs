@@ -94,11 +94,18 @@ this._defaultVersion);
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!this._scrollPending) return;
-        this._scrollPending = false;
 
-        var fragment = Uri.UnescapeDataString(new Uri(this.NavigationManager.Uri).Fragment.TrimStart('#'));
-        await this.JSRuntime.InvokeVoidAsync("blazingStoryDocs.scrollToAnchor", fragment);
         await this.JSRuntime.InvokeVoidAsync("blazingStoryDocs.highlightCode");
+
+        // Opening another document renders this component once while its Markdown is still being
+        // fetched, so the heading a link points at may not be in the page yet. The request stays
+        // pending until the heading is really there, otherwise a link to one would land on the top
+        // of the document instead.
+        var fragment = Uri.UnescapeDataString(new Uri(this.NavigationManager.Uri).Fragment.TrimStart('#'));
+        if (await this.JSRuntime.InvokeAsync<bool>("blazingStoryDocs.scrollToAnchor", fragment))
+        {
+            this._scrollPending = false;
+        }
     }
 
     private static (string Version, string Slug) ResolvePath(string? path, VersionCatalog catalog)

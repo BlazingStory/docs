@@ -1,0 +1,189 @@
+@implements IDisposable
+@inject SearchIndexService SearchIndexService
+@inject DocsUiState UiState
+@inject NavigationManager NavigationManager
+
+<div class="search-box" @onfocusout="this.OnFocusOut">
+    <input type="search" class="search-box-input" placeholder="Search docs" aria-label="Search the documentation"
+           autocomplete="off" value="@this._text" @onfocus="this.OnFocusAsync" @oninput="this.OnInputAsync"
+           @onkeydown="this.OnKeyDownAsync" />
+
+    @if (this._isOpen)
+    {
+        <div class="search-box-results">
+            @if (this.Status is { Length: > 0 } status)
+            {
+                <p class="search-box-status" aria-live="polite">@status</p>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var result in this._results)
+                    {
+                        <li>
+                            @* Keeping the mouse down from moving the focus is what lets the click below land before the list closes. *@
+                            <a href="@result.Url" @onmousedown:preventDefault
+                               @onclick="() => this.Select(result)" @onclick:preventDefault>
+                                <span class="search-box-result-title">@result.Title</span>
+                                @if (result.Heading != result.Title)
+                                {
+                                    <span class="search-box-result-heading">@result.Heading</span>
+                                }
+                                <span class="search-box-result-text">@result.Text</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+</div>
+
+@code
+{
+    private const int MaxResults = 10;
+
+    /// <summary>How long to wait after the last keystroke before running a search.</summary>
+    private static readonly TimeSpan DebounceDelay = TimeSpan.FromMilliseconds(400);
+
+    private string _text = "";
+
+    private bool _isOpen;
+
+    /// <summary>
+    /// The version whose index is loaded and ready to search. Every version has its own index, so
+    /// this has to be the version itself rather than a flag: switching to another one puts the box
+    /// back into its loading state until that version's index arrives too.
+    /// </summary>
+    private string _readyVersion = "";
+
+    private bool _isSearching;
+
+    private SearchResult[] _results = [];
+
+    private CancellationTokenSource? _debounceCancellation;
+
+    /// <summary>The text of the search box that <see cref="_results"/> was built from.</summary>
+    private string _appliedText = "";
+
+    /// <summary>The version the current results belong to, so that switching versions can drop them.</summary>
+    private string _resultsVersion = "";
+
+    /// <summary>What to tell the visitor instead of a result list, or an empty string when the results are worth showing.</summary>
+    private bool IsReady => this._readyVersion == this.UiState.Version;
+
+    private string Status => (this.IsReady, this._isSearching, this._text.Trim(), this._results.Length) switch
+    {
+        (false, _, _, _) => "Loading the search index…",
+        (_, true, _, _) => "Searching…",
+        (_, _, "", _) => "Type to search the documentation of this version.",
+        (_, _, _, 0) => "No results.",
+        _ => "",
+    };
+
+    protected override void OnInitialized() => this.UiState.Changed += this.OnUiStateChanged;
+
+    /// <summary>
+    /// Loads the model and the index only once the visitor shows an interest in searching. Doing
+    /// this on startup instead would make every visitor pay for a 23 MB download they may not want.
+    /// </summary>
+    private async Task OnFocusAsync()
+    {
+        this._isOpen = true;
+        if (this.IsReady) return;
+
+        var version = this.UiState.Version;
+        await this.SearchIndexService.WarmUpAsync(version);
+        this._readyVersion = version;
+
+        // Text left over from the version the visitor came from still deserves an answer, now
+        // against the index of this one.
+        await this.SearchAsync();
+    }
+
+    private void OnFocusOut(FocusEventArgs args) => this._isOpen = false;
+
+    private async Task OnInputAsync(ChangeEventArgs args)
+    {
+        this._text = args.Value as string ?? "";
+        this._isOpen = true;
+
+        // Drop the search that the previous keystroke scheduled, if it has not run yet.
+        this._debounceCancellation?.Cancel();
+        this._debounceCancellation = new CancellationTokenSource();
+        var cancellationToken = this._debounceCancellation.Token;
+
+        try { await Task.Delay(DebounceDelay, cancellationToken); }
+        catch (OperationCanceledException) { return; }
+
+        await this.SearchAsync();
+    }
+
+    private async Task SearchAsync()
+    {
+        var text = this._text.Trim();
+        if (this._appliedText == text) return;
+        this._appliedText = text;
+
+        if (text.Length == 0)
+        {
+            this._results = [];
+            this._isSearching = false;
+            return;
+        }
+
+        this._isSearching = true;
+        this.StateHasChanged();
+
+        var version = this.UiState.Version;
+        var results = await this.SearchIndexService.SearchAsync(version, text, MaxResults);
+
+        // A newer search text may have been applied while this search was running.
+        if (this._appliedText != text) return;
+
+        this._results = results;
+        this._resultsVersion = version;
+        this._isSearching = false;
+    }
+
+    private async Task OnKeyDownAsync(KeyboardEventArgs args)
+    {
+        if (args.Key == "Escape") { this._isOpen = false; return; }
+        if (args.Key != "Enter") return;
+
+        this._debounceCancellation?.Cancel();
+        await this.SearchAsync();
+    }
+
+    private void Select(SearchResult result)
+    {
+        this._isOpen = false;
+        this._text = "";
+        this._appliedText = "";
+        this._results = [];
+        this.NavigationManager.NavigateTo(result.Url);
+    }
+
+    /// <summary>
+    /// The results belong to one documentation version, so they are dropped when the visitor
+    /// switches to another one. Clearing the applied text along with them is what lets the same
+    /// search text run again against the index of the new version. Anything else the layout
+    /// reports, such as the sidebar opening, leaves what the visitor typed alone.
+    /// </summary>
+    private void OnUiStateChanged()
+    {
+        if (this._resultsVersion != this.UiState.Version)
+        {
+            this._results = [];
+            this._appliedText = "";
+        }
+        this.InvokeAsync(this.StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        this.UiState.Changed -= this.OnUiStateChanged;
+        this._debounceCancellation?.Cancel();
+        this._debounceCancellation?.Dispose();
+    }
+}

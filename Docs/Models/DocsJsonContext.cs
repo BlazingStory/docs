@@ -5,6 +5,7 @@ namespace BlazingStory.Docs.Models;
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, PropertyNameCaseInsensitive = true)]
 [JsonSerializable(typeof(VersionCatalog))]
 [JsonSerializable(typeof(SidebarDefinition))]
+[JsonSerializable(typeof(SearchIndexFile))]
 public sealed partial class DocsJsonContext : JsonSerializerContext
 {
 }

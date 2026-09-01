@@ -28,13 +28,20 @@ window.blazingStoryDocs = (function () {
             return this.getTheme();
         },
 
+        // Returns whether the request could be carried out. A document that is still being fetched
+        // has no heading in the page yet, so the caller has to ask again after the next render
+        // instead of giving up and leaving the visitor at the top of the page.
         scrollToAnchor: function (id) {
-            const element = id ? document.getElementById(id) : null;
-            if (element) {
-                element.scrollIntoView();
-            } else {
+            if (!id) {
                 window.scrollTo({ top: 0 });
+                return true;
             }
+
+            const element = document.getElementById(id);
+            if (!element) return false;
+
+            element.scrollIntoView();
+            return true;
         },
 
         highlightCode: function () {

@@ -4,6 +4,8 @@ This repository contains the documentation site for [Blazing Story](https://gith
 
 The site is a Blazor WebAssembly app. It loads versioned Markdown files from `Docs/wwwroot/Docs` at runtime and renders them in the browser.
 
+The search box finds pages by meaning, not by keyword. It also runs in the browser, so the site still works as plain static files with no server behind it.
+
 ## Repository Overview
 
 - **Purpose.** Host and manage the documentation for Blazing Story.
@@ -17,6 +19,9 @@ The site is a Blazor WebAssembly app. It loads versioned Markdown files from `Do
 
 **Requirements**
 - .NET 10 SDK
+- An internet connection for the first build
+
+The build also creates the search index for every documentation version. The first build downloads the embedding model (about 23 MB) from Hugging Face and keeps it in `Docs.IndexGenerator/.model-cache/`, so it takes a while. Later builds reuse that cache and skip any version whose content did not change. The index files themselves are build output, so they are not in this repository.
 
 ### Development Server
 

@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+    <!-- ".vec" is not in the SDK's default CompressionIncludePatterns list, so add it explicitly to get search-index.vec.br/.gz. -->
+    <CompressionIncludePatterns>$(CompressionIncludePatterns);**/*.vec</CompressionIncludePatterns>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,5 +14,30 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.11" PrivateAssets="all" />
   </ItemGroup>
+
+  <ItemGroup>
+    <SearchIndexInput Include="wwwroot/Docs/versions.json" />
+    <SearchIndexInput Include="wwwroot/Docs/*/sidebar.json" />
+    <SearchIndexInput Include="wwwroot/Docs/*/EN/**/*.md" />
+  </ItemGroup>
+
+  <!--
+    Regenerates wwwroot/Docs/{version}/search-index.json and search-index.vec by running the
+    Docs.IndexGenerator console app. The generator itself decides per version whether there is
+    anything to do, so a build with unchanged content costs about a second.
+
+    Hooked to BeforeTargets="Restore" (in addition to "Build") because on a fresh checkout the
+    wwwroot/** glob that becomes the Blazor WASM Static Web Assets manifest is fixed at project
+    evaluation time. dotnet build/publish evaluate the project once for the implicit Restore and
+    again for Build; generating the index files during the Restore pass ensures they already exist
+    on disk when the Build pass re-evaluates the wwwroot glob, so they get included as Static Web Assets.
+
+    The index files are not committed to the Git repository; the Markdown files and sidebar.json are.
+  -->
+  <Target Name="GenerateSearchIndex" BeforeTargets="Restore;Build" Inputs="@(SearchIndexInput)" Outputs="$(BaseIntermediateOutputPath)search-index.stamp">
+    <Exec Command="dotnet run --project &quot;$(MSBuildThisFileDirectory)..\Docs.IndexGenerator\BlazingStory.Docs.IndexGenerator.csproj&quot; -- --docs &quot;$(MSBuildThisFileDirectory)wwwroot\Docs&quot;" />
+    <MakeDir Directories="$(BaseIntermediateOutputPath)" />
+    <Touch Files="$(BaseIntermediateOutputPath)search-index.stamp" AlwaysCreate="true" />
+  </Target>
 
 </Project>

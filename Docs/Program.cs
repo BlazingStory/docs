@@ -11,6 +11,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<DocsCatalogService>();
 builder.Services.AddScoped<MarkdownService>();
 builder.Services.AddScoped<DocsUiState>();
+builder.Services.AddSingleton<EmbeddingService>();
+builder.Services.AddScoped<SearchIndexService>();
 builder.Services.AddScoped<ThemeService>();
 
 await builder.Build().RunAsync();

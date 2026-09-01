@@ -21,4 +21,10 @@ public static class DocRoutes
     public static string MarkdownFile(string version, string slug) => $"Docs/{version}/{Language}/{slug}.md";
 
     public static string ContentFile(string version, string relativePath) => $"Docs/{version}/{Language}/{relativePath}";
+
+    /// <summary>The metadata half of the vector search index of one version, generated at build time.</summary>
+    public static string SearchIndexJsonFile(string version) => $"Docs/{version}/search-index.json";
+
+    /// <summary>The vectors of the search index of one version, in the same order as the metadata.</summary>
+    public static string SearchIndexVecFile(string version) => $"Docs/{version}/search-index.vec";
 }

@@ -485,3 +485,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Vector search index files, generated at build time by Docs.IndexGenerator
+Docs/wwwroot/Docs/*/search-index.json
+Docs/wwwroot/Docs/*/search-index.vec
