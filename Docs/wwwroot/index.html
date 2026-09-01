@@ -28,7 +28,15 @@
 
   <body>
     <div id="app">
-      <div class="doc-loading">Loading&hellip;</div>
+      <div class="loading-progress">
+        <svg aria-label="Loading progress" role="img">
+          <title>Loading progress</title>
+          <circle r="40%" cx="50%" cy="50%" />
+          <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="text"></div>
+        <img src="img/logo.svg" alt="Blazing Story icon" />
+      </div>
     </div>
 
     <div id="blazor-error-ui">
