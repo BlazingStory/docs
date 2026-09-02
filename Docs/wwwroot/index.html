@@ -12,17 +12,7 @@
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/markdown.css" />
     <link rel="stylesheet" href="css/code-theme.css" />
-    <script>
-      // Apply the color theme before the first paint to avoid a flash of the wrong theme.
-      (function () {
-        var stored = null;
-        try {
-          stored = localStorage.getItem("theme");
-        } catch (e) {}
-        var dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
-      })();
-    </script>
+    <script src="js/theme-initializer.js"></script>
     <script type="importmap"></script>
   </head>
 
@@ -45,8 +35,6 @@
       <span class="dismiss">🗙</span>
     </div>
 
-    <script src="lib/prism/prism.js" data-manual></script>
-    <script src="js/site.js"></script>
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
   </body>
 </html>

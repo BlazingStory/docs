@@ -1,0 +1,21 @@
+{
+  "name": "transformers-bundle",
+  "version": "1.0.0",
+  "description": "Bundles @xenova/transformers into a single browser ES module using esbuild.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:js && npm run build:types",
+    "build:js": "esbuild src/index.js --bundle --format=esm --platform=browser --target=es2020 --minify --outfile=dist/transformers.min.js",
+    "build:types": "dts-bundle-generator -o dist/transformers.min.d.ts src/index.d.ts --no-check --external-inlines @xenova/transformers"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@xenova/transformers": "2.17.2"
+  },
+  "devDependencies": {
+    "dts-bundle-generator": "^9.5.1",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.9.3"
+  }
+}

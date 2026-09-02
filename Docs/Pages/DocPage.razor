@@ -1,5 +1,6 @@
 @page "/"
 @page "/{*Path}"
+@implements IAsyncDisposable
 @inject DocsCatalogService Catalog
 @inject MarkdownService MarkdownService
 @inject DocsUiState UiState
@@ -59,6 +60,11 @@ else
 
     private bool _scrollPending;
 
+    private IJSObjectReference? _jsModule;
+
+    private async ValueTask<IJSObjectReference> GetJsModuleAsync() => this._jsModule ??= await
+JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
+
     protected override async Task OnParametersSetAsync()
     {
         var catalog = await this.Catalog.GetVersionCatalogAsync();
@@ -93,16 +99,17 @@ this._defaultVersion);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!this._scrollPending) return;
+        var module = await this.GetJsModuleAsync();
+        await module.InvokeVoidAsync("highlightCode");
 
-        await this.JSRuntime.InvokeVoidAsync("blazingStoryDocs.highlightCode");
+        if (!this._scrollPending) return;
 
         // Opening another document renders this component once while its Markdown is still being
         // fetched, so the heading a link points at may not be in the page yet. The request stays
         // pending until the heading is really there, otherwise a link to one would land on the top
         // of the document instead.
         var fragment = Uri.UnescapeDataString(new Uri(this.NavigationManager.Uri).Fragment.TrimStart('#'));
-        if (await this.JSRuntime.InvokeAsync<bool>("blazingStoryDocs.scrollToAnchor", fragment))
+        if (await module.InvokeAsync<bool>("scrollToAnchor", fragment))
         {
             this._scrollPending = false;
         }
@@ -117,5 +124,15 @@ this._defaultVersion);
         return catalog.Contains(firstSegment)
             ? (firstSegment, separator < 0 ? "" : trimmed[(separator + 1)..])
             : (catalog.DefaultVersion, trimmed);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (this._jsModule is not null)
+        {
+            try { await this._jsModule.DisposeAsync(); }
+            catch (JSDisconnectedException) { } // Ignore if the JS runtime is already disconnected
+            this._jsModule = null;
+        }
     }
 }

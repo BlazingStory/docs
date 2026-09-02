@@ -1,0 +1,14 @@
+{
+  "name": "blazing-story-docs",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "license": "MPL-2.0",
+  "type": "module",
+  "devDependencies": {
+    "@xenova/transformers": "^2.17.2",
+    "typescript": "^7.0.2"
+  }
+}
