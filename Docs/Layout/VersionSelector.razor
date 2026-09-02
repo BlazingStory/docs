@@ -9,9 +9,9 @@
         <span class="version-selector-caret" aria-hidden="true"></span>
     </button>
 
-    @if (this._isOpen && this._catalog is not null)
+    @if (this._catalog is not null)
     {
-        <ul class="version-selector-menu">
+        <ul class="version-selector-menu @(this._isOpen ? "open" : "")">
             @foreach (var version in this._catalog.Versions)
             {
                 <li>

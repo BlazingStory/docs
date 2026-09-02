@@ -246,6 +246,15 @@ button {
     background-color: var(--bs-surface);
     border-radius: var(--bs-radius);
     box-shadow: var(--bs-shadow-menu);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.version-selector-menu.open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .version-selector-item {
