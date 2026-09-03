@@ -1,27 +1,14 @@
 ﻿<Project>
 
   <!--
-    Builds the browser bundle of "@xenova/transformers" out of the npm project next to this file,
-    so that neither of the two files it produces has to be built and copied by hand. Neither of
-    them is in the Git repository.
-
-    The project that imports this says where they go, and those same two paths are what tells the
-    target below whether there is anything left to do. Both are relative to that project:
+    Builds the browser bundle of "@xenova/transformers" out of the npm project next to this file.
+    The importing project says where the two files it produces go, and those paths, relative to
+    that project, are also what tells the target whether there is anything left to do:
 
       TransformersBundleJs   the ES module the browser loads, a Static Web Asset of the app
-      TransformersBundleDts  its type declarations, which "tsc" needs to compile the TypeScript
-                             of the app itself
+      TransformersBundleDts  its declarations, which "tsc" needs to compile the app's TypeScript
 
-    A fresh clone has no "node_modules" here yet, so the first build installs the npm packages as
-    well, which is what makes that one build take a couple of minutes. Every build after it skips
-    the whole target, since the two files it writes are newer than everything it reads.
-
-    The target runs before "Restore" as well as before "Build" for the same reason the search index
-    generation of the app does. The "wwwroot/**" glob that becomes the Static Web Assets manifest
-    is fixed when the project is evaluated, and a file missing from that manifest is a 404 from the
-    dev server with nothing to explain it. Both "dotnet build" and "dotnet publish" evaluate the
-    project once for the implicit restore and again for the build, so writing the bundle during the
-    restore pass leaves it on disk in time for the glob of the build pass to find it.
+    See "What the build generates" in AGENTS.md for the "Restore" hook and the rest.
   -->
 
   <PropertyGroup>

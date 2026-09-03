@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
 
-    <!-- ".vec" is not in the SDK's default CompressionIncludePatterns list, so add it explicitly to get search-index.vec.br/.gz. -->
+    <!-- ".vec" is not in the SDK's default list, so add it to get search-index.vec.br/.gz. -->
     <CompressionIncludePatterns>$(CompressionIncludePatterns);**/*.vec</CompressionIncludePatterns>
 
     <BlazorWasmPrerenderingOutputStyle>AppendHtmlExtension</BlazorWasmPrerenderingOutputStyle>
@@ -21,27 +21,19 @@
     <PackageReference Include="PublishSPAforGitHubPages.Build" Version="3.0.3" />
   </ItemGroup>
 
-  <!--
-    The documentation content sits in "Docs/" beside "wwwroot/" rather than inside it, so that
-    writing documentation never means working from within the web root of the app. Static Web
-    Assets is what serves it at "/Docs" all the same: "TargetPath" is the path the SDK matches
-    against its own "wwwroot/**" pattern, which is what gives each file its URL, while
-    "ContentRoot" is what tells the dev server where the file really is. "dotnet publish" copies
-    them into "wwwroot/Docs" of the published output.
-  -->
+  <!-- Documentation content, served at "/Docs" from beside "wwwroot" instead of from inside it. -->
   <ItemGroup>
-    <!-- The SDK claims the ".json" files of a folder as Content on its own, so the folder is dropped
-         first and then added back whole, with the metadata described above. -->
     <Content Remove="Docs\**" />
     <Content Include="Docs\**" TargetPath="wwwroot\Docs\%(RecursiveDir)%(Filename)%(Extension)"
              ContentRoot="$(MSBuildProjectDirectory)\Docs\" />
   </ItemGroup>
 
   <!--
-    The transformers.js bundle that the search box runs the embedding model with is built from the
-    npm project in "jsmodules/transformers" rather than kept in the Git repository. See the imported
-    file for how and when that happens.
+    Everything below writes files that the Git repository does not have, which is why each of them
+    hooks "Restore" as well as "Build". See "What the build generates" in AGENTS.md.
   -->
+
+  <!-- transformers.js bundle, for the embedding model of the search box. -->
   <PropertyGroup>
     <TransformersBundleJs>wwwroot\lib\transformers\transformers.min.js</TransformersBundleJs>
     <TransformersBundleDts>ts\lib\transformers\transformers.min.d.ts</TransformersBundleDts>
@@ -49,30 +41,14 @@
 
   <Import Project="..\jsmodules\transformers\TransformersBundle.targets" />
 
-  <!--
-    The Prism bundle that highlights fenced code blocks is likewise built from the npm project in
-    "jsmodules/prism" instead of being downloaded by hand from https://prismjs.com/download.html
-    and pasted in. See the imported file for how and when that happens, and "build.mjs" in that
-    project for the language list.
-  -->
+  <!-- Prism bundle, for the syntax highlighting of the code blocks. -->
   <PropertyGroup>
     <PrismBundleJs>wwwroot\lib\prism\prism.js</PrismBundleJs>
   </PropertyGroup>
 
   <Import Project="..\jsmodules\prism\PrismBundle.targets" />
 
-  <!--
-    The JavaScript the app loads is compiled from the TypeScript under "ts/" by "tsc", and the
-    "wwwroot/js/*.js" it writes is not in the Git repository either. It has to wait for the two
-    bundles above: "ts/js/search-embeddings.ts" imports the transformers.js bundle, and the type
-    declarations it resolves that import against are what "TransformersBundle.targets" generates,
-    so running "tsc" first fails with "TS2307: Cannot find module". Hence DependsOnTargets, which
-    settles the order no matter which of these targets the build happens to reach first.
-
-    Same "Restore" and "Build" hook as the rest, for the same Static Web Assets manifest reason.
-    Only the ".ts" files under "ts/js" produce a ".js"; the ".d.ts" files elsewhere under "ts/" are
-    read by "tsc" but emit nothing, so they belong in the inputs and not in the outputs.
-  -->
+  <!-- "wwwroot/js/*.js", compiled by "tsc" from "ts/". Needs both bundles above in place first. -->
   <ItemGroup>
     <TypeScriptInput Include="ts\**\*.ts;tsconfig.json;package.json;package-lock.json" />
     <TypeScriptModule Include="ts\js\**\*.ts" Exclude="ts\js\**\*.d.ts" />
@@ -86,25 +62,13 @@
     <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
 
+  <!-- Vector search index of every documentation version, built by the Docs.IndexGenerator app. -->
   <ItemGroup>
     <SearchIndexInput Include="Docs/versions.json" />
     <SearchIndexInput Include="Docs/*/sidebar.json" />
     <SearchIndexInput Include="Docs/*/EN/**/*.md" />
   </ItemGroup>
 
-  <!--
-    Regenerates Docs/{version}/search-index.json and search-index.vec by running the
-    Docs.IndexGenerator console app. The generator itself decides per version whether there is
-    anything to do, so a build with unchanged content costs about a second.
-
-    Hooked to BeforeTargets="Restore" (in addition to "Build") because on a fresh checkout the
-    Docs/** glob that becomes the Blazor WASM Static Web Assets manifest is fixed at project
-    evaluation time. dotnet build/publish evaluate the project once for the implicit Restore and
-    again for Build; generating the index files during the Restore pass ensures they already exist
-    on disk when the Build pass re-evaluates the glob, so they get included as Static Web Assets.
-
-    The index files are not committed to the Git repository; the Markdown files and sidebar.json are.
-  -->
   <Target Name="GenerateSearchIndex" BeforeTargets="Restore;Build" Inputs="@(SearchIndexInput)" Outputs="$(BaseIntermediateOutputPath)search-index.stamp">
     <Exec Command="dotnet run --project &quot;$(MSBuildThisFileDirectory)..\Docs.IndexGenerator\BlazingStory.Docs.IndexGenerator.csproj&quot; -- --docs &quot;$(MSBuildThisFileDirectory)Docs&quot;" />
     <MakeDir Directories="$(BaseIntermediateOutputPath)" />

@@ -1,23 +1,14 @@
 ﻿<Project>
 
   <!--
-    Builds a custom PrismJS bundle out of the npm project next to this file, so that the language
-    list lives in source control ("build.mjs") instead of being reproduced by hand on the download
-    page at https://prismjs.com/download.html. The file it produces is not in the Git repository.
-
-    The project that imports this says where it goes, and that path is what tells the target below
-    whether there is anything left to do:
+    Builds a custom PrismJS bundle out of the npm project next to this file, which is what replaced
+    clicking the language list together on https://prismjs.com/download.html by hand. "build.mjs"
+    holds that list. The importing project says where the bundle goes, and that path, relative to
+    that project, is also what tells the target whether there is anything left to do:
 
       PrismBundleJs   the ES module the browser loads, a Static Web Asset of the app
 
-    A fresh clone has no "node_modules" here yet, so the first build installs the npm packages as
-    well, which is what makes that one build take a little longer. Every build after it skips the
-    whole target, since the file it writes is newer than everything it reads.
-
-    The target runs before "Restore" as well as before "Build" for the same reason the search index
-    generation and the transformers.js bundle of the app do (see their comments): the "wwwroot/**"
-    glob that becomes the Static Web Assets manifest is fixed when the project is evaluated, and a
-    file missing from that manifest is a 404 from the dev server with nothing to explain it.
+    See "What the build generates" in AGENTS.md for the "Restore" hook and the rest.
   -->
 
   <PropertyGroup>
