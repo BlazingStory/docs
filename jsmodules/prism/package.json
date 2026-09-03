@@ -1,0 +1,17 @@
+{
+  "name": "prism-bundle",
+  "version": "1.0.0",
+  "description": "Bundles a custom build of PrismJS into a single browser ES module.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "prismjs": "1.30.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

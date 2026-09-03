@@ -1,0 +1,43 @@
+﻿<Project>
+
+  <!--
+    Builds a custom PrismJS bundle out of the npm project next to this file, so that the language
+    list lives in source control ("build.mjs") instead of being reproduced by hand on the download
+    page at https://prismjs.com/download.html. The file it produces is not in the Git repository.
+
+    The project that imports this says where it goes, and that path is what tells the target below
+    whether there is anything left to do:
+
+      PrismBundleJs   the ES module the browser loads, a Static Web Asset of the app
+
+    A fresh clone has no "node_modules" here yet, so the first build installs the npm packages as
+    well, which is what makes that one build take a little longer. Every build after it skips the
+    whole target, since the file it writes is newer than everything it reads.
+
+    The target runs before "Restore" as well as before "Build" for the same reason the search index
+    generation and the transformers.js bundle of the app do (see their comments): the "wwwroot/**"
+    glob that becomes the Static Web Assets manifest is fixed when the project is evaluated, and a
+    file missing from that manifest is a 404 from the dev server with nothing to explain it.
+  -->
+
+  <PropertyGroup>
+    <PrismBundleDir>$(MSBuildThisFileDirectory)</PrismBundleDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PrismBundleInput Include="$(PrismBundleDir)build.mjs" />
+    <PrismBundleInput Include="$(PrismBundleDir)package.json" />
+    <PrismBundleInput Include="$(PrismBundleDir)package-lock.json" />
+  </ItemGroup>
+
+  <Target Name="BuildPrismBundle" BeforeTargets="Restore;Build"
+          Inputs="@(PrismBundleInput)" Outputs="$(PrismBundleJs)">
+
+    <Exec Command="npm ci" WorkingDirectory="$(PrismBundleDir)"
+          Condition="!Exists('$(PrismBundleDir)node_modules')" />
+    <Exec Command="npm run build" WorkingDirectory="$(PrismBundleDir)" />
+
+    <Copy SourceFiles="$(PrismBundleDir)dist\prism.js" DestinationFiles="$(PrismBundleJs)" />
+  </Target>
+
+</Project>

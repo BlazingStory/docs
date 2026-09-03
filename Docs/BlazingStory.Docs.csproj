@@ -49,6 +49,18 @@
 
   <Import Project="..\jsmodules\transformers\TransformersBundle.targets" />
 
+  <!--
+    The Prism bundle that highlights fenced code blocks is likewise built from the npm project in
+    "jsmodules/prism" instead of being downloaded by hand from https://prismjs.com/download.html
+    and pasted in. See the imported file for how and when that happens, and "build.mjs" in that
+    project for the language list.
+  -->
+  <PropertyGroup>
+    <PrismBundleJs>wwwroot\lib\prism\prism.js</PrismBundleJs>
+  </PropertyGroup>
+
+  <Import Project="..\jsmodules\prism\PrismBundle.targets" />
+
   <ItemGroup>
     <SearchIndexInput Include="Docs/versions.json" />
     <SearchIndexInput Include="Docs/*/sidebar.json" />
