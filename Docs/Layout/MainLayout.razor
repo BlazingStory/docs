@@ -1,6 +1,5 @@
 ﻿@inherits LayoutComponentBase
 @inject ThemeService ThemeService
-@inject DocsUiState UiState
 
 <NavBar />
 
@@ -14,10 +13,6 @@
 {
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            await this.ThemeService.InitializeAsync();
-            this.UiState.MarkAppReady();
-        }
+        if (firstRender) await this.ThemeService.InitializeAsync();
     }
 }

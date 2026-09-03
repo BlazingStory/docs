@@ -3,12 +3,12 @@
 @inject DocsUiState UiState
 @inject NavigationManager NavigationManager
 
-<div class="search-box @(this.UiState.IsAppReady ? "" : "search-box-loading")" @onfocusout="this.OnFocusOut">
+<div class="search-box @(this.IsInteractive ? "" : "search-box-loading")" @onfocusout="this.OnFocusOut">
     <input type="search" class="search-box-input" placeholder="Search docs" aria-label="Search the documentation"
-           autocomplete="off" value="@this._text" disabled="@(!this.UiState.IsAppReady)"
-           @onfocus="this.OnFocusAsync" @oninput="this.OnInputAsync" @onkeydown="this.OnKeyDownAsync" />
+           autocomplete="off" value="@this._text" disabled="@(!this.IsInteractive)"
+           @onfocus="this.OnFocus" @oninput="this.OnInputAsync" @onkeydown="this.OnKeyDownAsync" />
 
-    @if (!this.UiState.IsAppReady)
+    @if (!this.IsInteractive)
     {
         <span class="search-box-spinner" aria-hidden="true"></span>
     }
@@ -51,12 +51,12 @@
     /// <summary>How long to wait after the last keystroke before running a search.</summary>
     private static readonly TimeSpan DebounceDelay = TimeSpan.FromMilliseconds(400);
 
+    /// <summary>How long to leave the loading of the page itself alone before the warm-up starts.</summary>
+    private static readonly TimeSpan WarmUpDelay = TimeSpan.FromSeconds(1);
+
     private string _text = "";
 
     private bool _isOpen;
-
-    /// <summary>How long to leave the loading of the page itself alone before the warm-up starts.</summary>
-    private static readonly TimeSpan WarmUpDelay = TimeSpan.FromSeconds(1);
 
     /// <summary>
     /// The version whose index is loaded and ready to search. Every version has its own index, so
@@ -67,8 +67,6 @@
 
     /// <summary>The version the warm-up under way, or the last one, is for.</summary>
     private string _warmUpVersion = "";
-
-    private Task _warmUpTask = Task.CompletedTask;
 
     /// <summary>
     /// Cancelling this does not abandon the warm-up, it only cuts short the wait it starts with.
@@ -87,24 +85,35 @@
     /// <summary>The version the current results belong to, so that switching versions can drop them.</summary>
     private string _resultsVersion = "";
 
-    /// <summary>What to tell the visitor instead of a result list, or an empty string when the results are worth showing.</summary>
+    /// <summary>
+    /// Whether the WebAssembly runtime is there to answer this box. The prerendered HTML puts it on
+    /// the page well before that, and a box that cannot search yet must not invite the visitor in.
+    /// </summary>
+    private bool IsInteractive => OperatingSystem.IsBrowser();
+
+    /// <summary>Whether the index of the version being read is loaded and ready to search.</summary>
     private bool IsReady => this._readyVersion == this.UiState.Version;
 
+    /// <summary>What to tell the visitor instead of a result list, or an empty string when the results are worth showing.</summary>
     private string Status => (this.IsReady, this._isSearching, this._text.Trim(), this._results.Length) switch
     {
         (false, _, _, _) => "Loading the search index…",
         (_, true, _, _) => "Searching…",
         (_, _, "", _) => "Type to search the documentation of this version.",
+        // Text the debounce still owes a search has no results yet rather than none to find.
+        (_, _, var text, 0) when text != this._appliedText => "Searching…",
         (_, _, _, 0) => "No results.",
         _ => "",
     };
 
     protected override void OnInitialized() => this.UiState.Changed += this.OnUiStateChanged;
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender) this.ScheduleWarmUp();
-    }
+    /// <summary>
+    /// Every render is a chance to notice that the version being read has no warm-up yet, which is
+    /// how the first page load and every version switch alike reach one. Static prerendering never
+    /// gets here, and must not, since the warm-up needs a browser to run the model in.
+    /// </summary>
+    protected override void OnAfterRender(bool firstRender) => this.ScheduleWarmUp();
 
     /// <summary>
     /// Starts loading the model and the index of the current version in the background, so that the
@@ -120,7 +129,7 @@
         this._warmUpVersion = version;
         this._warmUpWait?.Dispose();
         this._warmUpWait = new CancellationTokenSource();
-        this._warmUpTask = this.WarmUpAsync(version, this._warmUpWait.Token);
+        _ = this.WarmUpAsync(version, this._warmUpWait.Token);
     }
 
     private async Task WarmUpAsync(string version, CancellationToken hurryUp)
@@ -129,35 +138,28 @@
         // search box asks for.
         try { await Task.Delay(WarmUpDelay, hurryUp); } catch (OperationCanceledException) { }
 
-        // A version switch during the wait has scheduled a warm-up of its own, leaving this one for
-        // an index nobody is going to search.
-        if (this._warmUpVersion != version) return;
-
         await this.SearchIndexService.WarmUpAsync(version);
 
-        // The same is true of a switch during the load that just finished.
+        // A version switch has a warm-up of its own under way by now, so this one keeps quiet
+        // rather than reporting an index nobody is going to search as the one that is ready.
         if (this._warmUpVersion != version) return;
 
         this._readyVersion = version;
+
+        // Text typed while this was still loading, or left over from the version the visitor came
+        // from, deserves an answer now that this index can give one.
+        await this.SearchAsync();
+
         await this.InvokeAsync(this.StateHasChanged);
     }
 
-    /// <summary>
-    /// The visitor is about to search, so the warm-up has no reason to wait any longer, and it is
-    /// started here in case nothing has scheduled it yet.
-    /// </summary>
-    private async Task OnFocusAsync()
+    private void OnFocus()
     {
         this._isOpen = true;
-        if (this.IsReady) return;
 
-        this.ScheduleWarmUp();
+        // The visitor is about to search, so the warm-up that the render scheduled has no reason to
+        // keep waiting. What becomes of the text already in the box is left to the warm-up itself.
         this._warmUpWait?.Cancel();
-        await this._warmUpTask;
-
-        // Text left over from the version the visitor came from still deserves an answer, now
-        // against the index of this one.
-        await this.SearchAsync();
     }
 
     private void OnFocusOut(FocusEventArgs args) => this._isOpen = false;
@@ -178,8 +180,14 @@
         await this.SearchAsync();
     }
 
+    /// <summary>
+    /// Searches for whatever is in the box, unless the index it would need is not loaded yet, in
+    /// which case the warm-up searches this text itself once it has one.
+    /// </summary>
     private async Task SearchAsync()
     {
+        if (!this.IsReady) return;
+
         var text = this._text.Trim();
         if (this._appliedText == text) return;
         this._appliedText = text;
@@ -225,10 +233,9 @@
 
     /// <summary>
     /// The results belong to one documentation version, so they are dropped when the visitor
-    /// switches to another one, and the index of the new version is warmed up in turn. Clearing the
-    /// applied text along with them is what lets the same search text run again against the index
-    /// of the new version. Anything else the layout reports, such as the sidebar opening, leaves
-    /// both what the visitor typed and the warm-up alone.
+    /// switches to another one. Clearing the applied text along with them is what lets the same
+    /// search text run again against the index of the new version. Anything else the layout
+    /// reports, such as the sidebar opening, leaves what the visitor typed alone.
     /// </summary>
     private void OnUiStateChanged()
     {
@@ -237,7 +244,6 @@
             this._results = [];
             this._appliedText = "";
         }
-        this.ScheduleWarmUp();
         this.InvokeAsync(this.StateHasChanged);
     }
 
