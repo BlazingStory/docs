@@ -7,7 +7,6 @@
   "scripts": {
     "build": "node build.mjs"
   },
-  "license": "ISC",
   "dependencies": {
     "prismjs": "1.30.0"
   },
