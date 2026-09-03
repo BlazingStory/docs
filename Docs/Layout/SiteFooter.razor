@@ -1,8 +1,13 @@
+@using System.Runtime.InteropServices
 <footer class="site-footer">
     <div class="site-footer-copyright">
-        Copyright &copy; @DateTime.Now.Year @@jsakamoto. Built with Blazor WebAssembly.
+        <span>Copyright &copy; @DateTime.Now.Year @@jsakamoto.</span>
+        <span>
+            Built with Blazor (@RuntimeInformation.FrameworkDescription / @RuntimeInformation.ProcessArchitecture)
+        </span>
     </div>
     <div class="site-footer-links">
-        <a href="https://github.com/BlazingStory/docs/blob/main/THIRD-PARTY-NOTICES.txt" target="_blank" rel="noopener noreferrer">Third-Party Notices</a>
+        <a href="https://github.com/BlazingStory/docs/blob/main/THIRD-PARTY-NOTICES.txt" target="_blank"
+           rel="noopener noreferrer">Third-Party Notices</a>
     </div>
 </footer>
