@@ -10,13 +10,15 @@ Documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory
   - `Services/`
     - `DocsCatalogService` — fetches and caches `Docs/versions.json` and each version's `sidebar.json`.
     - `MarkdownService` — fetches a `.md` file, strips YAML front matter, runs it through the Markdig pipeline, and caches the rendered `DocContent`.
+    - `DocumentPreloadService` — run once from `Program.cs` right after `builder.Build()` and before `RunAsync()`. It resolves the requested URL and warms `DocsCatalogService`/`MarkdownService`'s caches for that page, using the same scoped instances `DocPage` reads from, so the first WASM render already has the document instead of flashing blank over the prerendered HTML (see Prerendering below).
     - `SearchIndexService`, `EmbeddingService` — the vector search (see below).
-    - `DocRoutes` — the single source of truth for every URL/path shape (version catalog, sidebar file, markdown file, content/asset file, doc link). Route logic changes belong here.
+    - `DocRoutes` — the single source of truth for every URL/path shape (version catalog, sidebar file, markdown file, content/asset file, doc link) and for parsing a raw URL path into `(version, slug)` via `ResolveDocPath`, used by both `DocPage` and `DocumentPreloadService`. Route logic changes belong here.
     - `DocsUiState`, `ThemeService` — sidebar open/close and light/dark theme state.
   - `Models/` — POCOs deserialized from `versions.json` / `sidebar.json`, plus `DocContent`/`TocEntry`.
   - `MarkdownRendering/`
     - `DocumentPostProcessor` — rewrites relative Markdown links/images into app routes, normalizes code fence languages (e.g. `cs` → `csharp`, `razor` → `cshtml`), extracts the H1 title, and builds the H2/H3 table of contents.
     - `CodeBlockTitleExtension` — Markdig extension for Docusaurus-style code fence titles.
+  - `ts/` — TypeScript sources (`js/site.ts`, `js/theme-initializer.ts`, `js/search-embeddings.ts`, plus ambient `.d.ts` files under `lib/` and `types/`), compiled by `tsc` (`Docs/tsconfig.json`, `rootDir: ./ts` → `outDir: ./wwwroot`) into `wwwroot/js/*.js`. The compiled `.js` files are committed to Git; nothing in the `dotnet build`/`publish` pipeline or the GitHub Pages workflow runs `npm run build`, so after editing a `.ts` file you must run it by hand (`npm run build` inside `Docs/`) and commit the regenerated `wwwroot/js/*.js`.
   - `wwwroot/Docs/` — the actual content, **not** the razor app:
     - `versions.json` — `{ defaultVersion, versions: [{ version, displayText }] }`.
     - `v{version}/sidebar.json` — `{ defaultSlug, sections: [{ displayText, items: [{ slug, displayText }] }] }` per version.
@@ -26,6 +28,9 @@ Documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory
   - `MarkdownChunker` — splits a Markdown file into the chunks that get indexed.
   - `MiniLmEmbedder` — turns a chunk into a 384 dimension vector with the all-MiniLM-L6-v2 ONNX model.
   - `.model-cache/` — the downloaded model files, ignored by Git.
+- `jsmodules/transformers/` — a standalone esbuild + `dts-bundle-generator` project (own `package.json`, not under `Docs/`) that bundles `@xenova/transformers` into the browser-ready `Docs/wwwroot/lib/transformers/transformers.min.js` (+ `.d.ts`) consumed by `Docs/ts/js/search-embeddings.ts`. Its own `dist/` and `node_modules/` are gitignored, but the bundled output under `Docs/wwwroot/lib/` is committed and must be rebuilt by hand (`npm run build`) when the pinned `@xenova/transformers` version changes.
+- `.github/workflows/gh-pages.yml` — builds and publishes the site to GitHub Pages on every push to `main` (see Prerendering below).
+- `THIRD-PARTY-NOTICES.txt` (repo root) — linked from `Docs/Layout/SiteFooter.razor` and `README.md`.
 
 ## How content resolves
 
@@ -49,17 +54,22 @@ The search box in the navbar finds documentation by meaning rather than by keywo
 
 Four things have to stay in step, and getting any of them wrong produces no error at all, only meaningless search results:
 
-1. **The model is pinned on both sides.** `wwwroot/js/search-embeddings.js` loads transformers.js `@2.17.2`, whose default is the quantized ONNX file, which is the file the generator downloads. Raising one version without the other silently breaks every result.
-2. **Symbols are stripped on both sides.** `Microsoft.ML.Tokenizers` drops every Unicode symbol character (`<`, `>`, `=`, `→`, …) while the tokenizer of transformers.js keeps each as its own token, so both sides remove them first: `MarkdownChunker.NormalizeForEmbedding` and the `\p{S}` replacement in `search-embeddings.js`. The same normalization also collapses line feeds, which the two tokenizers likewise disagree about.
+1. **The model is pinned on both sides.** `Docs/ts/js/search-embeddings.ts` (compiled to `wwwroot/js/search-embeddings.js`) imports the bundle built from `jsmodules/transformers/` (see Project layout), which pins `@xenova/transformers` `2.17.2`; its default is the quantized ONNX file, which is the file the generator downloads. Raising one version without the other silently breaks every result.
+2. **Symbols are stripped on both sides.** `Microsoft.ML.Tokenizers` drops every Unicode symbol character (`<`, `>`, `=`, `→`, …) while the tokenizer of transformers.js keeps each as its own token, so both sides remove them first: `MarkdownChunker.NormalizeForEmbedding` and the `\p{S}` replacement in `search-embeddings.ts`. The same normalization also collapses line feeds, which the two tokenizers likewise disagree about. Remember to edit the `.ts` source and rebuild, not the compiled `.js`.
 3. **Heading anchors have to match what the app renders.** The search results deep link to `#{anchor}`, so `MarkdownChunker` has to keep using `UseAutoIdentifiers(AutoIdentifierOptions.GitHub)` and has to keep stripping front matter exactly like `MarkdownService.StripFrontMatter` does. Leaving the front matter in turns it into a thematic break plus a setext heading, which shifts every heading id of the document.
 4. **Fenced code blocks are left out of the vectors** on purpose, since averaging a mass of code tokens into a vector pulls every code heavy chunk toward the same spot of the embedding space. Inline code stays, because it is part of a sentence.
 
-To check that the two sides still agree, embed the same sentence on each and compare: `dotnet run --project Docs.IndexGenerator/BlazingStory.Docs.IndexGenerator.csproj -- --embed "some sentence"` prints the token ids and the vector, and the same text can be run through `js/search-embeddings.js` in the browser console. The token ids have to be identical. The vectors agree to about 0.995 or better as a dot product, not exactly, because ONNX Runtime and onnxruntime-web run the quantized model with different kernels. A result down in the low 0.9 range instead means a real mismatch, such as the quantized and fp32 model files having been mixed up. `--dump` prints how every page was split into chunks.
+To check that the two sides still agree, embed the same sentence on each and compare: `dotnet run --project Docs.IndexGenerator/BlazingStory.Docs.IndexGenerator.csproj -- --embed "some sentence"` prints the token ids and the vector, and the same text can be run through the compiled `js/search-embeddings.js` in the browser console. The token ids have to be identical. The vectors agree to about 0.995 or better as a dot product, not exactly, because ONNX Runtime and onnxruntime-web run the quantized model with different kernels. A result down in the low 0.9 range instead means a real mismatch, such as the quantized and fp32 model files having been mixed up. `--dump` prints how every page was split into chunks.
+
+## Prerendering and deployment
+
+`Docs/BlazingStory.Docs.csproj` references `BlazorWasmPreRendering.Build` and `PublishSPAforGitHubPages.Build`, so `dotnet publish` (not `dotnet build`/`dotnet run`) renders every route to static HTML and rewrites the SPA fallback for GitHub Pages. `.github/workflows/gh-pages.yml` runs on every push to `main`: it installs the `wasm-tools` workload, runs `dotnet publish Docs/BlazingStory.Docs.csproj -o public -p GHPages=true`, and force-pushes `public/wwwroot` to the `gh-pages` branch via `peaceiris/actions-gh-pages`. Because the served HTML is prerendered, `Program.cs` runs `DocumentPreloadService` right after `builder.Build()` so the WASM app's first render already has the same document the prerenderer produced, instead of flashing blank while it refetches.
 
 ## Running / building
 
 - Run locally: `dotnet run --project "Docs/BlazingStory.Docs.csproj"` (dev server at `http://localhost:5030`, per `Properties/launchSettings.json`).
 - Build: `dotnet build "Docs/BlazingStory.Docs.csproj"`. The first build after a fresh clone also downloads about 23 MB of model files into `Docs.IndexGenerator/.model-cache/` and builds the search index; later builds skip both.
+- TypeScript under `Docs/ts/` is **not** compiled by the .NET build. After changing a `.ts` file, run `npm run build` in `Docs/` (plain `tsc`) and commit the regenerated files under `Docs/wwwroot/js/`.
 - No test suite in this repo.
 
 ## Conventions
