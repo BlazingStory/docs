@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/README/">
+    <File Path="AGENTS.md" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="THIRD-PARTY-NOTICES.txt" />
+  </Folder>
+  <Project Path="Docs.IndexGenerator/BlazingStory.Docs.IndexGenerator.csproj" />
+  <Project Path="Docs/BlazingStory.Docs.csproj" />
+</Solution>
