@@ -14,7 +14,7 @@ public sealed class DocsCatalogService(HttpClient httpClient)
 
     public async ValueTask<VersionCatalog> GetVersionCatalogAsync()
     {
-        this._versionCatalog ??= await httpClient.GetFromJsonAsync("Docs/versions.json", DocsJsonContext.Default.VersionCatalog)
+        this._versionCatalog ??= await httpClient.GetFromJsonAsync(DocRoutes.VersionCatalogFile, DocsJsonContext.Default.VersionCatalog)
             ?? throw new InvalidOperationException("\"Docs/versions.json\" could not be loaded.");
         return this._versionCatalog;
     }
@@ -24,7 +24,7 @@ public sealed class DocsCatalogService(HttpClient httpClient)
         if (this._sidebars.TryGetValue(version, out var cached)) return cached;
 
         SidebarDefinition? sidebar = null;
-        using var response = await httpClient.GetAsync($"Docs/{version}/sidebar.json");
+        using var response = await httpClient.GetAsync(DocRoutes.SidebarFile(version));
         if (response.IsSuccessStatusCode)
         {
             sidebar = await response.Content.ReadFromJsonAsync(DocsJsonContext.Default.SidebarDefinition);

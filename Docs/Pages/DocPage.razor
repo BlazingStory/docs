@@ -9,6 +9,18 @@
 
 <PageTitle>@(this._document is null ? "Blazing Story" : $"{this._document.Title} | Blazing Story")</PageTitle>
 
+@* Only the prerenderer renders this, so the hints reach the generated .html and start the downloads
+   "Program.cs" needs alongside the WebAssembly runtime. Without "crossorigin" the preloads would not
+   match the fetches of "HttpClient" and every file would be downloaded twice. *@
+@if (!OperatingSystem.IsBrowser() && this._document is not null)
+{
+    <HeadContent>
+        <link rel="preload" as="fetch" crossorigin href="@DocRoutes.VersionCatalogFile" />
+        <link rel="preload" as="fetch" crossorigin href="@DocRoutes.SidebarFile(this._version)" />
+        <link rel="preload" as="fetch" crossorigin href="@DocRoutes.MarkdownFile(this._version, this._slug)" />
+    </HeadContent>
+}
+
 @if (this._sidebar is null)
 {
     <div class="doc-loading">Loading&hellip;</div>
@@ -70,7 +82,7 @@ JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
         var catalog = await this.Catalog.GetVersionCatalogAsync();
         this._defaultVersion = catalog.DefaultVersion;
 
-        var (version, slug) = ResolvePath(this.Path, catalog);
+        var (version, slug) = DocRoutes.ResolveDocPath(this.Path, catalog);
 
         var sidebar = await this.Catalog.GetSidebarAsync(version);
         if (sidebar is null)
@@ -113,17 +125,6 @@ this._defaultVersion);
         {
             this._scrollPending = false;
         }
-    }
-
-    private static (string Version, string Slug) ResolvePath(string? path, VersionCatalog catalog)
-    {
-        var trimmed = (path ?? "").Trim('/');
-        var separator = trimmed.IndexOf('/');
-        var firstSegment = separator < 0 ? trimmed : trimmed[..separator];
-
-        return catalog.Contains(firstSegment)
-            ? (firstSegment, separator < 0 ? "" : trimmed[(separator + 1)..])
-            : (catalog.DefaultVersion, trimmed);
     }
 
     public async ValueTask DisposeAsync()

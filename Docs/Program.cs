@@ -9,13 +9,16 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 ConfigureServices(builder.Services, builder.HostEnvironment.BaseAddress);
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+await host.Services.GetRequiredService<DocumentPreloadService>().PreloadCurrentDocumentAsync();
+await host.RunAsync();
 
 static void ConfigureServices(IServiceCollection services, string baseAddress)
 {
     services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
     services.AddScoped<DocsCatalogService>();
     services.AddScoped<MarkdownService>();
+    services.AddScoped<DocumentPreloadService>();
     services.AddScoped<DocsUiState>();
     services.AddSingleton<EmbeddingService>();
     services.AddScoped<SearchIndexService>();

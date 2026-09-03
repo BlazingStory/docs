@@ -1,3 +1,5 @@
+using BlazingStory.Docs.Models;
+
 namespace BlazingStory.Docs.Services;
 
 /// <summary>
@@ -27,4 +29,16 @@ public static class DocRoutes
 
     /// <summary>The vectors of the search index of one version, in the same order as the metadata.</summary>
     public static string SearchIndexVecFile(string version) => $"Docs/{version}/search-index.vec";
+
+    /// <summary>The inverse of <see cref="Doc"/>: splits a documentation URL path into its version and slug.</summary>
+    public static (string Version, string Slug) ResolveDocPath(string? path, VersionCatalog catalog)
+    {
+        var trimmed = (path ?? "").Trim('/');
+        var separator = trimmed.IndexOf('/');
+        var firstSegment = separator < 0 ? trimmed : trimmed[..separator];
+
+        return catalog.Contains(firstSegment)
+            ? (firstSegment, separator < 0 ? "" : trimmed[(separator + 1)..])
+            : (catalog.DefaultVersion, trimmed);
+    }
 }
