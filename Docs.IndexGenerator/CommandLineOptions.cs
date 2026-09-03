@@ -3,7 +3,7 @@ namespace BlazingStory.Docs.IndexGenerator;
 internal class CommandLineOptions
 {
     /// <summary>
-    /// The content folder path ("Docs/wwwroot/Docs") containing "versions.json" and the version folders.<br/>
+    /// The content folder path ("Docs/Docs") containing "versions.json" and the version folders.<br/>
     /// Default: auto-detected by walking up from the current directory.
     /// </summary>
     public string? Docs { get; set; }

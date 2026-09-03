@@ -187,10 +187,10 @@ static string FindDefaultDocsDir()
 {
     for (var dir = new DirectoryInfo(Directory.GetCurrentDirectory()); dir != null; dir = dir.Parent)
     {
-        var candidate = Path.Combine(dir.FullName, "Docs", "wwwroot", "Docs");
+        var candidate = Path.Combine(dir.FullName, "Docs", "Docs");
         if (File.Exists(Path.Combine(candidate, "versions.json"))) return candidate;
     }
-    throw new DirectoryNotFoundException("Could not find the \"Docs/wwwroot/Docs\" folder. Specify it with the --docs option.");
+    throw new DirectoryNotFoundException("Could not find the \"Docs/Docs\" folder. Specify it with the --docs option.");
 }
 
 static bool IsUpToDate(IEnumerable<string> outputPaths, IEnumerable<string> inputPaths)

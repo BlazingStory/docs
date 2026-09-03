@@ -487,5 +487,5 @@ $RECYCLE.BIN/
 *.swp
 
 # Vector search index files, generated at build time by Docs.IndexGenerator
-Docs/wwwroot/Docs/*/search-index.json
-Docs/wwwroot/Docs/*/search-index.vec
+Docs/Docs/*/search-index.json
+Docs/Docs/*/search-index.vec

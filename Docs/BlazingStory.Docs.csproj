@@ -21,27 +21,43 @@
     <PackageReference Include="PublishSPAforGitHubPages.Build" Version="3.0.3" />
   </ItemGroup>
 
+  <!--
+    The documentation content sits in "Docs/" beside "wwwroot/" rather than inside it, so that
+    writing documentation never means working from within the web root of the app. Static Web
+    Assets is what serves it at "/Docs" all the same: "TargetPath" is the path the SDK matches
+    against its own "wwwroot/**" pattern, which is what gives each file its URL, while
+    "ContentRoot" is what tells the dev server where the file really is. "dotnet publish" copies
+    them into "wwwroot/Docs" of the published output.
+  -->
   <ItemGroup>
-    <SearchIndexInput Include="wwwroot/Docs/versions.json" />
-    <SearchIndexInput Include="wwwroot/Docs/*/sidebar.json" />
-    <SearchIndexInput Include="wwwroot/Docs/*/EN/**/*.md" />
+    <!-- The SDK claims the ".json" files of a folder as Content on its own, so the folder is dropped
+         first and then added back whole, with the metadata described above. -->
+    <Content Remove="Docs\**" />
+    <Content Include="Docs\**" TargetPath="wwwroot\Docs\%(RecursiveDir)%(Filename)%(Extension)"
+             ContentRoot="$(MSBuildProjectDirectory)\Docs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SearchIndexInput Include="Docs/versions.json" />
+    <SearchIndexInput Include="Docs/*/sidebar.json" />
+    <SearchIndexInput Include="Docs/*/EN/**/*.md" />
   </ItemGroup>
 
   <!--
-    Regenerates wwwroot/Docs/{version}/search-index.json and search-index.vec by running the
+    Regenerates Docs/{version}/search-index.json and search-index.vec by running the
     Docs.IndexGenerator console app. The generator itself decides per version whether there is
     anything to do, so a build with unchanged content costs about a second.
 
     Hooked to BeforeTargets="Restore" (in addition to "Build") because on a fresh checkout the
-    wwwroot/** glob that becomes the Blazor WASM Static Web Assets manifest is fixed at project
+    Docs/** glob that becomes the Blazor WASM Static Web Assets manifest is fixed at project
     evaluation time. dotnet build/publish evaluate the project once for the implicit Restore and
     again for Build; generating the index files during the Restore pass ensures they already exist
-    on disk when the Build pass re-evaluates the wwwroot glob, so they get included as Static Web Assets.
+    on disk when the Build pass re-evaluates the glob, so they get included as Static Web Assets.
 
     The index files are not committed to the Git repository; the Markdown files and sidebar.json are.
   -->
   <Target Name="GenerateSearchIndex" BeforeTargets="Restore;Build" Inputs="@(SearchIndexInput)" Outputs="$(BaseIntermediateOutputPath)search-index.stamp">
-    <Exec Command="dotnet run --project &quot;$(MSBuildThisFileDirectory)..\Docs.IndexGenerator\BlazingStory.Docs.IndexGenerator.csproj&quot; -- --docs &quot;$(MSBuildThisFileDirectory)wwwroot\Docs&quot;" />
+    <Exec Command="dotnet run --project &quot;$(MSBuildThisFileDirectory)..\Docs.IndexGenerator\BlazingStory.Docs.IndexGenerator.csproj&quot; -- --docs &quot;$(MSBuildThisFileDirectory)Docs&quot;" />
     <MakeDir Directories="$(BaseIntermediateOutputPath)" />
     <Touch Files="$(BaseIntermediateOutputPath)search-index.stamp" AlwaysCreate="true" />
   </Target>

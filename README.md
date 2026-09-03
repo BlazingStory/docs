@@ -2,7 +2,7 @@
 
 This repository contains the documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory), a clone of "Storybook" for Blazor, a frontend workshop for building UI components and pages in isolation.
 
-The site is a Blazor WebAssembly app. It loads versioned Markdown files from `Docs/wwwroot/Docs` at runtime and renders them in the browser.
+The site is a Blazor WebAssembly app. It loads versioned Markdown files from `Docs/Docs` at runtime and renders them in the browser.
 
 The search box finds pages by meaning, not by keyword. It also runs in the browser, so the site still works as plain static files with no server behind it.
 

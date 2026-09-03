@@ -19,7 +19,7 @@ Documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory
     - `DocumentPostProcessor` — rewrites relative Markdown links/images into app routes, normalizes code fence languages (e.g. `cs` → `csharp`, `razor` → `cshtml`), extracts the H1 title, and builds the H2/H3 table of contents.
     - `CodeBlockTitleExtension` — Markdig extension for Docusaurus-style code fence titles.
   - `ts/` — TypeScript sources (`js/site.ts`, `js/theme-initializer.ts`, `js/search-embeddings.ts`, plus ambient `.d.ts` files under `lib/` and `types/`), compiled by `tsc` (`Docs/tsconfig.json`, `rootDir: ./ts` → `outDir: ./wwwroot`) into `wwwroot/js/*.js`. The compiled `.js` files are committed to Git; nothing in the `dotnet build`/`publish` pipeline or the GitHub Pages workflow runs `npm run build`, so after editing a `.ts` file you must run it by hand (`npm run build` inside `Docs/`) and commit the regenerated `wwwroot/js/*.js`.
-  - `wwwroot/Docs/` — the actual content, **not** the razor app:
+  - `Docs/` (that is, `Docs/Docs/` from the repository root) — the actual content, **not** the razor app. It sits beside `wwwroot/` rather than inside it, and an item group in `BlazingStory.Docs.csproj` turns it into Static Web Assets served at `/Docs`, so the URLs are the same as if it were `wwwroot/Docs/` and `dotnet publish` copies it there:
     - `versions.json` — `{ defaultVersion, versions: [{ version, displayText }] }`.
     - `v{version}/sidebar.json` — `{ defaultSlug, sections: [{ displayText, items: [{ slug, displayText }] }] }` per version.
     - `v{version}/EN/*.md` (+ `addons/*.md`, `assets/*`) — the Markdown content and images for that version. Only `EN` exists today (see `DocRoutes.Language`).
@@ -38,7 +38,7 @@ Documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory
 
 ## Adding or editing a documentation page
 
-1. Add/edit the `.md` file under `wwwroot/Docs/v{version}/EN/`. Images go in that version's `assets/` folder; link to them with a relative path.
+1. Add/edit the `.md` file under `Docs/Docs/v{version}/EN/`. Images go in that version's `assets/` folder; link to them with a relative path.
 2. Add the page to the matching `sidebar.json` (`slug` = filename without `.md`, relative to the `EN` folder — e.g. `addons/overview`). A page not listed in `sidebar.json` cannot be reached from the sidebar and its prev/next pagination won't include it, even if the file exists.
 3. Only touch `versions.json` / create a new `v{version}` folder when cutting a new documentation version, not for routine content edits — existing published versions are treated as frozen snapshots (each has its own copy of every file).
 4. Admonitions use GFM alert syntax (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]`), not Docusaurus `:::` fences — `UseAlertBlocks()` in `MarkdownService` is what renders these.
@@ -78,4 +78,4 @@ The prerenderer runs the same components with the same lifecycle methods, with t
 
 - Target framework is `net10.0` with nullable reference types and implicit usings enabled — keep new C# consistent with that.
 - Async I/O uses `async`/`await` throughout (`ValueTask` for the cached service methods); follow the same pattern for new async code.
-- This is a content-heavy repo: most changes are Markdown edits under `wwwroot/Docs/`, not C# changes. Treat past published version folders as read-only history unless explicitly asked to backport a fix.
+- This is a content-heavy repo: most changes are Markdown edits under `Docs/Docs/`, not C# changes. Treat past published version folders as read-only history unless explicitly asked to backport a fix.
