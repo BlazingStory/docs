@@ -3,10 +3,15 @@
 @inject DocsUiState UiState
 @inject NavigationManager NavigationManager
 
-<div class="search-box" @onfocusout="this.OnFocusOut">
+<div class="search-box @(this.UiState.IsAppReady ? "" : "search-box-loading")" @onfocusout="this.OnFocusOut">
     <input type="search" class="search-box-input" placeholder="Search docs" aria-label="Search the documentation"
-           autocomplete="off" value="@this._text" @onfocus="this.OnFocusAsync" @oninput="this.OnInputAsync"
-           @onkeydown="this.OnKeyDownAsync" />
+           autocomplete="off" value="@this._text" disabled="@(!this.UiState.IsAppReady)"
+           @onfocus="this.OnFocusAsync" @oninput="this.OnInputAsync" @onkeydown="this.OnKeyDownAsync" />
+
+    @if (!this.UiState.IsAppReady)
+    {
+        <span class="search-box-spinner" aria-hidden="true"></span>
+    }
 
     @if (this._isOpen)
     {

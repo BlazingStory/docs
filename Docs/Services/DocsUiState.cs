@@ -14,7 +14,22 @@ public sealed class DocsUiState
 
     public bool IsSidebarOpen { get; private set; }
 
+    /// <summary>
+    /// Whether the Blazor WebAssembly runtime has completed its first render. Prerendered HTML is
+    /// visible to the visitor before this is true, so chrome that only works once the runtime is
+    /// interactive (such as the search box) must stay disabled until then.
+    /// </summary>
+    public bool IsAppReady { get; private set; }
+
     public event Action? Changed;
+
+    public void MarkAppReady()
+    {
+        if (this.IsAppReady) return;
+
+        this.IsAppReady = true;
+        this.Changed?.Invoke();
+    }
 
     public void SetCurrentDocument(string version, string defaultVersion, string slug)
     {
