@@ -55,12 +55,25 @@
 
     private bool _isOpen;
 
+    /// <summary>How long to leave the loading of the page itself alone before the warm-up starts.</summary>
+    private static readonly TimeSpan WarmUpDelay = TimeSpan.FromSeconds(1);
+
     /// <summary>
     /// The version whose index is loaded and ready to search. Every version has its own index, so
     /// this has to be the version itself rather than a flag: switching to another one puts the box
     /// back into its loading state until that version's index arrives too.
     /// </summary>
     private string _readyVersion = "";
+
+    /// <summary>The version the warm-up under way, or the last one, is for.</summary>
+    private string _warmUpVersion = "";
+
+    private Task _warmUpTask = Task.CompletedTask;
+
+    /// <summary>
+    /// Cancelling this does not abandon the warm-up, it only cuts short the wait it starts with.
+    /// </summary>
+    private CancellationTokenSource? _warmUpWait;
 
     private bool _isSearching;
 
@@ -88,18 +101,59 @@
 
     protected override void OnInitialized() => this.UiState.Changed += this.OnUiStateChanged;
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender) this.ScheduleWarmUp();
+    }
+
     /// <summary>
-    /// Loads the model and the index only once the visitor shows an interest in searching. Doing
-    /// this on startup instead would make every visitor pay for a 23 MB download they may not want.
+    /// Starts loading the model and the index of the current version in the background, so that the
+    /// visitor rarely has to wait for them at all. The wait it starts with keeps that 23 MB
+    /// download away from the loading of the page itself. Doing this again for the same version, or
+    /// before one is known, leaves the warm-up already under way alone.
+    /// </summary>
+    private void ScheduleWarmUp()
+    {
+        var version = this.UiState.Version;
+        if (version.Length == 0 || version == this._warmUpVersion) return;
+
+        this._warmUpVersion = version;
+        this._warmUpWait?.Dispose();
+        this._warmUpWait = new CancellationTokenSource();
+        this._warmUpTask = this.WarmUpAsync(version, this._warmUpWait.Token);
+    }
+
+    private async Task WarmUpAsync(string version, CancellationToken hurryUp)
+    {
+        // Being cancelled here means "start now" rather than "give up", which is what focusing the
+        // search box asks for.
+        try { await Task.Delay(WarmUpDelay, hurryUp); } catch (OperationCanceledException) { }
+
+        // A version switch during the wait has scheduled a warm-up of its own, leaving this one for
+        // an index nobody is going to search.
+        if (this._warmUpVersion != version) return;
+
+        await this.SearchIndexService.WarmUpAsync(version);
+
+        // The same is true of a switch during the load that just finished.
+        if (this._warmUpVersion != version) return;
+
+        this._readyVersion = version;
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    /// <summary>
+    /// The visitor is about to search, so the warm-up has no reason to wait any longer, and it is
+    /// started here in case nothing has scheduled it yet.
     /// </summary>
     private async Task OnFocusAsync()
     {
         this._isOpen = true;
         if (this.IsReady) return;
 
-        var version = this.UiState.Version;
-        await this.SearchIndexService.WarmUpAsync(version);
-        this._readyVersion = version;
+        this.ScheduleWarmUp();
+        this._warmUpWait?.Cancel();
+        await this._warmUpTask;
 
         // Text left over from the version the visitor came from still deserves an answer, now
         // against the index of this one.
@@ -171,9 +225,10 @@
 
     /// <summary>
     /// The results belong to one documentation version, so they are dropped when the visitor
-    /// switches to another one. Clearing the applied text along with them is what lets the same
-    /// search text run again against the index of the new version. Anything else the layout
-    /// reports, such as the sidebar opening, leaves what the visitor typed alone.
+    /// switches to another one, and the index of the new version is warmed up in turn. Clearing the
+    /// applied text along with them is what lets the same search text run again against the index
+    /// of the new version. Anything else the layout reports, such as the sidebar opening, leaves
+    /// both what the visitor typed and the warm-up alone.
     /// </summary>
     private void OnUiStateChanged()
     {
@@ -182,6 +237,7 @@
             this._results = [];
             this._appliedText = "";
         }
+        this.ScheduleWarmUp();
         this.InvokeAsync(this.StateHasChanged);
     }
 
@@ -190,5 +246,6 @@
         this.UiState.Changed -= this.OnUiStateChanged;
         this._debounceCancellation?.Cancel();
         this._debounceCancellation?.Dispose();
+        this._warmUpWait?.Dispose();
     }
 }
