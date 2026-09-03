@@ -28,7 +28,7 @@ Documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory
   - `MarkdownChunker` — splits a Markdown file into the chunks that get indexed.
   - `MiniLmEmbedder` — turns a chunk into a 384 dimension vector with the all-MiniLM-L6-v2 ONNX model.
   - `.model-cache/` — the downloaded model files, ignored by Git.
-- `jsmodules/transformers/` — a standalone esbuild + `dts-bundle-generator` project (own `package.json`, not under `Docs/`) that bundles `@xenova/transformers` into the browser-ready `Docs/wwwroot/lib/transformers/transformers.min.js` (+ `.d.ts`) consumed by `Docs/ts/js/search-embeddings.ts`. Its own `dist/` and `node_modules/` are gitignored, but the bundled output under `Docs/wwwroot/lib/` is committed and must be rebuilt by hand (`npm run build`) when the pinned `@xenova/transformers` version changes.
+- `jsmodules/transformers/` — a standalone esbuild + `dts-bundle-generator` project (own `package.json`, not under `Docs/`) that bundles `@xenova/transformers` into the browser-ready `Docs/wwwroot/lib/transformers/transformers.min.js` and its `Docs/ts/lib/transformers/transformers.min.d.ts`, consumed by `Docs/ts/js/search-embeddings.ts`. Neither of those two files is committed, nor are `dist/` and `node_modules/`: `TransformersBundle.targets` beside that `package.json` is imported by `BlazingStory.Docs.csproj` and builds them, `npm ci` included, whenever they are missing or older than the npm project. That is why the build needs Node.js on the PATH and why the first build after a clone takes a couple of minutes.
 - `.github/workflows/gh-pages.yml` — builds and publishes the site to GitHub Pages on every push to `main` (see Prerendering below).
 - `THIRD-PARTY-NOTICES.txt` (repo root) — linked from `Docs/Layout/SiteFooter.razor` and `README.md`.
 
@@ -70,7 +70,7 @@ The prerenderer runs the same components with the same lifecycle methods, with t
 ## Running / building
 
 - Run locally: `dotnet run --project "Docs/BlazingStory.Docs.csproj"` (dev server at `http://localhost:5030`, per `Properties/launchSettings.json`).
-- Build: `dotnet build "Docs/BlazingStory.Docs.csproj"`. The first build after a fresh clone also downloads about 23 MB of model files into `Docs.IndexGenerator/.model-cache/` and builds the search index; later builds skip both.
+- Build: `dotnet build "Docs/BlazingStory.Docs.csproj"`. Needs Node.js on the PATH, since the build bundles transformers.js out of `jsmodules/transformers/`. The first build after a fresh clone also installs that npm project, builds the bundle, downloads about 23 MB of model files into `Docs.IndexGenerator/.model-cache/`, and builds the search index, which together take a couple of minutes; later builds skip all of it.
 - TypeScript under `Docs/ts/` is **not** compiled by the .NET build. After changing a `.ts` file, run `npm run build` in `Docs/` (plain `tsc`) and commit the regenerated files under `Docs/wwwroot/js/`.
 - No test suite in this repo.
 

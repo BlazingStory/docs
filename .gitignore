@@ -489,3 +489,7 @@ $RECYCLE.BIN/
 # Vector search index files, generated at build time by Docs.IndexGenerator
 Docs/Docs/*/search-index.json
 Docs/Docs/*/search-index.vec
+
+# transformers.js bundle, generated at build time from the npm project in jsmodules/transformers
+Docs/wwwroot/lib/transformers/transformers.min.js
+Docs/ts/lib/transformers/transformers.min.d.ts

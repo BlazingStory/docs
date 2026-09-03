@@ -19,9 +19,10 @@ The search box finds pages by meaning, not by keyword. It also runs in the brows
 
 **Requirements**
 - .NET 10 SDK
+- Node.js
 - An internet connection for the first build
 
-The build also creates the search index for every documentation version. The first build downloads the embedding model (about 23 MB) from Hugging Face and keeps it in `Docs.IndexGenerator/.model-cache/`, so it takes a while. Later builds reuse that cache and skip any version whose content did not change. The index files themselves are build output, so they are not in this repository.
+The build also creates the search index for every documentation version, and bundles the transformers.js library that the search box runs the embedding model with. The first build installs the npm packages for that bundle and downloads the embedding model (about 23 MB) from Hugging Face, which it keeps in `Docs.IndexGenerator/.model-cache/`, so it takes a while. Later builds reuse both and skip any version whose content did not change. The bundle and the index files are build output, so they are not in this repository.
 
 ### Development Server
 

@@ -1,0 +1,49 @@
+﻿<Project>
+
+  <!--
+    Builds the browser bundle of "@xenova/transformers" out of the npm project next to this file,
+    so that neither of the two files it produces has to be built and copied by hand. Neither of
+    them is in the Git repository.
+
+    The project that imports this says where they go, and those same two paths are what tells the
+    target below whether there is anything left to do. Both are relative to that project:
+
+      TransformersBundleJs   the ES module the browser loads, a Static Web Asset of the app
+      TransformersBundleDts  its type declarations, which "tsc" needs to compile the TypeScript
+                             of the app itself
+
+    A fresh clone has no "node_modules" here yet, so the first build installs the npm packages as
+    well, which is what makes that one build take a couple of minutes. Every build after it skips
+    the whole target, since the two files it writes are newer than everything it reads.
+
+    The target runs before "Restore" as well as before "Build" for the same reason the search index
+    generation of the app does. The "wwwroot/**" glob that becomes the Static Web Assets manifest
+    is fixed when the project is evaluated, and a file missing from that manifest is a 404 from the
+    dev server with nothing to explain it. Both "dotnet build" and "dotnet publish" evaluate the
+    project once for the implicit restore and again for the build, so writing the bundle during the
+    restore pass leaves it on disk in time for the glob of the build pass to find it.
+  -->
+
+  <PropertyGroup>
+    <TransformersBundleDir>$(MSBuildThisFileDirectory)</TransformersBundleDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <TransformersBundleInput Include="$(TransformersBundleDir)src\**" />
+    <TransformersBundleInput Include="$(TransformersBundleDir)package.json" />
+    <TransformersBundleInput Include="$(TransformersBundleDir)package-lock.json" />
+    <TransformersBundleInput Include="$(TransformersBundleDir)tsconfig.json" />
+  </ItemGroup>
+
+  <Target Name="BuildTransformersBundle" BeforeTargets="Restore;Build"
+          Inputs="@(TransformersBundleInput)" Outputs="$(TransformersBundleJs);$(TransformersBundleDts)">
+
+    <Exec Command="npm ci" WorkingDirectory="$(TransformersBundleDir)"
+          Condition="!Exists('$(TransformersBundleDir)node_modules')" />
+    <Exec Command="npm run build" WorkingDirectory="$(TransformersBundleDir)" />
+
+    <Copy SourceFiles="$(TransformersBundleDir)dist\transformers.min.js" DestinationFiles="$(TransformersBundleJs)" />
+    <Copy SourceFiles="$(TransformersBundleDir)dist\transformers.min.d.ts" DestinationFiles="$(TransformersBundleDts)" />
+  </Target>
+
+</Project>

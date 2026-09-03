@@ -37,6 +37,18 @@
              ContentRoot="$(MSBuildProjectDirectory)\Docs\" />
   </ItemGroup>
 
+  <!--
+    The transformers.js bundle that the search box runs the embedding model with is built from the
+    npm project in "jsmodules/transformers" rather than kept in the Git repository. See the imported
+    file for how and when that happens.
+  -->
+  <PropertyGroup>
+    <TransformersBundleJs>wwwroot\lib\transformers\transformers.min.js</TransformersBundleJs>
+    <TransformersBundleDts>ts\lib\transformers\transformers.min.d.ts</TransformersBundleDts>
+  </PropertyGroup>
+
+  <Import Project="..\jsmodules\transformers\TransformersBundle.targets" />
+
   <ItemGroup>
     <SearchIndexInput Include="Docs/versions.json" />
     <SearchIndexInput Include="Docs/*/sidebar.json" />
