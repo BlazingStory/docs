@@ -496,3 +496,6 @@ Docs/ts/lib/transformers/transformers.min.d.ts
 
 # PrismJS bundle, generated at build time from the npm project in jsmodules/prism
 Docs/wwwroot/lib/prism/prism.js
+
+# JavaScript compiled at build time by tsc from the TypeScript under Docs/ts
+Docs/wwwroot/js/*.js

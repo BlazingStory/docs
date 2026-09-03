@@ -22,7 +22,7 @@ The search box finds pages by meaning, not by keyword. It also runs in the brows
 - Node.js
 - An internet connection for the first build
 
-The build also creates the search index for every documentation version, and bundles the transformers.js and PrismJS libraries the search box and the code blocks run on. The first build installs the npm packages for those bundles and downloads the embedding model (about 23 MB) from Hugging Face, which it keeps in `Docs.IndexGenerator/.model-cache/`, so it takes a while. Later builds reuse all of it and skip any version whose content did not change. The bundles and the index files are build output, so they are not in this repository.
+The build also creates the search index for every documentation version, bundles the transformers.js and PrismJS libraries the search box and the code blocks run on, and compiles the TypeScript of the site. The first build installs the npm packages for all of that and downloads the embedding model (about 23 MB) from Hugging Face, which it keeps in `Docs.IndexGenerator/.model-cache/`, so it takes a while. Later builds reuse all of it and skip whatever did not change. None of what the build writes is in this repository, so there is nothing to regenerate by hand.
 
 ### Development Server
 

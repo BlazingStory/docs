@@ -61,6 +61,31 @@
 
   <Import Project="..\jsmodules\prism\PrismBundle.targets" />
 
+  <!--
+    The JavaScript the app loads is compiled from the TypeScript under "ts/" by "tsc", and the
+    "wwwroot/js/*.js" it writes is not in the Git repository either. It has to wait for the two
+    bundles above: "ts/js/search-embeddings.ts" imports the transformers.js bundle, and the type
+    declarations it resolves that import against are what "TransformersBundle.targets" generates,
+    so running "tsc" first fails with "TS2307: Cannot find module". Hence DependsOnTargets, which
+    settles the order no matter which of these targets the build happens to reach first.
+
+    Same "Restore" and "Build" hook as the rest, for the same Static Web Assets manifest reason.
+    Only the ".ts" files under "ts/js" produce a ".js"; the ".d.ts" files elsewhere under "ts/" are
+    read by "tsc" but emit nothing, so they belong in the inputs and not in the outputs.
+  -->
+  <ItemGroup>
+    <TypeScriptInput Include="ts\**\*.ts;tsconfig.json;package.json;package-lock.json" />
+    <TypeScriptModule Include="ts\js\**\*.ts" Exclude="ts\js\**\*.d.ts" />
+  </ItemGroup>
+
+  <Target Name="CompileTypeScript" BeforeTargets="Restore;Build"
+          DependsOnTargets="BuildTransformersBundle;BuildPrismBundle"
+          Inputs="@(TypeScriptInput)" Outputs="@(TypeScriptModule -> 'wwwroot\js\%(RecursiveDir)%(Filename).js')">
+    <Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)"
+          Condition="!Exists('$(MSBuildProjectDirectory)\node_modules')" />
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
   <ItemGroup>
     <SearchIndexInput Include="Docs/versions.json" />
     <SearchIndexInput Include="Docs/*/sidebar.json" />
