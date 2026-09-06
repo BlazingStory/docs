@@ -68,6 +68,22 @@ To check that the two sides still agree, embed the same sentence on each and com
 
 The prerenderer runs the same components with the same lifecycle methods, with the notable exception of `OnAfterRender`, and it has no browser behind it. So anything that needs one belongs in `OnAfterRender`, which is where `SearchBox` starts its search warm-up and `DocPage` scrolls to an anchor, and markup that has to look different until the runtime arrives asks `OperatingSystem.IsBrowser()`, which is how `SearchBox` renders itself disabled and `DocPage` emits its preload hints. Neither of those shows up in a `dotnet build` or `dotnet run`, so a change around startup, JavaScript interop, or the first render wants a `dotnet publish` before it is believed.
 
+## Content Security Policy
+
+`Docs/wwwroot/index.html` carries its CSP as a `<meta http-equiv="Content-Security-Policy">` tag, not a response header, because GitHub Pages serves only static files and cannot add headers. That also means `frame-ancestors`, `report-*`, and `sandbox` are pointless there — a `<meta>` CSP silently ignores them per spec — so the policy omits them rather than implying protection it does not provide.
+
+Blazor's import map is an inline `<script type="importmap">`, which a strict `script-src` (no `'unsafe-inline'`) blocks outright; adding a `nonce` attribute is not an option either, since the SDK refuses to generate the import map when the tag already carries one. `Toolbelt.Blazor.WebAssembly.ExtensibleDevServer.ImportMapExtension` (see its [README](https://github.com/jsakamoto/Toolbelt.Blazor.WebAssembly.ExtensibleDevServer.ImportMapExtension), and the background at <https://zenn.dev/j_sakamoto/articles/86150707a01533>) is what makes this work: it replaces the `Microsoft.AspNetCore.Components.WebAssembly.DevServer` package reference, and at both dev-server and publish time it rewrites the literal `{importmap}` token wherever it appears in `index.html` with the actual SHA-256 digest of the generated import map, so `script-src` can pin `'sha256-{importmap}'` instead of weakening to `'unsafe-inline'`. Because the replacement is a plain string search, keep any other mention of that token (in comments included) out of the file, or it gets rewritten too.
+
+The rest of the policy is shaped by what the app actually loads at runtime, not by copying a generic strict template:
+
+- `connect-src` allows `huggingface.co`, `*.huggingface.co`, and `*.hf.co` because `EmbeddingService`/`search-embeddings.ts` downloads the ~23 MB ONNX model from the Hugging Face Hub the first time the search box warms up (see Vector search above) — there is no way to avoid this without self-hosting the model.
+- `worker-src` allows `blob:` because the bundled onnxruntime-web (inside `transformers.min.js`) spins up its Web Worker from a `Blob` URL rather than a same-origin file.
+- `script-src` allows `'wasm-unsafe-eval'`, which both the Blazor WASM runtime and onnxruntime-web need to instantiate WebAssembly modules.
+- `img-src` allows `raw.githubusercontent.com` and `img.shields.io` because Markdown content (unlike this app's own UI) is not passed through `DocumentPostProcessor.RewriteLinks` when its image/link URL is already absolute (`http(s)://`, `//`, `mailto:`, `tel:`, `data:`, or a root-relative `/`) — see `DocumentPostProcessor._AbsoluteUrlPrefixes` — so authors do sometimes hot-link images straight from the main `BlazingStory` repository or a shields.io badge, and the CSP has to allow the hosts already in use across every published version's Markdown rather than just the current one, since old versions are frozen and cannot be edited to move their images local.
+- `media-src` allows `github.com` because a few pages embed a demo `<video><source src="https://github.com/user-attachments/assets/...">` — Markdig does not strip raw HTML by default, so this tag reaches the browser as written.
+
+Adding a documentation page that hot-links an image, video, or badge from a new external host means adding that host to the matching directive here, not loosening `default-src`.
+
 ## Running / building
 
 - Run locally: `dotnet run --project "Docs/BlazingStory.Docs.csproj"` (dev server at `http://localhost:5030`, per `Properties/launchSettings.json`).

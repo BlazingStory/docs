@@ -18,8 +18,9 @@
     <PackageReference Include="BlazorWasmPreRendering.Build" Version="8.0.2" />
     <PackageReference Include="Markdig" Version="1.3.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.11" PrivateAssets="all" />
     <PackageReference Include="PublishSPAforGitHubPages.Build" Version="3.0.3" />
+    <PackageReference Include="Toolbelt.Blazor.WebAssembly.ExtensibleDevServer" Version="10.0.11" PrivateAssets="all" />
+    <PackageReference Include="Toolbelt.Blazor.WebAssembly.ExtensibleDevServer.ImportMapExtension" Version="10.0.11" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Documentation content, served at "/Docs" from beside "wwwroot" instead of from inside it. -->
