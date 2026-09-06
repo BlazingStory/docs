@@ -2,7 +2,11 @@
 // time index generator uses. The version of this library and the model file it downloads are a
 // pair: transformers.js v2 loads the quantized ONNX file, which is what the generator embeds with,
 // so upgrading only one of the two silently breaks every search result.
-import { type FeatureExtractionPipeline, pipeline } from '../lib/transformers/transformers.min.js';
+import { env, type FeatureExtractionPipeline, pipeline } from '../lib/transformers/transformers.min.js';
+
+// Skips the library's default attempt to fetch the model from a same-origin "/models/" path first,
+// which always 404s here since we don't host a local copy, before it falls back to the hub.
+env.allowLocalModels = false;
 
 let extractor: FeatureExtractionPipeline | null = null;
 
