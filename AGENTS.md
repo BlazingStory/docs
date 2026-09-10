@@ -1,6 +1,6 @@
 # Blazing Story Docs (Blazor)
 
-Documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory) (a Storybook clone for Blazor). A .NET 10 Blazor WebAssembly single-page app that fetches versioned Markdown from `wwwroot` at runtime and renders it client-side.
+Documentation site for [Blazing Story](https://github.com/jsakamoto/BlazingStory) (a Storybook clone for Blazor). A .NET 11 Blazor WebAssembly single-page app that fetches versioned Markdown from `wwwroot` at runtime and renders it client-side.
 
 ## Project layout
 
@@ -72,7 +72,7 @@ The prerenderer runs the same components with the same lifecycle methods, with t
 
 `Docs/wwwroot/index.html` carries its CSP as a `<meta http-equiv="Content-Security-Policy">` tag, not a response header, because GitHub Pages serves only static files and cannot add headers. That also means `frame-ancestors`, `report-*`, and `sandbox` are pointless there — a `<meta>` CSP silently ignores them per spec — so the policy omits them rather than implying protection it does not provide.
 
-Blazor's import map is an inline `<script type="importmap">`, which a strict `script-src` (no `'unsafe-inline'`) blocks outright; adding a `nonce` attribute is not an option either, since the SDK refuses to generate the import map when the tag already carries one. `Toolbelt.Blazor.WebAssembly.ExtensibleDevServer.ImportMapExtension` (see its [README](https://github.com/jsakamoto/Toolbelt.Blazor.WebAssembly.ExtensibleDevServer.ImportMapExtension), and the background at <https://zenn.dev/j_sakamoto/articles/86150707a01533>) is what makes this work: it replaces the `Microsoft.AspNetCore.Components.WebAssembly.DevServer` package reference, and at both dev-server and publish time it rewrites the literal `{importmap}` token wherever it appears in `index.html` with the actual SHA-256 digest of the generated import map, so `script-src` can pin `'sha256-{importmap}'` instead of weakening to `'unsafe-inline'`. Because the replacement is a plain string search, keep any other mention of that token (in comments included) out of the file, or it gets rewritten too.
+Blazor's import map is an inline `<script type="importmap">`, which a strict `script-src` (no `'unsafe-inline'`) blocks outright; adding a `nonce` attribute is not an option either, since the SDK refuses to generate the import map when the tag already carries one. `Toolbelt.Blazor.WebAssembly.ExtensibleGateway.ImportMapExtension` (see its [README](https://github.com/jsakamoto/Toolbelt.Blazor.WebAssembly.ExtensibleGateway.ImportMapExtension), and the background at <https://zenn.dev/j_sakamoto/articles/86150707a01533>) is what makes this work: it replaces the `Microsoft.AspNetCore.Components.WebAssembly.DevServer` package reference (via its companion `Toolbelt.Blazor.WebAssembly.ExtensibleGateway` package), and at both dev-server and publish time it rewrites the literal `{importmap}` token wherever it appears in `index.html` with the actual SHA-256 digest of the generated import map, so `script-src` can pin `'sha256-{importmap}'` instead of weakening to `'unsafe-inline'`. Because the replacement is a plain string search, keep any other mention of that token (in comments included) out of the file, or it gets rewritten too.
 
 The rest of the policy is shaped by what the app actually loads at runtime, not by copying a generic strict template:
 
@@ -101,6 +101,6 @@ Most of what the browser loads is build output rather than repository content: t
 
 ## Conventions
 
-- Target framework is `net10.0` with nullable reference types and implicit usings enabled — keep new C# consistent with that.
+- Target framework is `net11.0` with nullable reference types and implicit usings enabled — keep new C# consistent with that.
 - Async I/O uses `async`/`await` throughout (`ValueTask` for the cached service methods); follow the same pattern for new async code.
 - This is a content-heavy repo: most changes are Markdown edits under `Docs/Docs/`, not C# changes. Treat past published version folders as read-only history unless explicitly asked to backport a fix.

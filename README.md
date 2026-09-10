@@ -9,7 +9,7 @@ The search box finds pages by meaning, not by keyword. It also runs in the brows
 ## Repository Overview
 
 - **Purpose.** Host and manage the documentation for Blazing Story.
-- **Framework.** Built with Blazor WebAssembly (.NET 10).
+- **Framework.** Built with Blazor WebAssembly (.NET 11).
 
 ## Related Repository
 
@@ -18,7 +18,7 @@ The search box finds pages by meaning, not by keyword. It also runs in the brows
 ## Build Instructions
 
 **Requirements**
-- .NET 10 SDK
+- .NET 11 SDK (currently RC1, so install it with a preview-enabled feed/installer)
 - Node.js
 - An internet connection for the first build
 
@@ -38,7 +38,7 @@ This starts the site at `http://localhost:5030`.
 dotnet publish Docs -c Release
 ```
 
-This generates the static site under `Docs/bin/Release/net10.0/publish/wwwroot`.
+This generates the static site under `Docs/bin/Release/net11.0/publish/wwwroot`.
 
 ## License and Third-Party Notices
 
