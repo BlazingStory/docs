@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Blazing Story</title>
+    <base href="/docs/"/>
+    <link href="_framework/dotnet.6ujmn7yjap.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4="/>
+    <link rel="icon" href="img/favicon.ico"/>
+    <meta name="description" content="The clone of &quot;Storybook&quot; for Blazor, a frontend workshop for building UI components and pages in isolation."/>
+    <meta property="og:image" content="img/social-preview.png"/>
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'none';
+      base-uri 'self';
+      script-src 'self' 'wasm-unsafe-eval' 'sha256-AdzjkCykZusJ9DvCcMxDZ53jIMCDwG+hhI1j/ExxEeM=';
+      style-src 'self';
+      img-src 'self' https://raw.githubusercontent.com https://img.shields.io;
+      media-src 'self' https://github.com;
+      connect-src 'self' https://huggingface.co https://*.huggingface.co https://*.hf.co https://cdn.jsdelivr.net/npm/@xenova/;
+      worker-src 'self' blob:;
+      object-src 'none';
+      form-action 'self';
+      upgrade-insecure-requests;"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/markdown.css"/>
+    <link rel="stylesheet" href="css/code-theme.css"/>
+    <script src="js/theme-initializer.js"></script>
+    <script type="importmap">{
+  "imports": {
+    "./_framework/dotnet.js": "./_framework/dotnet.6ujmn7yjap.js",
+    "./_framework/dotnet.native.js": "./_framework/dotnet.native.ovo3wn48us.js",
+    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.gqgh3r3nhq.js"
+  },
+  "scopes": {},
+  "integrity": {
+    "./_framework/dotnet.6ujmn7yjap.js": "sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4=",
+    "./_framework/dotnet.js": "sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4=",
+    "./_framework/dotnet.native.js": "sha256-tLyXXI2PD4cFrijohEp0sn7VtuHVH9P46wgbaOTwFnA=",
+    "./_framework/dotnet.native.ovo3wn48us.js": "sha256-tLyXXI2PD4cFrijohEp0sn7VtuHVH9P46wgbaOTwFnA=",
+    "./_framework/dotnet.runtime.gqgh3r3nhq.js": "sha256-CHJJM/ZgtVetJLyVfm7XXfr1VQfR5EEU6T/EgGPi+Fc=",
+    "./_framework/dotnet.runtime.js": "sha256-CHJJM/ZgtVetJLyVfm7XXfr1VQfR5EEU6T/EgGPi+Fc="
+  }
+}</script>
+  
+<!-- %%-PRERENDERING-HEADOUTLET-BEGIN-%% -->
+<title>Blazing Story</title>
+<!-- %%-PRERENDERING-HEADOUTLET-END-%% -->
+</head>
+
+  <body>
+    <div id="app">
+<!-- %%-PRERENDERING-BEGIN-%% -->
+<header class="navbar"><div class="navbar-inner"><button type="button" class="navbar-hamburger" aria-label="Toggle the navigation menu"><svg width="24" height="24" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h22M4 15h22M4 23h22"></path></svg></button>
+
+        <a class="navbar-brand" href="./"><img src="img/logo.svg" alt="Blazing Story Logo" width="32" height="32">
+            <b>Blazing Story</b></a>
+
+        <div class="navbar-items"><div class="search-box search-box-loading"><input type="search" class="search-box-input" placeholder="Search docs" aria-label="Search the documentation" autocomplete="off" value="" disabled /><span class="search-box-spinner" aria-hidden="true"></span></div>
+            <div class="version-selector"><button type="button" class="version-selector-button">1.0.0-preview.81 ~ 82
+        <span class="version-selector-caret" aria-hidden="true"></span></button><ul class="version-selector-menu "><li><a class="version-selector-item " href="visual-regression-testing" __internal_preventDefault_onclick>Current Version</a></li><li><a class="version-selector-item " href="v1.0.0-preview.87/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.87 ~ 88</a></li><li><a class="version-selector-item " href="v1.0.0-preview.83/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.83 ~ 86</a></li><li><a class="version-selector-item active" href="v1.0.0-preview.81/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.81 ~ 82</a></li><li><a class="version-selector-item " href="v1.0.0-preview.68/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.68 ~ 80</a></li><li><a class="version-selector-item " href="v1.0.0-preview.67/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.67 or before</a></li></ul></div>
+            <a class="navbar-link" href="https://github.com/jsakamoto/BlazingStory" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <button type="button" class="theme-toggle" title="Switch between dark and light mode" aria-label="Switch between dark and light mode"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"></path></svg></button></div></div></header>
+
+<main class="site-main"><div class="doc-layout"><nav class="doc-sidebar "><div class="sidebar-section"><div class="sidebar-section-title">&#x1F4D6; Introduction</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.81/overview">Overview</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/getting-started">Getting Started</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/structure-of-stories">Structure Of &quot;stories&quot;</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F4DA; Documentation</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.81/enhancing-documentation">Enhancing Documentation</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/custom-pages-and-markdown">Custom Pages &amp; Markdown</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x2699;&#xFE0F; Configuration</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.81/configure-layouts">Configure Layouts</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/configure-arguments">Configure Arguments</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/sorting-navigation-tree-items">Sorting Navigation Tree Items</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/configure-pathbase">Configure Path Base</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/include-custom-css-and-js">Include Custom CSS And JS</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F3A8; Appearance</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.81/prefers-color-scheme">Prefers Color Scheme</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/customize-title-and-brand-logo">Customize Title And Logo</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F9E9; Addons</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.81/addons/overview">Overview</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/addons/creating-addons">Creating Custom Addons</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F916; AI Integration</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.81/mcp-server-feature">MCP Server Feature</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/agent-skills">Agent Skills</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F6E0;&#xFE0F; Development</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.81/hot-reloading">Hot Reloading [Preview]</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x2139;&#xFE0F; General Info</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.81/disclaimer">&#x1F647; Disclaimer</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/attention">&#x26A0;&#xFE0F; Attention</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/faq">FAQ</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/release-notes">Release Notes</a></li><li><a class="sidebar-item " href="v1.0.0-preview.81/license-and-3rd-party-notice">License &amp; 3rd Party Notice</a></li></ul></div></nav>
+
+        <div class="doc-body"><div class="doc-not-found"><h1>Page Not Found</h1>
+    <p>Sorry, the documentation page you are looking for does not exist.</p>
+    <p><a href="./">Back to the overview</a></p></div></div>
+
+        <nav class="doc-toc"></nav></div></main>
+
+<footer class="site-footer"><div class="site-footer-copyright"><span>Copyright &#xA9; 2026 @jsakamoto.</span>
+        <span>
+            Built with Blazor (.NET 11.0.0-rc.1.26425.128 / X64)
+        </span></div>
+    <div class="site-footer-links"><a href="https://github.com/BlazingStory/docs/blob/main/THIRD-PARTY-NOTICES.txt" target="_blank" rel="noopener noreferrer">Third-Party Notices</a></div></footer>
+        <blazor-focus-on-navigate selector="h1"></blazor-focus-on-navigate>
+<!-- %%-PRERENDERING-END-%% -->
+</div>
+
+    <div id="blazor-error-ui">
+      An unhandled error has occurred.
+      <a href="." class="reload">Reload</a>
+      <span class="dismiss">🗙</span>
+    </div>
+
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script src="brotliloader.min.js" type="module"></script>
+  
+
+</body></html>

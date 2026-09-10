@@ -1,0 +1,466 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Blazing Story</title>
+    <base href="/docs/"/>
+    <link href="_framework/dotnet.6ujmn7yjap.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4="/>
+    <link rel="icon" href="img/favicon.ico"/>
+    <meta name="description" content="The clone of &quot;Storybook&quot; for Blazor, a frontend workshop for building UI components and pages in isolation."/>
+    <meta property="og:image" content="img/social-preview.png"/>
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'none';
+      base-uri 'self';
+      script-src 'self' 'wasm-unsafe-eval' 'sha256-AdzjkCykZusJ9DvCcMxDZ53jIMCDwG+hhI1j/ExxEeM=';
+      style-src 'self';
+      img-src 'self' https://raw.githubusercontent.com https://img.shields.io;
+      media-src 'self' https://github.com;
+      connect-src 'self' https://huggingface.co https://*.huggingface.co https://*.hf.co https://cdn.jsdelivr.net/npm/@xenova/;
+      worker-src 'self' blob:;
+      object-src 'none';
+      form-action 'self';
+      upgrade-insecure-requests;"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/markdown.css"/>
+    <link rel="stylesheet" href="css/code-theme.css"/>
+    <script src="js/theme-initializer.js"></script>
+    <script type="importmap">{
+  "imports": {
+    "./_framework/dotnet.js": "./_framework/dotnet.6ujmn7yjap.js",
+    "./_framework/dotnet.native.js": "./_framework/dotnet.native.ovo3wn48us.js",
+    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.gqgh3r3nhq.js"
+  },
+  "scopes": {},
+  "integrity": {
+    "./_framework/dotnet.6ujmn7yjap.js": "sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4=",
+    "./_framework/dotnet.js": "sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4=",
+    "./_framework/dotnet.native.js": "sha256-tLyXXI2PD4cFrijohEp0sn7VtuHVH9P46wgbaOTwFnA=",
+    "./_framework/dotnet.native.ovo3wn48us.js": "sha256-tLyXXI2PD4cFrijohEp0sn7VtuHVH9P46wgbaOTwFnA=",
+    "./_framework/dotnet.runtime.gqgh3r3nhq.js": "sha256-CHJJM/ZgtVetJLyVfm7XXfr1VQfR5EEU6T/EgGPi+Fc=",
+    "./_framework/dotnet.runtime.js": "sha256-CHJJM/ZgtVetJLyVfm7XXfr1VQfR5EEU6T/EgGPi+Fc="
+  }
+}</script>
+  
+<!-- %%-PRERENDERING-HEADOUTLET-BEGIN-%% -->
+<title>Creating Custom Addons | Blazing Story</title><link rel="preload" as="fetch" crossorigin href="Docs/versions.json?v=6b3e8f2a" />
+        <link rel="preload" as="fetch" crossorigin href="Docs/v1.0.0-preview.83/sidebar.json?v=6b3e8f2a" />
+        <link rel="preload" as="fetch" crossorigin href="Docs/v1.0.0-preview.83/EN/addons/creating-addons.md?v=6b3e8f2a" />
+<!-- %%-PRERENDERING-HEADOUTLET-END-%% -->
+</head>
+
+  <body>
+    <div id="app">
+<!-- %%-PRERENDERING-BEGIN-%% -->
+<header class="navbar"><div class="navbar-inner"><button type="button" class="navbar-hamburger" aria-label="Toggle the navigation menu"><svg width="24" height="24" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h22M4 15h22M4 23h22"></path></svg></button>
+
+        <a class="navbar-brand" href="./"><img src="img/logo.svg" alt="Blazing Story Logo" width="32" height="32">
+            <b>Blazing Story</b></a>
+
+        <div class="navbar-items"><div class="search-box search-box-loading"><input type="search" class="search-box-input" placeholder="Search docs" aria-label="Search the documentation" autocomplete="off" value="" disabled /><span class="search-box-spinner" aria-hidden="true"></span></div>
+            <div class="version-selector"><button type="button" class="version-selector-button">1.0.0-preview.83 ~ 86
+        <span class="version-selector-caret" aria-hidden="true"></span></button><ul class="version-selector-menu "><li><a class="version-selector-item " href="addons/creating-addons" __internal_preventDefault_onclick>Current Version</a></li><li><a class="version-selector-item " href="v1.0.0-preview.87/addons/creating-addons" __internal_preventDefault_onclick>1.0.0-preview.87 ~ 88</a></li><li><a class="version-selector-item active" href="v1.0.0-preview.83/addons/creating-addons" __internal_preventDefault_onclick>1.0.0-preview.83 ~ 86</a></li><li><a class="version-selector-item " href="v1.0.0-preview.81/addons/creating-addons" __internal_preventDefault_onclick>1.0.0-preview.81 ~ 82</a></li><li><a class="version-selector-item " href="v1.0.0-preview.68/addons/creating-addons" __internal_preventDefault_onclick>1.0.0-preview.68 ~ 80</a></li><li><a class="version-selector-item " href="v1.0.0-preview.67/addons/creating-addons" __internal_preventDefault_onclick>1.0.0-preview.67 or before</a></li></ul></div>
+            <a class="navbar-link" href="https://github.com/jsakamoto/BlazingStory" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <button type="button" class="theme-toggle" title="Switch between dark and light mode" aria-label="Switch between dark and light mode"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"></path></svg></button></div></div></header>
+
+<main class="site-main"><div class="doc-layout"><nav class="doc-sidebar "><div class="sidebar-section"><div class="sidebar-section-title">&#x1F4D6; Introduction</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.83/overview">Overview</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/getting-started">Getting Started</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/structure-of-stories">Structure Of &quot;stories&quot;</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F4DA; Documentation</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.83/enhancing-documentation">Enhancing Documentation</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/custom-pages-and-markdown">Custom Pages &amp; Markdown</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x2699;&#xFE0F; Configuration</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.83/configure-layouts">Configure Layouts</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/configure-arguments">Configure Arguments</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/sorting-navigation-tree-items">Sorting Navigation Tree Items</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/configure-pathbase">Configure Path Base</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/include-custom-css-and-js">Include Custom CSS And JS</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F3A8; Appearance</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.83/prefers-color-scheme">Prefers Color Scheme</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/customize-title-and-brand-logo">Customize Title And Logo</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F9E9; Addons</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.83/addons/overview">Overview</a></li><li><a class="sidebar-item active" href="v1.0.0-preview.83/addons/creating-addons">Creating Custom Addons</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F916; AI Integration</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.83/mcp-server-feature">MCP Server Feature</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/agent-skills">Agent Skills</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F6E0;&#xFE0F; Development</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.83/hot-reloading">Hot Reloading [Preview]</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x2139;&#xFE0F; General Info</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="v1.0.0-preview.83/disclaimer">&#x1F647; Disclaimer</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/attention">&#x26A0;&#xFE0F; Attention</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/faq">FAQ</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/release-notes">Release Notes</a></li><li><a class="sidebar-item " href="v1.0.0-preview.83/license-and-3rd-party-notice">License &amp; 3rd Party Notice</a></li></ul></div></nav>
+
+        <div class="doc-body"><nav class="breadcrumbs" aria-label="Breadcrumbs"><ol><li><a class="breadcrumb-home" href="./" aria-label="Home"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"></path></svg></a></li><li><span class="breadcrumb-item">&#x1F9E9; Addons</span></li><li><span class="breadcrumb-item active">Creating Custom Addons</span></li></ol></nav>
+                <article class="markdown"><h1 id="creating-custom-addons">Creating Custom Addons</h1>
+<p>This page walks you through creating your own Blazing Story addon (a custom toolbar button, panel tab, or preview decorator) step by step.</p>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p><strong>AI-Assisted Addon Creation</strong></p>
+<p>You can also have an AI coding assistant scaffold custom addons for you. Install the Blazing Story agent skills and instruct your AI agent to create and register an addon. See <a href="v1.0.0-preview.83/agent-skills">Agent Skills</a> for details.</p>
+</div>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>To create a custom addon, you need to reference the <code>BlazingStory.Addons</code> NuGet package. If you are adding the addon directly inside your existing Blazing Story app project, the package is already available transitively via <code>BlazingStory</code>. If you are creating a <strong>separate Razor Class Library (RCL)</strong> for reuse across projects, add the package explicitly:</p>
+<div class="code-block">
+<pre><code class="language-shell">dotnet add package BlazingStory.Addons
+</code></pre>
+</div>
+<h2 id="step-1-create-the-razor-components">Step 1: Create the Razor Components</h2>
+<h3 id="toolbar-content-component">Toolbar Content Component</h3>
+<p>A toolbar content component is a <code>.razor</code> file that renders a button, icon, or drop-down in the toolbar area. The <code>GlobalArguments</code> cascading parameter is a shared key-value store for passing state from the toolbar to the preview decorator (see <a href="v1.0.0-preview.83/addons/creating-addons#preview-decorator-component">Preview Decorator Component</a> below).</p>
+<div class="code-block"><div class="code-block-title">MyToolbarContent.razor</div>
+<pre><code class="language-html">
+&lt;button @onclick=&quot;OnClick&quot;&gt;
+    @(_enabled ? &quot;✔ Enabled&quot; : &quot;Disabled&quot;)
+&lt;/button&gt;
+
+@code {
+    /// &lt;summary&gt;Shared state container for communicating with the preview decorator.&lt;/summary&gt;
+    [CascadingParameter]
+    public GlobalArguments Globals { get; set; } = default!;
+
+    private bool _enabled = false;
+
+    private void OnClick()
+    {
+        _enabled = !_enabled;
+        Globals[&quot;myAddon.enabled&quot;] = _enabled;
+    }
+}
+</code></pre>
+</div>
+<h3 id="panel-component">Panel Component</h3>
+<p>A panel component is a <code>.razor</code> file that appears as a new tab in the addon panel below the canvas. Use the <code>&lt;PanelTitle&gt;</code> component to supply the tab label. The <code>&lt;PanelTitle&gt;</code> content is rendered via a <code>SectionContent</code> mechanism; it does not appear inline in your component markup.</p>
+<div class="code-block"><div class="code-block-title">MyPanel.razor</div>
+<pre><code class="language-html">
+@* Set the tab title *@
+&lt;PanelTitle&gt;My Panel&lt;/PanelTitle&gt;
+
+@* Panel body *@
+&lt;div style=&quot;padding: 16px;&quot;&gt;
+    &lt;p&gt;Custom panel content goes here.&lt;/p&gt;
+    &lt;p&gt;Value from toolbar: @_value&lt;/p&gt;
+&lt;/div&gt;
+
+@code {
+    private string? _value;
+
+    // Optionally, inject services or cascade values here.
+}
+</code></pre>
+</div>
+<h3 id="preview-decorator-component">Preview Decorator Component</h3>
+<p>A preview decorator is a Blazor component that is <strong>rendered as a sibling</strong> of the story in the same preview frame. It does not wrap or receive the story content; instead, it renders its own HTML (for example, a <code>&lt;style&gt;</code> tag, an overlay <code>&lt;div&gt;</code>, or nothing visible at all) and uses the cascading parameters below to react to the current story and toolbar state.</p>
+<table>
+<thead>
+<tr>
+<th>Cascading parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[CascadingParameter(Name = &quot;Globals&quot;)]</code></td>
+<td><code>IReadOnlyDictionary&lt;string, string&gt;?</code></td>
+<td>Global arguments written by toolbar content components</td>
+</tr>
+<tr>
+<td><code>[CascadingParameter(Name = &quot;Args&quot;)]</code></td>
+<td><code>IReadOnlyDictionary&lt;string, string&gt;?</code></td>
+<td>The current story's control arguments</td>
+</tr>
+<tr>
+<td><code>[CascadingParameter(Name = &quot;Story&quot;)]</code></td>
+<td><code>IStory?</code></td>
+<td>The currently displayed story</td>
+</tr>
+</tbody>
+</table>
+<p>A common pattern is to inject a <code>&lt;style&gt;</code> tag whose content depends on the <code>Globals</code> dictionary, similar to how the built-in Grid addon conditionally loads a stylesheet. The following example renders a CSS outline on the preview body when the toolbar toggle is on:</p>
+<div class="code-block"><div class="code-block-title">MyPreviewDecorator.razor</div>
+<pre><code class="language-html">
+@* Inject a CSS rule into the preview frame when the toggle is enabled. *@
+@if (_enabled)
+{
+    &lt;style&gt;
+        body { outline: 3px solid cornflowerblue !important; }
+    &lt;/style&gt;
+}
+
+@code {
+    /// &lt;summary&gt;Reads global arguments written by toolbar components.&lt;/summary&gt;
+    [CascadingParameter(Name = &quot;Globals&quot;)]
+    public IReadOnlyDictionary&lt;string, string&gt;? Globals { get; set; }
+
+    private bool _enabled =&gt;
+        Globals?.TryGetValue(&quot;myAddon.enabled&quot;, out var v) == true &amp;&amp; v == &quot;True&quot;;
+}
+</code></pre>
+</div>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>Values in <code>Globals</code> are always serialized as strings. A <code>bool</code> written as <code>Globals[&quot;key&quot;] = true</code> arrives in the decorator as the string <code>&quot;True&quot;</code>.</p>
+</div>
+<p>For side effects that require JavaScript (such as changing background color or intercepting DOM events), inject <code>IJSRuntime</code> and invoke your JS from <code>OnAfterRenderAsync</code>, exactly how the built-in Background and Actions addons work.</p>
+<p>The examples above use plain HTML elements to illustrate the fundamentals. In practice, you can build polished, consistent-looking addons using the reusable components described below.</p>
+<h3 id="styling-addon-components">Styling Addon Components</h3>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>Blazor's <strong>scoped CSS</strong> (<code>*.razor.css</code>) is <strong>not supported</strong> in addon components at this time. This limitation applies to toolbar content, panel, and preview decorator components.</p>
+</div>
+<p>Instead, define your styles in a regular <code>.css</code> file and load it using the <code>ImportStyleSheet</code> component from <code>BlazingStory.ToolKit</code> (described in the <a href="v1.0.0-preview.83/addons/creating-addons#importstylesheet">next section</a>) or a standard <code>&lt;link&gt;</code> tag. This limitation may be removed in a future version of Blazing Story.</p>
+<h3 id="using-the-blazingstorytoolkit">Using the BlazingStory.ToolKit</h3>
+<p>When building addons, you will often want toolbar buttons, popup menus, icons, and other UI elements that match the look and feel of the built-in Blazing Story addons. The <strong><code>BlazingStory.ToolKit</code></strong> NuGet package provides these reusable components. In fact, all of Blazing Story's built-in addons are built using this same toolkit.</p>
+<div class="code-block">
+<pre><code class="language-shell">dotnet add package BlazingStory.ToolKit
+</code></pre>
+</div>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>If you are adding the addon directly inside your Blazing Story app project, <code>BlazingStory.ToolKit</code> is already available transitively. You only need to add the package explicitly when creating a separate class library.</p>
+</div>
+<h4 id="iconbutton">IconButton</h4>
+<p><code>IconButton</code> renders a toolbar-style button with a built-in SVG icon. When used with the <code>Active</code> parameter, it visually indicates an on/off state, making it perfect for toggle actions.</p>
+<div class="code-block">
+<pre><code class="language-html">@using BlazingStory.ToolKit.Buttons
+@using BlazingStory.ToolKit.Icons
+
+&lt;IconButton Icon=&quot;SvgIconType.Grid&quot;
+            Title=&quot;Toggle grid overlay&quot;
+            Active=&quot;@_enabled&quot;
+            OnClick=&quot;OnClick&quot; /&gt;
+
+@code {
+    [CascadingParameter]
+    public GlobalArguments Globals { get; set; } = default!;
+
+    private bool _enabled;
+
+    private void OnClick()
+    {
+        _enabled = !_enabled;
+        Globals[&quot;myAddon.grid&quot;] = _enabled;
+    }
+}
+</code></pre>
+</div>
+<p>The <code>SvgIconType</code> enum includes icons for common toolbar actions such as <code>Grid</code>, <code>Background</code>, <code>Measure</code>, <code>Outlines</code>, <code>Gear</code>, <code>ZoomIn</code>, <code>ZoomOut</code>, and more.</p>
+<h4 id="popupmenu--menuitem">PopupMenu / MenuItem</h4>
+<p><code>PopupMenu</code> shows a dropdown menu when a trigger element is clicked. Use it together with <code>MenuItem</code> to build selection menus, similar to the built-in <strong>Background</strong> addon.</p>
+<div class="code-block">
+<pre><code class="language-html">@using BlazingStory.ToolKit.Buttons
+@using BlazingStory.ToolKit.Icons
+@using BlazingStory.ToolKit.Menus
+
+&lt;PopupMenu MarginTop=&quot;6&quot;&gt;
+    &lt;Trigger&gt;
+        &lt;IconButton Icon=&quot;SvgIconType.Background&quot;
+                    Title=&quot;Choose a background&quot;
+                    Active=&quot;@(_selected != &quot;none&quot;)&quot; /&gt;
+    &lt;/Trigger&gt;
+    &lt;MenuItems&gt;
+        &lt;MenuItem Active=&quot;@(_selected == &quot;light&quot;)&quot;
+                  OnClick=&quot;() =&gt; Select(&quot;light&quot;)&quot;&gt;
+            Light
+        &lt;/MenuItem&gt;
+        &lt;MenuItem Active=&quot;@(_selected == &quot;dark&quot;)&quot;
+                  OnClick=&quot;() =&gt; Select(&quot;dark&quot;)&quot;&gt;
+            Dark
+        &lt;/MenuItem&gt;
+    &lt;/MenuItems&gt;
+&lt;/PopupMenu&gt;
+
+@code {
+    private string _selected = &quot;none&quot;;
+    private void Select(string value) =&gt; _selected = value;
+}
+</code></pre>
+</div>
+<p>You can also use <code>MenuItemDivider</code> to insert a horizontal separator between menu items.</p>
+<h4 id="importstylesheet">ImportStyleSheet</h4>
+<p><code>ImportStyleSheet</code> dynamically adds or removes a <code>&lt;link&gt;</code> stylesheet in the document. This is particularly useful in <strong>preview decorators</strong> where you need to conditionally load CSS based on toolbar state.</p>
+<div class="code-block">
+<pre><code class="language-html">@using BlazingStory.ToolKit.Styles
+
+&lt;ImportStyleSheet Href=&quot;./_content/MyAddonLibrary/css/my-overlay.css&quot;
+                  Disabled=&quot;@(!_enabled)&quot; /&gt;
+
+@code {
+    [CascadingParameter(Name = &quot;Globals&quot;)]
+    public IReadOnlyDictionary&lt;string, string&gt;? Globals { get; set; }
+
+    private bool _enabled =&gt;
+        Globals?.TryGetValue(&quot;myAddon.grid&quot;, out var v) == true
+        &amp;&amp; v == &quot;True&quot;;
+}
+</code></pre>
+</div>
+<p>When <code>Disabled</code> is <code>false</code> (i.e. the stylesheet should be active), the component injects the stylesheet via JavaScript. When <code>Disabled</code> becomes <code>true</code>, the stylesheet is removed from the document. This is exactly how the built-in <strong>Grid</strong> addon conditionally loads its background grid CSS.</p>
+<h4 id="badge">Badge</h4>
+<p><code>Badge</code> renders a small label, typically placed inside a <code>&lt;PanelTitle&gt;</code> to add a notification indicator or counter to a panel tab.</p>
+<div class="code-block">
+<pre><code class="language-html">&lt;PanelTitle&gt;Actions &lt;Badge Text=&quot;@_count.ToString()&quot; /&gt;&lt;/PanelTitle&gt;
+</code></pre>
+</div>
+<h2 id="step-2-create-the-addon-class">Step 2: Create the Addon Class</h2>
+<p>Now that the Razor components are ready, create a class that implements the <code>IAddon</code> interface from the <code>BlazingStory.Addons</code> namespace. Its <code>Initialize</code> method receives an <code>IAddonBuilder</code> and registers the components you created in Step 1:</p>
+<div class="code-block">
+<pre><code class="language-csharp">using BlazingStory.Addons;
+
+public class MyCustomAddon : IAddon
+{
+    public void Initialize(IAddonBuilder builder)
+    {
+        // Register a toolbar content component (shown only in Story view)
+        builder.AddToolbarContent&lt;MyToolbarContent&gt;(
+            order: 1000,
+            match: viewMode =&gt; viewMode == ViewMode.Story);
+
+        // Register a panel tab component (shown only in Story view)
+        builder.AddPanel&lt;MyPanel&gt;(
+            order: 1000,
+            match: viewMode =&gt; viewMode == ViewMode.Story);
+
+        // Register a preview decorator (placed alongside the story in the preview frame)
+        builder.AddPreviewDecorator&lt;MyPreviewDecorator&gt;();
+    }
+}
+</code></pre>
+</div>
+<h3 id="order-parameter">Order parameter</h3>
+<p>The <code>order</code> parameter controls the position of the component relative to other registered toolbar items or panels. Lower values appear first (further to the left in the toolbar, or as earlier tabs in the panel). Built-in addons use orders in the range 100-900, so values like <code>1000</code> or higher are safe for custom addons.</p>
+<h3 id="viewmode">ViewMode</h3>
+<p>The <code>match</code> predicate receives a <code>ViewMode</code> value and should return <code>true</code> when the component should be visible. <code>ViewMode</code> has three members:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ViewMode.Story</code></td>
+<td>The individual story canvas view</td>
+</tr>
+<tr>
+<td><code>ViewMode.Docs</code></td>
+<td>The documentation page view</td>
+</tr>
+<tr>
+<td><code>ViewMode.CustomPage</code></td>
+<td>A custom page defined by the user</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>ViewMode.Story</code> for most toolbar and panel addons. To show a component in all views, return <code>true</code> unconditionally:</p>
+<div class="code-block">
+<pre><code class="language-csharp">match: _ =&gt; true
+</code></pre>
+</div>
+<h2 id="step-3-register-the-addon">Step 3: Register the Addon</h2>
+<p>Addons are registered in the <code>&lt;BlazingStoryApp&gt;</code> component via the <code>OnInitialize</code> callback parameter. This callback receives an <code>IBlazingStoryBuilder</code> which exposes the <code>Addons</code> property of type <code>IAddonStore</code>:</p>
+<div class="code-block">
+<pre><code class="language-html">@* e.g. App.razor in a Blazing Story app *@
+
+&lt;BlazingStoryApp
+    Assemblies=&quot;[typeof(App).Assembly]&quot;
+    OnInitialize=&quot;builder =&gt; builder.Addons.Register&lt;MyCustomAddon&gt;()&quot; /&gt;
+</code></pre>
+</div>
+<p>To register multiple addons, use a separate method:</p>
+<div class="code-block">
+<pre><code class="language-html">&lt;BlazingStoryApp
+    Assemblies=&quot;[typeof(App).Assembly]&quot;
+    OnInitialize=&quot;@ConfigureBlazingStory&quot; /&gt;
+
+@code {
+    private void ConfigureBlazingStory(IBlazingStoryBuilder builder)
+    {
+        builder.Addons.Register&lt;MyCustomAddon&gt;();
+        builder.Addons.Register&lt;AnotherAddon&gt;();
+    }
+}
+</code></pre>
+</div>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>The <code>IBlazingStoryBuilder</code> interface is in the <code>BlazingStory.Configurations</code> namespace. Add a <code>@using BlazingStory.Configurations</code> directive if the type is not resolved automatically.</p>
+</div>
+<h2 id="complete-example">Complete Example</h2>
+<p>Here is a minimal end-to-end example of an addon that toggles a CSS grid overlay on the story canvas, using <code>BlazingStory.ToolKit</code> components:</p>
+<p><strong><code>MyGridAddon.cs</code></strong></p>
+<div class="code-block">
+<pre><code class="language-csharp">using BlazingStory.Addons;
+
+namespace MyAddonLibrary;
+
+public class MyGridAddon : IAddon
+{
+    public void Initialize(IAddonBuilder builder)
+    {
+        builder.AddToolbarContent&lt;MyGridToolbar&gt;(order: 1000,
+            match: viewMode =&gt; viewMode == ViewMode.Story);
+        builder.AddPreviewDecorator&lt;MyGridDecorator&gt;();
+    }
+}
+</code></pre>
+</div>
+<p><strong><code>MyGridToolbar.razor</code></strong>: Uses <code>IconButton</code> from the ToolKit for a native look.</p>
+<div class="code-block">
+<pre><code class="language-html">@using BlazingStory.Addons
+@using BlazingStory.ToolKit.Buttons
+@using BlazingStory.ToolKit.Icons
+
+&lt;IconButton Icon=&quot;SvgIconType.Grid&quot;
+            Title=&quot;Toggle grid&quot;
+            Active=&quot;@_on&quot;
+            OnClick=&quot;OnClick&quot; /&gt;
+
+@code {
+    [CascadingParameter] public GlobalArguments Globals { get; set; } = default!;
+    private bool _on;
+
+    private void OnClick()
+    {
+        _on = !_on;
+        Globals[&quot;myGrid.enabled&quot;] = _on;
+    }
+}
+</code></pre>
+</div>
+<p><strong><code>MyGridDecorator.razor</code></strong>: Uses <code>ImportStyleSheet</code> from the ToolKit to conditionally load a CSS file.</p>
+<div class="code-block">
+<pre><code class="language-html">@using BlazingStory.ToolKit.Styles
+
+&lt;ImportStyleSheet Href=&quot;./_content/MyAddonLibrary/css/grid-overlay.css&quot;
+                  Disabled=&quot;@(!_on)&quot; /&gt;
+
+@code {
+    [CascadingParameter(Name = &quot;Globals&quot;)]
+    public IReadOnlyDictionary&lt;string, string&gt;? Globals { get; set; }
+
+    private bool _on =&gt;
+        Globals?.TryGetValue(&quot;myGrid.enabled&quot;, out var v) == true
+        &amp;&amp; v == &quot;True&quot;;
+}
+</code></pre>
+</div>
+<p><strong>Registration in <code>App.razor</code></strong></p>
+<div class="code-block">
+<pre><code class="language-html">@using MyAddonLibrary
+
+&lt;BlazingStoryApp Assemblies=&quot;[typeof(App).Assembly]&quot;
+                 OnInitialize=&quot;b =&gt; b.Addons.Register&lt;MyGridAddon&gt;()&quot;&gt;
+&lt;/BlazingStoryApp&gt;
+</code></pre>
+</div>
+</article>
+                <nav class="doc-pagination" aria-label="Documentation pages"><a class="doc-pagination-link previous" href="v1.0.0-preview.83/addons/overview"><span class="doc-pagination-label">Previous</span>
+                <span class="doc-pagination-title">Overview</span></a><a class="doc-pagination-link next" href="v1.0.0-preview.83/mcp-server-feature"><span class="doc-pagination-label">Next</span>
+                <span class="doc-pagination-title">MCP Server Feature</span></a></nav></div>
+
+        <nav class="doc-toc"><div class="doc-toc-title">On this page</div>
+        <ul><li class="toc-level-2"><a href="v1.0.0-preview.83/addons/creating-addons#prerequisites">Prerequisites</a></li><li class="toc-level-2"><a href="v1.0.0-preview.83/addons/creating-addons#step-1-create-the-razor-components">Step 1: Create the Razor Components</a></li><li class="toc-level-3"><a href="v1.0.0-preview.83/addons/creating-addons#toolbar-content-component">Toolbar Content Component</a></li><li class="toc-level-3"><a href="v1.0.0-preview.83/addons/creating-addons#panel-component">Panel Component</a></li><li class="toc-level-3"><a href="v1.0.0-preview.83/addons/creating-addons#preview-decorator-component">Preview Decorator Component</a></li><li class="toc-level-3"><a href="v1.0.0-preview.83/addons/creating-addons#styling-addon-components">Styling Addon Components</a></li><li class="toc-level-3"><a href="v1.0.0-preview.83/addons/creating-addons#using-the-blazingstorytoolkit">Using the BlazingStory.ToolKit</a></li><li class="toc-level-2"><a href="v1.0.0-preview.83/addons/creating-addons#step-2-create-the-addon-class">Step 2: Create the Addon Class</a></li><li class="toc-level-3"><a href="v1.0.0-preview.83/addons/creating-addons#order-parameter">Order parameter</a></li><li class="toc-level-3"><a href="v1.0.0-preview.83/addons/creating-addons#viewmode">ViewMode</a></li><li class="toc-level-2"><a href="v1.0.0-preview.83/addons/creating-addons#step-3-register-the-addon">Step 3: Register the Addon</a></li><li class="toc-level-2"><a href="v1.0.0-preview.83/addons/creating-addons#complete-example">Complete Example</a></li></ul></nav></div></main>
+
+<footer class="site-footer"><div class="site-footer-copyright"><span>Copyright &#xA9; 2026 @jsakamoto.</span>
+        <span>
+            Built with Blazor (.NET 11.0.0-rc.1.26425.128 / X64)
+        </span></div>
+    <div class="site-footer-links"><a href="https://github.com/BlazingStory/docs/blob/main/THIRD-PARTY-NOTICES.txt" target="_blank" rel="noopener noreferrer">Third-Party Notices</a></div></footer>
+        <blazor-focus-on-navigate selector="h1"></blazor-focus-on-navigate>
+<!-- %%-PRERENDERING-END-%% -->
+</div>
+
+    <div id="blazor-error-ui">
+      An unhandled error has occurred.
+      <a href="." class="reload">Reload</a>
+      <span class="dismiss">🗙</span>
+    </div>
+
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script src="brotliloader.min.js" type="module"></script>
+  
+
+</body></html>

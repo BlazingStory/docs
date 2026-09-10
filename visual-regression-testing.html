@@ -1,0 +1,544 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Blazing Story</title>
+    <base href="/docs/"/>
+    <link href="_framework/dotnet.6ujmn7yjap.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4="/>
+    <link rel="icon" href="img/favicon.ico"/>
+    <meta name="description" content="The clone of &quot;Storybook&quot; for Blazor, a frontend workshop for building UI components and pages in isolation."/>
+    <meta property="og:image" content="img/social-preview.png"/>
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'none';
+      base-uri 'self';
+      script-src 'self' 'wasm-unsafe-eval' 'sha256-AdzjkCykZusJ9DvCcMxDZ53jIMCDwG+hhI1j/ExxEeM=';
+      style-src 'self';
+      img-src 'self' https://raw.githubusercontent.com https://img.shields.io;
+      media-src 'self' https://github.com;
+      connect-src 'self' https://huggingface.co https://*.huggingface.co https://*.hf.co https://cdn.jsdelivr.net/npm/@xenova/;
+      worker-src 'self' blob:;
+      object-src 'none';
+      form-action 'self';
+      upgrade-insecure-requests;"/>
+    <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="css/markdown.css"/>
+    <link rel="stylesheet" href="css/code-theme.css"/>
+    <script src="js/theme-initializer.js"></script>
+    <script type="importmap">{
+  "imports": {
+    "./_framework/dotnet.js": "./_framework/dotnet.6ujmn7yjap.js",
+    "./_framework/dotnet.native.js": "./_framework/dotnet.native.ovo3wn48us.js",
+    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.gqgh3r3nhq.js"
+  },
+  "scopes": {},
+  "integrity": {
+    "./_framework/dotnet.6ujmn7yjap.js": "sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4=",
+    "./_framework/dotnet.js": "sha256-7uB0PJlI7j9CTM1WQzOQyo+3Dtp3WoygT96TsephZF4=",
+    "./_framework/dotnet.native.js": "sha256-tLyXXI2PD4cFrijohEp0sn7VtuHVH9P46wgbaOTwFnA=",
+    "./_framework/dotnet.native.ovo3wn48us.js": "sha256-tLyXXI2PD4cFrijohEp0sn7VtuHVH9P46wgbaOTwFnA=",
+    "./_framework/dotnet.runtime.gqgh3r3nhq.js": "sha256-CHJJM/ZgtVetJLyVfm7XXfr1VQfR5EEU6T/EgGPi+Fc=",
+    "./_framework/dotnet.runtime.js": "sha256-CHJJM/ZgtVetJLyVfm7XXfr1VQfR5EEU6T/EgGPi+Fc="
+  }
+}</script>
+  
+<!-- %%-PRERENDERING-HEADOUTLET-BEGIN-%% -->
+<title>Visual Regression Testing | Blazing Story</title><link rel="preload" as="fetch" crossorigin href="Docs/versions.json?v=6b3e8f2a" />
+        <link rel="preload" as="fetch" crossorigin href="Docs/v1.0.0-preview.89/sidebar.json?v=6b3e8f2a" />
+        <link rel="preload" as="fetch" crossorigin href="Docs/v1.0.0-preview.89/EN/visual-regression-testing.md?v=6b3e8f2a" />
+<!-- %%-PRERENDERING-HEADOUTLET-END-%% -->
+</head>
+
+  <body>
+    <div id="app">
+<!-- %%-PRERENDERING-BEGIN-%% -->
+<header class="navbar"><div class="navbar-inner"><button type="button" class="navbar-hamburger" aria-label="Toggle the navigation menu"><svg width="24" height="24" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h22M4 15h22M4 23h22"></path></svg></button>
+
+        <a class="navbar-brand" href="./"><img src="img/logo.svg" alt="Blazing Story Logo" width="32" height="32">
+            <b>Blazing Story</b></a>
+
+        <div class="navbar-items"><div class="search-box search-box-loading"><input type="search" class="search-box-input" placeholder="Search docs" aria-label="Search the documentation" autocomplete="off" value="" disabled /><span class="search-box-spinner" aria-hidden="true"></span></div>
+            <div class="version-selector"><button type="button" class="version-selector-button">Current Version
+        <span class="version-selector-caret" aria-hidden="true"></span></button><ul class="version-selector-menu "><li><a class="version-selector-item active" href="visual-regression-testing" __internal_preventDefault_onclick>Current Version</a></li><li><a class="version-selector-item " href="v1.0.0-preview.87/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.87 ~ 88</a></li><li><a class="version-selector-item " href="v1.0.0-preview.83/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.83 ~ 86</a></li><li><a class="version-selector-item " href="v1.0.0-preview.81/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.81 ~ 82</a></li><li><a class="version-selector-item " href="v1.0.0-preview.68/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.68 ~ 80</a></li><li><a class="version-selector-item " href="v1.0.0-preview.67/visual-regression-testing" __internal_preventDefault_onclick>1.0.0-preview.67 or before</a></li></ul></div>
+            <a class="navbar-link" href="https://github.com/jsakamoto/BlazingStory" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <button type="button" class="theme-toggle" title="Switch between dark and light mode" aria-label="Switch between dark and light mode"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"></path></svg></button></div></div></header>
+
+<main class="site-main"><div class="doc-layout"><nav class="doc-sidebar "><div class="sidebar-section"><div class="sidebar-section-title">&#x1F4D6; Introduction</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="overview">Overview</a></li><li><a class="sidebar-item " href="getting-started">Getting Started</a></li><li><a class="sidebar-item " href="structure-of-stories">Structure Of &quot;stories&quot;</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F4DA; Documentation</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="enhancing-documentation">Enhancing Documentation</a></li><li><a class="sidebar-item " href="custom-pages-and-markdown">Custom Pages &amp; Markdown</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x2699;&#xFE0F; Configuration</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="configure-layouts">Configure Layouts</a></li><li><a class="sidebar-item " href="configure-arguments">Configure Arguments</a></li><li><a class="sidebar-item " href="sorting-navigation-tree-items">Sorting Navigation Tree Items</a></li><li><a class="sidebar-item " href="configure-pathbase">Configure Path Base</a></li><li><a class="sidebar-item " href="include-custom-css-and-js">Include Custom CSS And JS</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F3A8; Appearance</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="prefers-color-scheme">Prefers Color Scheme</a></li><li><a class="sidebar-item " href="customize-title-and-brand-logo">Customize Title And Logo</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F9E9; Addons</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="addons/overview">Overview</a></li><li><a class="sidebar-item " href="addons/creating-addons">Creating Custom Addons</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F9EA; Testing</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item active" href="visual-regression-testing">Visual Regression Testing</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F916; AI Integration</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="mcp-server-feature">MCP Server Feature</a></li><li><a class="sidebar-item " href="agent-skills">Agent Skills</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x1F6E0;&#xFE0F; Development</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="javascript-api">JavaScript API</a></li><li><a class="sidebar-item " href="hot-reloading">Hot Reloading [Preview]</a></li></ul></div><div class="sidebar-section"><div class="sidebar-section-title">&#x2139;&#xFE0F; General Info</div>
+            <ul class="sidebar-items"><li><a class="sidebar-item " href="disclaimer">&#x1F647; Disclaimer</a></li><li><a class="sidebar-item " href="attention">&#x26A0;&#xFE0F; Attention</a></li><li><a class="sidebar-item " href="faq">FAQ</a></li><li><a class="sidebar-item " href="release-notes">Release Notes</a></li><li><a class="sidebar-item " href="license-and-3rd-party-notice">License &amp; 3rd Party Notice</a></li></ul></div></nav>
+
+        <div class="doc-body"><nav class="breadcrumbs" aria-label="Breadcrumbs"><ol><li><a class="breadcrumb-home" href="./" aria-label="Home"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"></path></svg></a></li><li><span class="breadcrumb-item">&#x1F9EA; Testing</span></li><li><span class="breadcrumb-item active">Visual Regression Testing</span></li></ol></nav>
+                <article class="markdown"><h1 id="visual-regression-testing">Visual Regression Testing</h1>
+<h2 id="summary">Summary</h2>
+<p>A <strong>visual regression test (VRT)</strong> takes a screenshot of every story, keeps it as the baseline, and compares fresh screenshots against that baseline after you change something. If a component's appearance changes in a way nobody intended, the test fails before the change ships.</p>
+<p>Once that safety net is in place, you can improve CSS aggressively, refactor markup, or let an AI coding agent rewrite a UI implementation, without the fear that an unnoticed visual breakage reaches your users.</p>
+<p>Blazing Story supports this in two pieces:</p>
+<ul>
+<li>The Blazing Story app exposes a <a href="javascript-api"><strong>JavaScript API</strong></a> in the browser, which reports every story it contains and tells a test runner when the view has settled down enough to be photographed.</li>
+<li>A project template named <strong>&quot;Blazing Story Visual Regression Test&quot;</strong> creates a ready-to-run VRT project that uses that API. It is a TypeScript project running on Node.js and <a href="https://playwright.dev/docs/intro" target="_blank" rel="noopener noreferrer">Playwright Test</a>, and it turns <strong>every story in your app into one test with one screenshot, automatically</strong>. You never register stories in the test project by hand, not even when you add new ones later.</li>
+</ul>
+<p>The baseline screenshots are usually shared with your teammates and your CI/CD pipeline through a cloud storage service, so that everyone compares against the same, authoritative images. The project template supports Amazon S3, Azure Blob Storage, and Google Cloud Storage out of the box, and it can also scaffold an adapter for a storage service of your own.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li><strong>.NET SDK ver.8 or later</strong>, to install the project template and to run the Blazing Story app under test.</li>
+<li><strong>Node.js ver.24 or later</strong>, to run the VRT project.</li>
+<li>A <strong>running Blazing Story app</strong>. The VRT project drives a real browser against a real running app, so the app must be up and reachable at the configured URL whenever the tests run.</li>
+<li>Depending on the storage service you pick, the <strong>CLI of that service</strong>, installed and authenticated (see <a href="visual-regression-testing#choosing-where-the-baseline-screenshots-live">Choosing Where The Baseline Screenshots Live</a>).</li>
+</ul>
+<h2 id="how-it-works">How It Works</h2>
+<p>It is worth knowing what happens during a test run, because it explains most of the behavior described later on this page.</p>
+<ol>
+<li>Before every test run, the VRT project opens the Blazing Story app in a headless Chromium browser and calls the JavaScript API's <code>getStoryIndex()</code> to read the list of stories. The result is written to <code>tests/stories.json</code>.</li>
+<li>Baseline screenshots that are missing on your machine are downloaded from the storage service, so a fresh clone or a clean CI agent still compares against the team's baselines.</li>
+<li>The test file reads <code>tests/stories.json</code> and registers one Playwright test per story. This is why each story appears individually in the VS Code Test Explorer.</li>
+<li>Each test navigates to that story's isolated preview page (<code>/iframe.html?id=&lt;story id&gt;&amp;viewMode=story</code>), awaits the JavaScript API's <code>readyView()</code> so that rendering, fonts, and the opening transition have settled, and then captures the preview area with Playwright's <a href="https://playwright.dev/docs/test-snapshots" target="_blank" rel="noopener noreferrer"><code>toHaveScreenshot()</code></a>.</li>
+<li>Screenshots are compared against the baseline files in <code>tests/vrt.spec.ts-snapshots/</code>, and a story that renders differently fails the test.</li>
+<li>The outcome is written as an HTML report at <code>playwright-report/index.html</code>.</li>
+</ol>
+<p>Note that only <strong>stories</strong> are captured. &quot;Docs&quot; pages and custom pages appear in the story index, but they are not part of the visual regression test.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><strong>Where the baselines live</strong><br />
+<code>tests/vrt.spec.ts-snapshots/</code> is the local home of the baselines: it is where <code>npm run snapshots:pull</code> downloads into, and where <code>npm run snapshots:push</code> uploads from.</p>
+<p>Each file there is named <code>&lt;story id&gt;-&lt;platform&gt;.png</code>, for example <code>example-button--primary-linux.png</code>. Because the platform is part of the file name, a screenshot taken on Linux is only ever compared against a Linux baseline, never against one captured on Windows or macOS. That is also why one storage location can hold the sets of several platforms side by side.</p>
+</div>
+<h2 id="preparation">Preparation</h2>
+<p>Install the Blazing Story project templates, exactly as described in <a href="getting-started">Getting Started</a>. If you have already done that for your Blazing Story app project, there is nothing more to install.</p>
+<div class="code-block">
+<pre><code class="language-shell">dotnet new install BlazingStory.ProjectTemplates
+</code></pre>
+</div>
+<h2 id="choosing-where-the-baseline-screenshots-live">Choosing Where The Baseline Screenshots Live</h2>
+<p>You choose the storage service when you create the VRT project, and that choice shapes the generated project (its dependencies, its npm scripts, and its README). Choose it before you create the project.</p>
+<table>
+<thead>
+<tr>
+<th>Choice</th>
+<th>Baselines are stored in</th>
+<th>Authentication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AWS S3</strong></td>
+<td>An Amazon S3 bucket</td>
+<td>The AWS CLI (<code>aws configure</code>). The identity needs <code>s3:ListBucket</code>, <code>s3:GetObject</code>, <code>s3:PutObject</code>, and <code>s3:DeleteObject</code> on the bucket.</td>
+</tr>
+<tr>
+<td><strong>Azure Blob Storage</strong></td>
+<td>A blob container in an Azure Storage account</td>
+<td>The Azure CLI (<code>az login</code>). The signed-in user needs the <strong>&quot;Storage Blob Data Contributor&quot;</strong> role on the storage account. Being a subscription Owner or Contributor is not enough.</td>
+</tr>
+<tr>
+<td><strong>Google Cloud Storage</strong></td>
+<td>A Google Cloud Storage bucket</td>
+<td>The Google Cloud CLI. Run both <code>gcloud auth login</code> and <code>gcloud auth application-default login</code>, and set the project with <code>gcloud config set project &lt;project id&gt;</code>.</td>
+</tr>
+<tr>
+<td><strong>Custom</strong></td>
+<td>Any service you like</td>
+<td>Up to the adapter you implement. See <a href="visual-regression-testing#implementing-a-custom-storage-adapter">Implementing A Custom Storage Adapter</a>.</td>
+</tr>
+<tr>
+<td><strong>None</strong></td>
+<td>The local disk only</td>
+<td>Not applicable.</td>
+</tr>
+</tbody>
+</table>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>Authentication is never configured inside the VRT project itself. The project relies on the credentials that the storage service's own CLI has already established on the machine, which is also what makes the same project work unchanged on a CI agent that has been logged in by other means.</p>
+</div>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p>&quot;None&quot; produces a VRT project whose baselines never leave your machine and are shared with nobody. That is a fine way to try visual regression testing out for the first time, but for team use, pick one of the storage services so that every developer and every CI run compares against the same baselines.</p>
+</div>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>For an AWS S3 bucket, use the default SSE-S3 encryption. SSE-KMS changes the entity tag the sync uses to detect changed files, so the sync can no longer tell which baselines are up to date.</p>
+</div>
+<h2 id="creating-a-vrt-project">Creating A VRT Project</h2>
+<h3 id="on-visual-studio">On Visual Studio</h3>
+<p>Open the &quot;Create a new project&quot; dialog, select the <strong>&quot;Blazing Story Visual Regression Test&quot;</strong> project template, and fill in the dialog:</p>
+<ul>
+<li><strong>A base URL where the Blazing Story app under test is running</strong>, for example <code>http://localhost:5000</code>.</li>
+<li><strong>A storage service for UI snapshots</strong>, one of the choices in the table above.</li>
+<li>The connection values for the storage service you selected, for example the S3 region and bucket name. The dialog shows only the fields that apply to your choice.</li>
+<li>For the &quot;Custom&quot; storage service, which <strong>AI coding agent</strong> should receive the storage adapter skill (Claude Code, or the generic layout used by GitHub Copilot, OpenAI Codex, Cursor, and others), or none.</li>
+</ul>
+<h3 id="on-dotnet-cli">On dotnet CLI</h3>
+<p>The template's short name is <code>blazingstoryvrt</code>. The base URL is required, and the remaining options depend on the storage service.</p>
+<div class="code-block">
+<pre><code class="language-shell"># AWS S3
+dotnet new blazingstoryvrt -n MyBlazorWasmApp1.Stories.VRT \
+  --base-url http://localhost:5000 \
+  --storage aws --aws-region ap-northeast-1 --aws-bucket my-vrt-baselines
+
+# Azure Blob Storage
+dotnet new blazingstoryvrt -n MyBlazorWasmApp1.Stories.VRT \
+  --base-url http://localhost:5000 \
+  --storage azure --az-account mystorageaccount --az-container my-vrt-baselines
+
+# Google Cloud Storage
+dotnet new blazingstoryvrt -n MyBlazorWasmApp1.Stories.VRT \
+  --base-url http://localhost:5000 \
+  --storage gcp --gcp-bucket my-vrt-baselines
+
+# Local disk only
+dotnet new blazingstoryvrt -n MyBlazorWasmApp1.Stories.VRT \
+  --base-url http://localhost:5000
+</code></pre>
+</div>
+<p>The available options are the following.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Applies to</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--base-url</code>, <code>-b</code></td>
+<td>always (required)</td>
+<td>The URL where the Blazing Story app under test is running.</td>
+</tr>
+<tr>
+<td><code>--storage</code></td>
+<td>always</td>
+<td><code>aws</code>, <code>azure</code>, <code>gcp</code>, <code>custom</code>, or <code>none</code> (default: <code>none</code>).</td>
+</tr>
+<tr>
+<td><code>--aws-region</code></td>
+<td><code>--storage aws</code> (required)</td>
+<td>The AWS region of the S3 bucket, for example <code>ap-northeast-1</code>.</td>
+</tr>
+<tr>
+<td><code>--aws-bucket</code></td>
+<td><code>--storage aws</code> (required)</td>
+<td>The S3 bucket name holding the baseline screenshots.</td>
+</tr>
+<tr>
+<td><code>--az-account</code></td>
+<td><code>--storage azure</code> (required)</td>
+<td>The Azure Storage account name.</td>
+</tr>
+<tr>
+<td><code>--az-container</code></td>
+<td><code>--storage azure</code> (required)</td>
+<td>The blob container name holding the baseline screenshots.</td>
+</tr>
+<tr>
+<td><code>--gcp-bucket</code></td>
+<td><code>--storage gcp</code> (required)</td>
+<td>The Google Cloud Storage bucket name.</td>
+</tr>
+<tr>
+<td><code>--ai-agent</code>, <code>-ai</code></td>
+<td><code>--storage custom</code></td>
+<td><code>claude</code>, <code>generic</code>, or <code>none</code> (default: <code>none</code>). Decides where the storage adapter skill for AI coding agents is placed.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-you-get">What You Get</h3>
+<div class="code-block">
+<pre><code>📂 MyBlazorWasmApp1.Stories.VRT
+    + 📄 StoryVRT.esproj         👈 lets Visual Studio open the project
+    + 📄 package.json            👈 the npm scripts you will run
+    + 📄 vrt.config.ts           👈 the app URL and the storage connection values
+    + 📄 playwright.config.ts    👈 viewport, diff sensitivity, and other test settings
+    + 📄 README.md               👈 the same workflow as this page, tailored to your storage choice
+    + 📂 tests
+        + 📄 vrt.spec.ts         👈 registers one test per story
+    + 📂 scripts                 👈 story index generation and baseline sync
+    + 📂 .devcontainer           👈 a container that runs the tests reproducibly
+    + 📂 .vscode
+</code></pre>
+</div>
+<p>The generated project also contains a <code>README.md</code> written for the storage service you selected, so the exact command sequence for your project is always at hand inside the project folder.</p>
+<h2 id="setting-up-the-vrt-project">Setting Up The VRT Project</h2>
+<h3 id="step-1---install-the-npm-packages">Step 1 - Install The npm Packages</h3>
+<p>Playwright and the storage SDKs are npm packages, so restore them once in the project folder.</p>
+<div class="code-block">
+<pre><code class="language-shell">npm install
+</code></pre>
+</div>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>If you reopen the project in the Dev Container described below, this step runs automatically when the container is created.</p>
+</div>
+<h3 id="step-2---implement-a-custom-storage-adapter-only-for-the-custom-choice">Step 2 - Implement A Custom Storage Adapter (Only For The &quot;Custom&quot; Choice)</h3>
+<p>Skip this step unless you selected the &quot;Custom&quot; storage service. See <a href="visual-regression-testing#implementing-a-custom-storage-adapter">Implementing A Custom Storage Adapter</a> for the details.</p>
+<h3 id="step-3---start-the-blazing-story-app">Step 3 - Start The Blazing Story App</h3>
+<p>The VRT project takes screenshots of a live app, so start the Blazing Story app under test and leave it running.</p>
+<div class="code-block">
+<pre><code class="language-shell">dotnet run --project ./MyBlazorWasmApp1.Stories
+</code></pre>
+</div>
+<p>Make sure the URL it listens on is the one you configured as the base URL. If it is not, correct it in <code>vrt.config.ts</code>.</p>
+<h2 id="running-the-visual-regression-test">Running The Visual Regression Test</h2>
+<p>All of the following commands are run in the VRT project folder.</p>
+<h3 id="the-first-run-capture-the-baselines">The First Run: Capture The Baselines</h3>
+<p>There is no baseline to compare against yet, so capture one.</p>
+<div class="code-block">
+<pre><code class="language-shell">npm run snapshots:update
+</code></pre>
+</div>
+<p>Review the captured images under <code>tests/vrt.spec.ts-snapshots/</code>, and once they look right, publish them as the team's baselines.</p>
+<div class="code-block">
+<pre><code class="language-shell">npm run snapshots:push
+</code></pre>
+</div>
+<h3 id="everyday-runs">Everyday Runs</h3>
+<p>After changing a component, a stylesheet, or anything else that could affect the appearance, run the test.</p>
+<div class="code-block">
+<pre><code class="language-shell">npm test
+</code></pre>
+</div>
+<p>Baselines that are missing on your machine are downloaded from the storage service automatically before the run, so this single command is also all that a fresh clone or a CI agent needs.</p>
+<p>If differences are detected, the failing tests are listed in the console. Open the report at <code>playwright-report/index.html</code> in a browser to inspect them visually: for each failing story it shows the baseline image, the new screenshot, and the highlighted pixel diff, so you can judge at a glance whether the change was intended. <code>npm run test:open</code> runs the test and opens that report for you.</p>
+<h3 id="accepting-an-intentional-change">Accepting An Intentional Change</h3>
+<p>When a difference is intentional and the new appearance is the correct one from now on, recapture the baselines and publish them again.</p>
+<div class="code-block">
+<pre><code class="language-shell">npm run snapshots:update
+npm run snapshots:push
+</code></pre>
+</div>
+<h3 id="the-npm-scripts">The npm Scripts</h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npm test</code></td>
+<td>Runs the visual regression test for every story.</td>
+</tr>
+<tr>
+<td><code>npm run test:open</code></td>
+<td>Runs the test and then opens <code>playwright-report/index.html</code>.</td>
+</tr>
+<tr>
+<td><code>npm run snapshots:update</code></td>
+<td>Captures screenshots and writes them into <code>tests/vrt.spec.ts-snapshots/</code> as the new baselines.</td>
+</tr>
+<tr>
+<td><code>npm run snapshots:push</code></td>
+<td>Uploads the local baselines to the storage service.</td>
+</tr>
+<tr>
+<td><code>npm run snapshots:pull</code></td>
+<td>Downloads the baselines from the storage service explicitly.</td>
+</tr>
+<tr>
+<td><code>npm run stories:gen</code></td>
+<td>Refreshes <code>tests/stories.json</code> from the running app without running any test. Useful to make newly added stories appear in an editor's test explorer.</td>
+</tr>
+</tbody>
+</table>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p><code>snapshots:push</code> and <code>snapshots:pull</code> exist only when a storage service other than &quot;None&quot; was selected.</p>
+</div>
+<h3 id="options-of-the-baseline-sync">Options Of The Baseline Sync</h3>
+<p><code>snapshots:push</code> and <code>snapshots:pull</code> transfer only the files that are missing or whose content differs, print the resulting plan, and ask for confirmation before doing anything. Options are passed after a <code>--</code> separator, for example <code>npm run snapshots:push -- --dry-run</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--dry-run</code></td>
+<td>Shows the plan and transfers nothing.</td>
+</tr>
+<tr>
+<td><code>--yes</code></td>
+<td>Skips the confirmation prompt, which is what you want on CI.</td>
+</tr>
+<tr>
+<td><code>--force</code></td>
+<td>Transfers everything, overwriting the destination.</td>
+</tr>
+<tr>
+<td><code>--missing</code></td>
+<td>Transfers only the files that are absent at the destination.</td>
+</tr>
+<tr>
+<td><code>--filter &lt;glob&gt;</code></td>
+<td>Restricts the operation to file names matching the glob (<code>*</code> and <code>?</code> are supported).</td>
+</tr>
+<tr>
+<td><code>--all-platforms</code></td>
+<td>On pull only. Also downloads the baselines captured on other platforms.</td>
+</tr>
+<tr>
+<td><code>--prune</code></td>
+<td>Deletes the files at the destination that no longer exist at the source.</td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>Shows this list.</td>
+</tr>
+</tbody>
+</table>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>Since baseline file names carry the platform they were captured on, every operation acts on the current platform's set unless you ask otherwise. Pruning is always limited to the current platform, so a push from one platform can never delete another platform's baselines.</p>
+</div>
+<h2 id="running-in-a-dev-container-recommended">Running In A Dev Container (Recommended)</h2>
+<p>Screenshots differ subtly between machines. A different graphics stack, a different set of installed fonts, or simply a different operating system is enough to shift a few pixels and produce a failure that means nothing. The cure is to always capture and compare inside the same container.</p>
+<p>The generated project therefore ships a Dev Container definition (<code>.devcontainer/devcontainer.json</code>) based on the official Playwright container image, with the CLI of your chosen storage service and the Playwright extension for VS Code already included. If you open the VRT project folder in VS Code, run <strong>&quot;Reopen in Container&quot;</strong>, and you are running in the same environment as everybody else, including your CI/CD pipeline.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>When the tests run inside the container, <code>localhost</code> in the base URL is automatically rewritten to <code>host.docker.internal</code>, so a Blazing Story app running on your host machine is still reachable from inside the container without any configuration change.</p>
+</div>
+<h2 id="configuration">Configuration</h2>
+<h3 id="vrtconfigts"><code>vrt.config.ts</code></h3>
+<p>Everything you may need to edit is collected in <code>vrt.config.ts</code>: the URL of the Blazing Story app under test, and the connection values of the storage service. The file is already filled in with the values you gave when the project was created, so edit it when one of them was wrong or has changed later.</p>
+<div class="code-block"><div class="code-block-title">📄 vrt.config.ts (the AWS S3 case)</div>
+<pre><code class="language-typescript">export const vrtConfig = {
+  storageRegion: process.env.VRT_STORAGE_REGION ?? &quot;ap-northeast-1&quot;,
+  storageBucket: process.env.VRT_STORAGE_BUCKET ?? &quot;my-vrt-baselines&quot;,
+  baseURL: process.env.VRT_BASE_URL ?? &quot;http://localhost:5000&quot;,
+};
+</code></pre>
+</div>
+<h3 id="environment-variables-and-env">Environment Variables And <code>.env</code></h3>
+<p>As the code above shows, an environment variable takes precedence over the value written in the file. This is how one machine, or one CI job, runs against a different app URL or a different bucket without editing a committed file.</p>
+<table>
+<thead>
+<tr>
+<th>Environment variable</th>
+<th>Overrides</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VRT_BASE_URL</code></td>
+<td>The URL of the Blazing Story app under test.</td>
+</tr>
+<tr>
+<td><code>VRT_STORAGE_REGION</code></td>
+<td>The AWS S3 region.</td>
+</tr>
+<tr>
+<td><code>VRT_STORAGE_BUCKET</code></td>
+<td>The AWS S3 or Google Cloud Storage bucket name.</td>
+</tr>
+<tr>
+<td><code>VRT_STORAGE_ACCOUNT</code></td>
+<td>The Azure Storage account name.</td>
+</tr>
+<tr>
+<td><code>VRT_STORAGE_CONTAINER</code></td>
+<td>The Azure blob container name.</td>
+</tr>
+<tr>
+<td><code>VRT_SKIP_CLOUD</code></td>
+<td>Set it to <code>1</code> to run the tests without touching the storage service, for example when working offline.</td>
+</tr>
+</tbody>
+</table>
+<p>These variables can also be written into a <code>.env</code> file at the project root. <code>vrt.config.ts</code> loads it automatically, and the generated <code>.gitignore</code> keeps it out of your repository, which makes <code>.env</code> the right place for anything secret. A variable that is already set in the shell still wins over <code>.env</code>.</p>
+<h3 id="playwrightconfigts"><code>playwright.config.ts</code></h3>
+<p>The test settings live in <code>playwright.config.ts</code>. The values worth knowing about are the following.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expect.toHaveScreenshot.maxDiffPixelRatio</code></td>
+<td><code>0.001</code></td>
+<td>How much of the image is allowed to differ before the test fails. Raise it if tiny rendering noise makes tests flaky, lower it to catch smaller changes.</td>
+</tr>
+<tr>
+<td><code>use.viewport</code></td>
+<td><code>900</code> x <code>600</code></td>
+<td>The browser viewport the stories are rendered in.</td>
+</tr>
+<tr>
+<td><code>workers</code></td>
+<td><code>4</code></td>
+<td>How many stories are captured in parallel.</td>
+</tr>
+<tr>
+<td><code>reporter</code></td>
+<td>HTML</td>
+<td>Writes the report into <code>playwright-report/</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Changing the viewport, or anything else that affects rendering, invalidates the existing baselines, so recapture and publish them afterwards.</p>
+<p>Everything else follows the standard Playwright Test behavior, so for deeper customization, refer to the <a href="https://playwright.dev/docs/test-configuration" target="_blank" rel="noopener noreferrer">Playwright documentation</a> and its <a href="https://playwright.dev/docs/test-snapshots" target="_blank" rel="noopener noreferrer">snapshot testing guide</a>.</p>
+<h2 id="implementing-a-custom-storage-adapter">Implementing A Custom Storage Adapter</h2>
+<p>If your baselines belong somewhere other than the three supported cloud services, such as MinIO, WebDAV, Dropbox, or any other S3-compatible storage, create the project with the &quot;Custom&quot; storage service.</p>
+<p>That produces the same project, except that <code>scripts/snapshot-storage.ts</code> is an empty template. Implement its members, each of which is described by a comment in the file, so that the sync can list, download, upload, and delete the baseline files on your service. Add the connection values your implementation needs to <code>vrt.config.ts</code>, following the same pattern as the app URL: read an environment variable first, and fall back to a literal in the file. Everything else in the project is storage agnostic and does not need to be touched.</p>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p>
+<p>If you selected an AI coding agent when creating the project, you do not have to write the adapter by hand. A <strong>storage adapter skill</strong> is placed in the folder for that agent (<code>.claude/skills/</code> for Claude Code, or <code>.agents/skills/</code> for GitHub Copilot, OpenAI Codex, Cursor, and others). Tell your agent which service you want to use and ask it to implement the storage adapter, and it will follow that skill to fill in <code>scripts/snapshot-storage.ts</code> and add the matching values to <code>vrt.config.ts</code>.</p>
+</div>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title"><svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p>
+<p>Secrets such as passwords and access keys must never be written into <code>vrt.config.ts</code>, because that file is committed to your repository. Read them from environment variables, and keep them in the git-ignored <code>.env</code> file.</p>
+</div>
+<h2 id="working-with-editors">Working With Editors</h2>
+<p><strong>VS Code with the <a href="https://playwright.dev/docs/getting-started-vscode" target="_blank" rel="noopener noreferrer">Playwright extension</a> is the recommended environment.</strong> Every story appears as its own entry in the Test Explorer, so you can run the visual regression test for a single story, watch the diff, and update just that baseline, all from the GUI.</p>
+<p><strong>Visual Studio</strong> can open the project (that is what <code>StoryVRT.esproj</code> is for) and can trigger a test run or a baseline update, but the finer-grained operations, and the baseline sync in particular, are done with <code>npm</code> commands in a terminal.</p>
+<h2 id="running-on-cicd">Running On CI/CD</h2>
+<p>Nothing about the VRT project is specific to a developer machine, but keep the following in mind when you wire it into a pipeline.</p>
+<ul>
+<li>The Blazing Story app under test must be running and reachable from the job, and <code>VRT_BASE_URL</code> should point at it.</li>
+<li>The job needs to be authenticated to the storage service in the same way a developer machine is, through that service's CLI or its ambient credentials. The baselines are then downloaded automatically before the tests run.</li>
+<li>Use the same container as your local runs, so that the screenshots being compared were rendered by the same browser, on the same operating system, with the same fonts.</li>
+<li>Publish <code>playwright-report/</code> as a build artifact, so a failing run can be inspected visually.</li>
+</ul>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="javascript-api">Blazing Story JavaScript API</a>, the browser API this VRT project is built on, which you can also use to automate the Blazing Story app in other ways.</li>
+</ul>
+</article>
+                <nav class="doc-pagination" aria-label="Documentation pages"><a class="doc-pagination-link previous" href="addons/creating-addons"><span class="doc-pagination-label">Previous</span>
+                <span class="doc-pagination-title">Creating Custom Addons</span></a><a class="doc-pagination-link next" href="mcp-server-feature"><span class="doc-pagination-label">Next</span>
+                <span class="doc-pagination-title">MCP Server Feature</span></a></nav></div>
+
+        <nav class="doc-toc"><div class="doc-toc-title">On this page</div>
+        <ul><li class="toc-level-2"><a href="visual-regression-testing#summary">Summary</a></li><li class="toc-level-2"><a href="visual-regression-testing#requirements">Requirements</a></li><li class="toc-level-2"><a href="visual-regression-testing#how-it-works">How It Works</a></li><li class="toc-level-2"><a href="visual-regression-testing#preparation">Preparation</a></li><li class="toc-level-2"><a href="visual-regression-testing#choosing-where-the-baseline-screenshots-live">Choosing Where The Baseline Screenshots Live</a></li><li class="toc-level-2"><a href="visual-regression-testing#creating-a-vrt-project">Creating A VRT Project</a></li><li class="toc-level-3"><a href="visual-regression-testing#on-visual-studio">On Visual Studio</a></li><li class="toc-level-3"><a href="visual-regression-testing#on-dotnet-cli">On dotnet CLI</a></li><li class="toc-level-3"><a href="visual-regression-testing#what-you-get">What You Get</a></li><li class="toc-level-2"><a href="visual-regression-testing#setting-up-the-vrt-project">Setting Up The VRT Project</a></li><li class="toc-level-3"><a href="visual-regression-testing#step-1---install-the-npm-packages">Step 1 - Install The npm Packages</a></li><li class="toc-level-3"><a href="visual-regression-testing#step-2---implement-a-custom-storage-adapter-only-for-the-custom-choice">Step 2 - Implement A Custom Storage Adapter (Only For The &quot;Custom&quot; Choice)</a></li><li class="toc-level-3"><a href="visual-regression-testing#step-3---start-the-blazing-story-app">Step 3 - Start The Blazing Story App</a></li><li class="toc-level-2"><a href="visual-regression-testing#running-the-visual-regression-test">Running The Visual Regression Test</a></li><li class="toc-level-3"><a href="visual-regression-testing#the-first-run-capture-the-baselines">The First Run: Capture The Baselines</a></li><li class="toc-level-3"><a href="visual-regression-testing#everyday-runs">Everyday Runs</a></li><li class="toc-level-3"><a href="visual-regression-testing#accepting-an-intentional-change">Accepting An Intentional Change</a></li><li class="toc-level-3"><a href="visual-regression-testing#the-npm-scripts">The npm Scripts</a></li><li class="toc-level-3"><a href="visual-regression-testing#options-of-the-baseline-sync">Options Of The Baseline Sync</a></li><li class="toc-level-2"><a href="visual-regression-testing#running-in-a-dev-container-recommended">Running In A Dev Container (Recommended)</a></li><li class="toc-level-2"><a href="visual-regression-testing#configuration">Configuration</a></li><li class="toc-level-3"><a href="visual-regression-testing#vrtconfigts">vrt.config.ts</a></li><li class="toc-level-3"><a href="visual-regression-testing#environment-variables-and-env">Environment Variables And .env</a></li><li class="toc-level-3"><a href="visual-regression-testing#playwrightconfigts">playwright.config.ts</a></li><li class="toc-level-2"><a href="visual-regression-testing#implementing-a-custom-storage-adapter">Implementing A Custom Storage Adapter</a></li><li class="toc-level-2"><a href="visual-regression-testing#working-with-editors">Working With Editors</a></li><li class="toc-level-2"><a href="visual-regression-testing#running-on-cicd">Running On CI/CD</a></li><li class="toc-level-2"><a href="visual-regression-testing#see-also">See Also</a></li></ul></nav></div></main>
+
+<footer class="site-footer"><div class="site-footer-copyright"><span>Copyright &#xA9; 2026 @jsakamoto.</span>
+        <span>
+            Built with Blazor (.NET 11.0.0-rc.1.26425.128 / X64)
+        </span></div>
+    <div class="site-footer-links"><a href="https://github.com/BlazingStory/docs/blob/main/THIRD-PARTY-NOTICES.txt" target="_blank" rel="noopener noreferrer">Third-Party Notices</a></div></footer>
+        <blazor-focus-on-navigate selector="h1"></blazor-focus-on-navigate>
+<!-- %%-PRERENDERING-END-%% -->
+</div>
+
+    <div id="blazor-error-ui">
+      An unhandled error has occurred.
+      <a href="." class="reload">Reload</a>
+      <span class="dismiss">🗙</span>
+    </div>
+
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script src="brotliloader.min.js" type="module"></script>
+  
+
+</body></html>
