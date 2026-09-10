@@ -9,18 +9,21 @@
     <link rel="icon" href="img/favicon.ico" />
     <meta name="description" content='The clone of "Storybook" for Blazor, a frontend workshop for building UI components and pages in isolation.' />
     <meta property="og:image" content="img/social-preview.png" />
-    <meta http-equiv="Content-Security-Policy" content="
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
       default-src 'none';
       base-uri 'self';
       script-src 'self' 'wasm-unsafe-eval' 'sha256-{importmap}';
       style-src 'self';
       img-src 'self' https://raw.githubusercontent.com https://img.shields.io;
       media-src 'self' https://github.com;
-      connect-src 'self' https://huggingface.co https://*.huggingface.co https://*.hf.co;
+      connect-src 'self' https://huggingface.co https://*.huggingface.co https://*.hf.co https://cdn.jsdelivr.net/npm/@xenova/;
       worker-src 'self' blob:;
       object-src 'none';
       form-action 'self';
-      upgrade-insecure-requests;" />
+      upgrade-insecure-requests;"
+    />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/markdown.css" />
     <link rel="stylesheet" href="css/code-theme.css" />
