@@ -1,0 +1,11 @@
+{
+  "defaultVersion": "v1.0.0-preview.89",
+  "versions": [
+    { "version": "v1.0.0-preview.89", "displayText": { "EN": "Current Version" } },
+    { "version": "v1.0.0-preview.87", "displayText": { "EN": "1.0.0-preview.87 ~ 88" } },
+    { "version": "v1.0.0-preview.83", "displayText": { "EN": "1.0.0-preview.83 ~ 86" } },
+    { "version": "v1.0.0-preview.81", "displayText": { "EN": "1.0.0-preview.81 ~ 82" } },
+    { "version": "v1.0.0-preview.68", "displayText": { "EN": "1.0.0-preview.68 ~ 80" } },
+    { "version": "v1.0.0-preview.67", "displayText": { "EN": "1.0.0-preview.67 or before" } }
+  ]
+}
