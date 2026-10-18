@@ -49,7 +49,7 @@ Or, if you are working on dotnet CLI, you can do that by running the `dotnet new
 dotnet new blazingstoryserver -mcp
 ```
 
-## Migration Your Blazing Story App To Enable The MCP Server Feature
+## Migrate Your Blazing Story App To Enable The MCP Server Feature
 
 To enable the MCP server feature in your existing Blazing Story app, you need to follow these steps:
 
@@ -62,7 +62,7 @@ To enable the MCP server feature in your existing Blazing Story app, you need to
    If you are working on dotnet CLI, you can do that with the following command:
 
    ```shell
-   dotnet add package BlazingStory.MCPServer
+   dotnet add package BlazingStory.McpServer
    ```
 
 3. Add the `AddBlazingStoryMcpServer` method call to the `Program.cs` file of your Blazing Story app project to register the MCP server services in the dependency injection container.
@@ -74,10 +74,11 @@ To enable the MCP server feature in your existing Blazing Story app, you need to
    ...
    var builder = WebApplication.CreateBuilder(args);
    ...
-    // 👇 Add services to the container.
+   // 👇 Add services to the container.
    builder.Services.AddBlazingStoryMcpServer();
    ...
-   ```  
+   ```
+
 4. Add the `MapBlazingStoryMcp` method call to the `app` object in the `Program.cs` file to register the Blazing Story MCP server middleware.
 
    ```csharp title="📄 Program.cs"
@@ -94,6 +95,56 @@ To enable the MCP server feature in your existing Blazing Story app, you need to
 
 ## Usage
 
-The transport type of the MCP server feature of the Blazing Story is **Streamable HTTP** and **SSE**. It doesn't support STDIO transport type for now.
+The transport type of the MCP server feature of the Blazing Story is **Streamable HTTP**. It doesn't support STDIO transport type for now.
 
-Once you have enabled the MCP server feature in your Blazing Story app, you can access the MCP server at the `/mcp/blazingstory` endpoint of your Blazing Story app for Streamable HTTP access, or at the `/mcp/blazingstory/sse` endpoint for SSE access.
+Once you have enabled the MCP server feature in your Blazing Story app, you can access the MCP server at the `/mcp/blazingstory` endpoint of your Blazing Story app.
+
+## HTTP Transport Settings
+
+### Stateless By Default
+
+The HTTP transport of the MCP server is **stateless** by default. The server answers each request on its own and keeps no session between requests. Every tool of the MCP server only reads your catalog, so it doesn't need a session. MCP clients that follow older revisions of the MCP specification also work without a session ID.
+
+> [!NOTE]
+> Before version 1.0.0-preview.95, the HTTP transport was stateful by default, and the server issued a session ID to each client.
+
+### Configure The HTTP Transport
+
+The `AddBlazingStoryMcpServer` method returns an `IMcpServerBuilder` object. To change the settings of the HTTP transport, call the `WithHttpTransport` method on it in the `Program.cs` file.
+
+For example, if your MCP client needs a session, you can turn on the hybrid session mode like below. In this mode, the server issues a session ID to clients that follow older revisions of the MCP specification, and stays stateless for the other clients.
+
+```csharp title="📄 Program.cs"
+...
+// 👇 Add the necessary using directive for the HTTP transport options.
+using ModelContextProtocol.AspNetCore;
+...
+builder.Services.AddBlazingStoryMcpServer()
+    // 👇 Configure the HTTP transport of the MCP server.
+    .WithHttpTransport(options =>
+    {
+        options.SessionMode = HttpServerSessionMode.StatefulForInitializeClients;
+    });
+...
+```
+
+### Enable The Legacy SSE Transport
+
+The legacy SSE transport (the `/mcp/blazingstory/sse` endpoint) is disabled by default. If you still need it, set the `EnableLegacySse` option to `true` together with a stateful session mode. The legacy SSE transport needs a session, so enabling it in the stateless mode throws an exception when the app starts.
+
+```csharp title="📄 Program.cs"
+...
+builder.Services.AddBlazingStoryMcpServer()
+    .WithHttpTransport(options =>
+    {
+        // 👇 The legacy SSE transport needs a stateful session mode.
+        options.SessionMode = HttpServerSessionMode.StatefulForInitializeClients;
+#pragma warning disable MCP9004
+        options.EnableLegacySse = true;
+#pragma warning restore MCP9004
+    });
+...
+```
+
+> [!WARNING]
+> The `EnableLegacySse` option is marked as obsolete, so using it causes the MCP9004 compiler warning. The MCP C# SDK recommends it only for fully trusted clients. Use the Streamable HTTP transport whenever possible.
