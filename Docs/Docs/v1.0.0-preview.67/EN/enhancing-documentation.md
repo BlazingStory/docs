@@ -30,7 +30,7 @@ To add more detailed descriptions of component parameters to the "Docs" pages, w
 
 And next, enable generating an XML documentation file in your UI component library's project file (.csproj).
 
-If you are working on Visual Studio, you can do that by turning on the option `Documentation file - Generate a file containing API documentation" from the property GUI window of the project (You can find that option in the "Build" > "Output" category. You can also find it more easily by searching with the "Documentation file" keyword inside the project property GUI window).
+If you are working on Visual Studio, you can do that by turning on the option "Documentation file - Generate a file containing API documentation" from the property GUI window of the project (You can find that option in the "Build" > "Output" category. You can also find it more easily by searching with the "Documentation file" keyword inside the project property GUI window).
 
 ![](https://raw.githubusercontent.com/jsakamoto/BlazingStory/main/assets/readme-images/configure-xml-doc-comment.png)
 
