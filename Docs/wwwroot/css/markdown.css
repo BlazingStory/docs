@@ -74,6 +74,11 @@
     height: auto;
 }
 
+/* Here, not in a style attribute in the Markdown, because the CSP blocks inline styles. */
+.markdown video {
+    max-width: 800px;
+}
+
 .markdown hr {
     height: 1px;
     margin: 2rem 0;

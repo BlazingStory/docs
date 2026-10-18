@@ -6,7 +6,7 @@ Blzing Story provides a **MCP server** feature that allows Blazing Story to expo
 
 To catch up he power of the Blazing Story's MCP server feature, you can watch the following introduction video.
 
-<video controls width="100%" style={{maxWidth: '800px'}}>
+<video controls width="100%">
   <source src="https://github.com/user-attachments/assets/1e4ced81-8d06-4714-ad89-4b0987d958c9" type="video/mp4" />
   Your browser does not support the video tag.
 </video>

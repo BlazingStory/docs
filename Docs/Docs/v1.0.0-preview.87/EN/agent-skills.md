@@ -7,7 +7,7 @@ Blazing Story publishes **agent skills** that help AI coding assistants generate
 >
 > ➡️ **https://github.com/BlazingStory/agent-skills**
 
-<video controls width="100%" style={{maxWidth: '800px'}}>
+<video controls width="100%">
   <source src="https://github.com/user-attachments/assets/aeea68f9-5ff0-4edf-aa57-6d6725ea88a9" type="video/mp4" />
   Your browser does not support the video tag.
 </video>
