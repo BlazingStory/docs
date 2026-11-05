@@ -27,10 +27,12 @@ MiniLmEmbedder? embedder = null;
 
 try
 {
-    // "--embed" checks that this program and the browser side compute the same vectors.
-    if (options.Embed is { Length: > 0 } textToEmbed)
+    // "--embed" checks that this program and the browser side compute the same vectors, so the text
+    // goes through the same normalization as every chunk of the index and every search query.
+    if (options.Embed is { Length: > 0 } rawTextToEmbed)
     {
         embedder = await CreateEmbedderAsync(modelDir);
+        var textToEmbed = MarkdownChunker.NormalizeForEmbedding(rawTextToEmbed);
         var vector = embedder.Embed(textToEmbed);
         Console.WriteLine($"Text  : {textToEmbed}");
         Console.WriteLine($"Tokens: {embedder.Tokenize(textToEmbed).Count} [{string.Join(", ", embedder.Tokenize(textToEmbed))}]");
