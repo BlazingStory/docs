@@ -31,15 +31,17 @@ export async function initModel(model: string): Promise<void> {
  * them: "Microsoft.ML.Tokenizers", which the build time index generator uses, drops each of them,
  * while the one here keeps each as its own token. Characters such as "<", ">", "=" and "→" are
  * common in this content, so leaving that difference in place would put the search queries in a
- * slightly different embedding space than the index. The counterpart of this lives in
- * "MarkdownChunker.NormalizeForEmbedding" of the index generator, and the two have to keep doing
- * the same thing.
+ * slightly different embedding space than the index. Connector punctuation such as "_" is stripped
+ * too, since the tokenizer here splits a word at it while "Microsoft.ML.Tokenizers" keeps it inside
+ * the word, so "my_component" would get different tokens on each side. The counterpart of this
+ * lives in "MarkdownChunker.NormalizeForEmbedding" of the index generator, and the two have to keep
+ * doing the same thing.
  *
  * @param {string} text - The input text to embed.
  * @returns {Promise<number[]>} A promise that resolves to the embedding vector as an array of numbers.
  */
 export async function embed(text: string): Promise<number[]> {
-    const normalized = text.replace(/\p{S}/gu, ' ').replace(/\s+/g, ' ').trim();
+    const normalized = text.replace(/[\p{S}\p{Pc}]/gu, ' ').replace(/\s+/g, ' ').trim();
     const output = await extractor?.(normalized, { pooling: 'mean', normalize: true });
     return Array.from(output?.data ?? []);
 }

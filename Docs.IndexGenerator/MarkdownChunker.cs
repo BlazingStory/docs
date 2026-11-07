@@ -38,8 +38,8 @@ public static class MarkdownChunker
 
     private static readonly Regex _Whitespace = new(@"\s+", RegexOptions.Compiled);
 
-    /// <summary>Every character of the Unicode symbol categories (Sm, Sc, Sk and So).</summary>
-    private static readonly Regex _Symbols = new(@"\p{S}", RegexOptions.Compiled);
+    /// <summary>Every character of the Unicode symbol categories (Sm, Sc, Sk and So) and of the connector punctuation category (Pc).</summary>
+    private static readonly Regex _Symbols = new(@"[\p{S}\p{Pc}]", RegexOptions.Compiled);
 
     private static readonly MarkdownPipeline _Pipeline = new MarkdownPipelineBuilder()
         .UsePipeTables()
@@ -238,6 +238,13 @@ public static class MarkdownChunker
     /// its own token. Characters such as "&lt;", "&gt;", "=" and "→" are common in this content, so
     /// that difference would show up in most vectors. Removing them on both sides is what keeps the
     /// index and the search queries in the same embedding space.
+    /// <para>
+    /// Connector punctuation, the underscore above all, is removed for a similar reason: here it
+    /// does not end a word, so "my_component" becomes "my" + "##_" + "##com" + "##pone" + "##nt",
+    /// while transformers.js splits the word at it and gets "my" + "_" + "component". Names such
+    /// as "VRT_BASE_URL" are common in this content, so they are turned into separate words on
+    /// both sides instead.
+    /// </para>
     /// <para>
     /// The counterpart of this method lives in "wwwroot/js/search-embeddings.js" of the app, and the
     /// two have to keep doing the same thing.
