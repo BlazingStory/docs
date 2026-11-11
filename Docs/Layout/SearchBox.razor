@@ -222,12 +222,13 @@
         await this.SearchAsync();
     }
 
+    /// <summary>
+    /// Leaves the text and its results in place, so that coming back to the box shows them again
+    /// without searching, since <see cref="SearchAsync"/> skips text it has already applied.
+    /// </summary>
     private void Select(SearchResult result)
     {
         this._isOpen = false;
-        this._text = "";
-        this._appliedText = "";
-        this._results = [];
         this.NavigationManager.NavigateTo(result.Url);
     }
 
