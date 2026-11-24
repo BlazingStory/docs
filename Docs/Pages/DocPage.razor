@@ -111,10 +111,8 @@ this._defaultVersion);
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var module = await this.GetJsModuleAsync();
-        await module.InvokeVoidAsync("highlightCode");
-
         if (!this._scrollPending) return;
+        var module = await this.GetJsModuleAsync();
 
         // Opening another document renders this component once while its Markdown is still being
         // fetched, so the heading a link points at may not be in the page yet. The request stays
