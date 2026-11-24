@@ -3,6 +3,7 @@ using Markdig;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
+using PrismazorHighlighter = Toolbelt.Blazor.Prismazor.PrismazorHighlighter;
 
 namespace BlazingStory.Docs.MarkdownRendering;
 
@@ -54,8 +55,19 @@ internal sealed partial class TitledCodeBlockRenderer : CodeBlockRenderer
             renderer.Write("</div>");
         }
 
-        base.Write(renderer, obj);
+        WriteHighlightedCode(renderer, obj);
         renderer.WriteLine("</div>");
+    }
+
+    // Highlighting here, not in the browser, is what puts the colors into the prerendered HTML.
+    private static void WriteHighlightedCode(HtmlRenderer renderer, CodeBlock codeBlock)
+    {
+        var grammar = CodeLanguages.Resolve((codeBlock as FencedCodeBlock)?.Info);
+        var languageClass = "language-" + grammar.Id;
+
+        renderer.Write("<pre class=\"").Write(languageClass).Write("\"><code class=\"").Write(languageClass).Write("\">");
+        renderer.Write(PrismazorHighlighter.Highlight(codeBlock.Lines.ToString(), grammar));
+        renderer.WriteLine("</code></pre>");
     }
 
     private static string? GetTitle(CodeBlock codeBlock)

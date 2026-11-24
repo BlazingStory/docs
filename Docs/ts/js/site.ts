@@ -1,4 +1,3 @@
-import { Prism } from '../lib/prism/prism.js';
 import type { Theme } from '../types/blazing-story-docs.d.ts';
 import type { DotNetObjectReference } from '../types/blazor.d.ts';
 
@@ -37,5 +36,3 @@ export const scrollToAnchor = (id: string | null | undefined) => {
     element.scrollIntoView();
     return true;
 };
-
-export const highlightCode = () => Prism.highlightAllUnder(document.body);

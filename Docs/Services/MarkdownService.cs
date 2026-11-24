@@ -40,7 +40,6 @@ public sealed class MarkdownService(HttpClient httpClient)
         var markdown = StripFrontMatter(await response.Content.ReadAsStringAsync());
         var document = Markdig.Markdown.Parse(markdown, _Pipeline);
 
-        DocumentPostProcessor.NormalizeCodeBlockLanguages(document);
         DocumentPostProcessor.RewriteLinks(document, version, defaultVersion, slug);
 
         var content = new DocContent

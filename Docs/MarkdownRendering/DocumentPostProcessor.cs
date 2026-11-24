@@ -9,33 +9,11 @@ namespace BlazingStory.Docs.MarkdownRendering;
 
 /// <summary>
 /// Adjusts a parsed Markdown document so that it can be rendered inside the single page
-/// application: code fence languages are normalized and every relative link and image path
-/// is rewritten to an application URL.
+/// application: every relative link and image path is rewritten to an application URL.
 /// </summary>
 public static class DocumentPostProcessor
 {
-    private static readonly Dictionary<string, string> _LanguageAliases = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["cs"] = "csharp",
-        ["sh"] = "bash",
-        ["shell"] = "bash",
-        ["razor"] = "cshtml",
-        ["xml"] = "markup",
-        ["html"] = "markup",
-    };
-
     private static readonly string[] _AbsoluteUrlPrefixes = ["http://", "https://", "//", "mailto:", "tel:", "data:", "/"];
-
-    public static void NormalizeCodeBlockLanguages(MarkdownDocument document)
-    {
-        foreach (var codeBlock in document.Descendants<FencedCodeBlock>())
-        {
-            if (codeBlock.Info is { Length: > 0 } info && _LanguageAliases.TryGetValue(info, out var normalized))
-            {
-                codeBlock.Info = normalized;
-            }
-        }
-    }
 
     public static void RewriteLinks(MarkdownDocument document, string version, string defaultVersion, string slug)
     {

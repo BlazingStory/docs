@@ -22,6 +22,7 @@
     <PackageReference Include="Markdig" Version="1.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="11.0.0" />
     <PackageReference Include="PublishSPAforGitHubPages.Build" Version="3.0.3" />
+    <PackageReference Include="Toolbelt.Blazor.Prismazor" Version="1.0.0" />
     <PackageReference Include="Toolbelt.Blazor.WebAssembly.ExtensibleGateway" Version="11.0.0" PrivateAssets="all" />
     <PackageReference Include="Toolbelt.Blazor.WebAssembly.ExtensibleGateway.ImportMapExtension" Version="11.0.0" PrivateAssets="all" />
   </ItemGroup>
@@ -45,20 +46,13 @@
 
   <Import Project="..\jsmodules\transformers\TransformersBundle.targets" />
 
-  <!-- Prism bundle, for the syntax highlighting of the code blocks. -->
-  <PropertyGroup>
-    <PrismBundleJs>wwwroot\lib\prism\prism.js</PrismBundleJs>
-  </PropertyGroup>
-
-  <Import Project="..\jsmodules\prism\PrismBundle.targets" />
-
-  <!-- "wwwroot/js/*.js", compiled by "tsc" from "ts/". Needs both bundles above in place first. -->
+  <!-- "wwwroot/js/*.js", compiled by "tsc" from "ts/". Needs the bundle above in place first. -->
   <ItemGroup>
     <TypeScriptInput Include="ts\**\*.ts;tsconfig.json;package.json;package-lock.json" />
     <TypeScriptModule Include="ts\js\**\*.ts" Exclude="ts\js\**\*.d.ts" />
   </ItemGroup>
 
-  <Target Name="CompileTypeScript" BeforeTargets="Restore;Build" DependsOnTargets="BuildTransformersBundle;BuildPrismBundle" Inputs="@(TypeScriptInput)" Outputs="@(TypeScriptModule -> 'wwwroot\js\%(RecursiveDir)%(Filename).js')">
+  <Target Name="CompileTypeScript" BeforeTargets="Restore;Build" DependsOnTargets="BuildTransformersBundle" Inputs="@(TypeScriptInput)" Outputs="@(TypeScriptModule -> 'wwwroot\js\%(RecursiveDir)%(Filename).js')">
     <Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="!Exists('$(MSBuildProjectDirectory)\node_modules')" />
     <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
