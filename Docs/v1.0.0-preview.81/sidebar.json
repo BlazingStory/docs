@@ -1,0 +1,67 @@
+{
+  "defaultSlug": "overview",
+  "sections": [
+    {
+      "displayText": { "EN": "📖 Introduction" },
+      "items": [
+        { "slug": "overview", "displayText": { "EN": "Overview" } },
+        { "slug": "getting-started", "displayText": { "EN": "Getting Started" } },
+        { "slug": "structure-of-stories", "displayText": { "EN": "Structure Of \"stories\"" } }
+      ]
+    },
+    {
+      "displayText": { "EN": "📚 Documentation" },
+      "items": [
+        { "slug": "enhancing-documentation", "displayText": { "EN": "Enhancing Documentation" } },
+        { "slug": "custom-pages-and-markdown", "displayText": { "EN": "Custom Pages & Markdown" } }
+      ]
+    },
+    {
+      "displayText": { "EN": "⚙️ Configuration" },
+      "items": [
+        { "slug": "configure-layouts", "displayText": { "EN": "Configure Layouts" } },
+        { "slug": "configure-arguments", "displayText": { "EN": "Configure Arguments" } },
+        { "slug": "sorting-navigation-tree-items", "displayText": { "EN": "Sorting Navigation Tree Items" } },
+        { "slug": "configure-pathbase", "displayText": { "EN": "Configure Path Base" } },
+        { "slug": "include-custom-css-and-js", "displayText": { "EN": "Include Custom CSS And JS" } }
+      ]
+    },
+    {
+      "displayText": { "EN": "🎨 Appearance" },
+      "items": [
+        { "slug": "prefers-color-scheme", "displayText": { "EN": "Prefers Color Scheme" } },
+        { "slug": "customize-title-and-brand-logo", "displayText": { "EN": "Customize Title And Logo" } }
+      ]
+    },
+    {
+      "displayText": { "EN": "🧩 Addons" },
+      "items": [
+        { "slug": "addons/overview", "displayText": { "EN": "Overview" } },
+        { "slug": "addons/creating-addons", "displayText": { "EN": "Creating Custom Addons" } }
+      ]
+    },
+    {
+      "displayText": { "EN": "🤖 AI Integration" },
+      "items": [
+        { "slug": "mcp-server-feature", "displayText": { "EN": "MCP Server Feature" } },
+        { "slug": "agent-skills", "displayText": { "EN": "Agent Skills" } }
+      ]
+    },
+    {
+      "displayText": { "EN": "🛠️ Development" },
+      "items": [
+        { "slug": "hot-reloading", "displayText": { "EN": "Hot Reloading [Preview]" } }
+      ]
+    },
+    {
+      "displayText": { "EN": "ℹ️ General Info" },
+      "items": [
+        { "slug": "disclaimer", "displayText": { "EN": "🙇 Disclaimer" } },
+        { "slug": "attention", "displayText": { "EN": "⚠️ Attention" } },
+        { "slug": "faq", "displayText": { "EN": "FAQ" } },
+        { "slug": "release-notes", "displayText": { "EN": "Release Notes" } },
+        { "slug": "license-and-3rd-party-notice", "displayText": { "EN": "License & 3rd Party Notice" } }
+      ]
+    }
+  ]
+}
