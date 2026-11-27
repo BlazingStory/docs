@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using BlazingStory.Docs;
 using BlazingStory.Docs.Services;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -23,4 +24,5 @@ static void ConfigureServices(IServiceCollection services, string baseAddress)
     services.AddSingleton<EmbeddingService>();
     services.AddScoped<SearchIndexService>();
     services.AddScoped<ThemeService>();
+    services.AddHotKeys2();
 }

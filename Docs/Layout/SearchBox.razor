@@ -1,16 +1,24 @@
-@implements IDisposable
+@using Toolbelt.Blazor.HotKeys2
+@implements IAsyncDisposable
 @inject SearchIndexService SearchIndexService
 @inject DocsUiState UiState
 @inject NavigationManager NavigationManager
+@inject HotKeys HotKeys
+@inject IJSRuntime JSRuntime
 
 <div class="search-box @(this.IsInteractive ? "" : "search-box-loading")" @onfocusout="this.OnFocusOut">
     <input type="search" class="search-box-input" placeholder="Search docs" aria-label="Search the documentation"
+           aria-keyshortcuts="Control+K Meta+K /" @ref="this._input"
            autocomplete="off" value="@this._text" disabled="@(!this.IsInteractive)"
            @onfocus="this.OnFocus" @oninput="this.OnInputAsync" @onkeydown="this.OnKeyDownAsync" />
 
     @if (!this.IsInteractive)
     {
         <span class="search-box-spinner" aria-hidden="true"></span>
+    }
+    else if (this._shortcutHint is { } shortcutHint && this._text.Length == 0)
+    {
+        <kbd class="search-box-shortcut" aria-hidden="true">@shortcutHint</kbd>
     }
 
     @if (this._isOpen)
@@ -55,6 +63,18 @@
     private static readonly TimeSpan WarmUpDelay = TimeSpan.FromSeconds(1);
 
     private string _text = "";
+
+    private ElementReference _input;
+
+    private HotKeysContext? _hotKeysContext;
+
+    private IJSObjectReference? _jsModule;
+
+    /// <summary>
+    /// The keyboard shortcut shown inside the empty search box. It stays null until the platform
+    /// is known, so that a Mac never shows "Ctrl K" for a moment before it switches to "⌘ K".
+    /// </summary>
+    private string? _shortcutHint;
 
     private bool _isOpen;
 
@@ -113,7 +133,35 @@
     /// how the first page load and every version switch alike reach one. Static prerendering never
     /// gets here, and must not, since the warm-up needs a browser to run the model in.
     /// </summary>
-    protected override void OnAfterRender(bool firstRender) => this.ScheduleWarmUp();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        this.ScheduleWarmUp();
+        if (!firstRender) return;
+
+        // Ctrl/Cmd + K works even inside a text box, while "/" has to stay typeable there.
+        // Only the lowercase "k" is registered, since Ctrl + Shift + K opens the web console of Firefox.
+        var description = "Focus the search box";
+        this._hotKeysContext = this.HotKeys.CreateContext()
+            .Add(ModKey.Ctrl, Key.k, this.FocusAsync, new() { Description = description, Exclude = Exclude.None })
+            .Add(ModKey.Meta, Key.k, this.FocusAsync, new() { Description = description, Exclude = Exclude.None })
+            .Add(ModKey.None, Key.Slash, this.FocusAsync, new() { Description = description });
+
+        var module = await this.GetJsModuleAsync();
+        this._shortcutHint = await module.InvokeAsync<bool>("isApplePlatform") ? "⌘ K" : "Ctrl K";
+        this.StateHasChanged();
+    }
+
+    private async ValueTask<IJSObjectReference> GetJsModuleAsync() => this._jsModule ??= await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
+
+    /// <summary>
+    /// Selecting the text as well lets the visitor type a new search right away, while the
+    /// previous one stays a single arrow key away.
+    /// </summary>
+    private async ValueTask FocusAsync()
+    {
+        var module = await this.GetJsModuleAsync();
+        await module.InvokeVoidAsync("focusAndSelect", this._input);
+    }
 
     /// <summary>
     /// Starts loading the model and the index of the current version in the background, so that the
@@ -248,11 +296,13 @@
         this.InvokeAsync(this.StateHasChanged);
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         this.UiState.Changed -= this.OnUiStateChanged;
         this._debounceCancellation?.Cancel();
         this._debounceCancellation?.Dispose();
         this._warmUpWait?.Dispose();
+        if (this._hotKeysContext is not null) await this._hotKeysContext.DisposeAsync();
+        if (this._jsModule is not null) await this._jsModule.DisposeAsync();
     }
 }

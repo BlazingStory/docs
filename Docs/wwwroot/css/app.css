@@ -181,11 +181,12 @@ button {
     text-decoration: none;
 }
 
+/* Takes the free room of the navbar, which is what the search box grows into. */
 .navbar-items {
     display: flex;
+    flex: 1;
     align-items: center;
     gap: .5rem;
-    margin-left: auto;
 }
 
 .navbar-link {
@@ -506,12 +507,21 @@ button {
 
 /* ---------------------------------------------------------------- search box */
 
+/*
+ * Grows from 9rem into whatever room the navbar has left, so it never squeezes "Current Version"
+ * onto two lines. "margin-left: auto" rather than "justify-content: flex-end" keeps an overflow off the brand.
+ */
 .search-box {
     position: relative;
+    margin-left: auto;
+    flex: 1 1 9rem;
+    min-width: 9rem;
+    max-width: 20rem;
+    container-type: inline-size;
 }
 
 .search-box-input {
-    width: 14rem;
+    width: 100%;
     padding: .3rem .75rem;
     border: 1px solid var(--bs-border);
     border-radius: var(--bs-radius);
@@ -543,6 +553,32 @@ button {
     border-top-color: var(--bs-color-primary);
     border-radius: 50%;
     animation: search-box-spin .7s linear infinite;
+}
+
+.search-box-shortcut {
+    position: absolute;
+    top: 50%;
+    right: .5rem;
+    transform: translateY(-50%);
+    padding: .05rem .4rem;
+    border: 1px solid var(--bs-border);
+    border-radius: 4px;
+    color: var(--bs-text-secondary);
+    font-family: inherit;
+    font-size: .75rem;
+    line-height: 1.4;
+    pointer-events: none;
+}
+
+.search-box:focus-within .search-box-shortcut {
+    display: none;
+}
+
+/* Too narrow a box would put the hint over the placeholder. */
+@container (max-width: 12rem) {
+    .search-box-shortcut {
+        display: none;
+    }
 }
 
 @keyframes search-box-spin {
@@ -669,10 +705,6 @@ button {
 
     .navbar-link {
         display: none;
-    }
-
-    .search-box-input {
-        width: 9rem;
     }
 
     /* There is no room for a 26rem panel next to a narrow navbar, so it spans the viewport instead. */

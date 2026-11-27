@@ -21,6 +21,14 @@ export const initializeTheme = (dotNetReference: DotNetObjectReference) => {
     return getTheme();
 };
 
+// "navigator.platform" is deprecated, but "navigator.userAgentData" that replaces it is Chromium only.
+export const isApplePlatform = () => /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+
+export const focusAndSelect = (element: HTMLInputElement) => {
+    element.focus();
+    element.select();
+};
+
 // Returns whether the request could be carried out. A document that is still being fetched
 // has no heading in the page yet, so the caller has to ask again after the next render
 // instead of giving up and leaving the visitor at the top of the page.
