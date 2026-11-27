@@ -62,13 +62,14 @@
     /// <summary>How long to leave the loading of the page itself alone before the warm-up starts.</summary>
     private static readonly TimeSpan WarmUpDelay = TimeSpan.FromSeconds(1);
 
+    /// <summary>The parts of "navigator.platform" that mean a keyboard with a Cmd key instead of Ctrl.</summary>
+    private static readonly string[] ApplePlatforms = ["Mac", "iPhone", "iPad", "iPod"];
+
     private string _text = "";
 
     private ElementReference _input;
 
     private HotKeysContext? _hotKeysContext;
-
-    private IJSObjectReference? _jsModule;
 
     /// <summary>
     /// The keyboard shortcut shown inside the empty search box. It stays null until the platform
@@ -146,12 +147,10 @@
             .Add(ModKey.Meta, Key.k, this.FocusAsync, new() { Description = description, Exclude = Exclude.None })
             .Add(ModKey.None, Key.Slash, this.FocusAsync, new() { Description = description });
 
-        var module = await this.GetJsModuleAsync();
-        this._shortcutHint = await module.InvokeAsync<bool>("isApplePlatform") ? "⌘ K" : "Ctrl K";
+        var platform = await this.JSRuntime.GetValueAsync<string>("navigator.platform");
+        this._shortcutHint = ApplePlatforms.Any(platform.Contains) ? "⌘ K" : "Ctrl K";
         this.StateHasChanged();
     }
-
-    private async ValueTask<IJSObjectReference> GetJsModuleAsync() => this._jsModule ??= await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
 
     /// <summary>
     /// Selecting the text as well lets the visitor type a new search right away, while the
@@ -159,8 +158,10 @@
     /// </summary>
     private async ValueTask FocusAsync()
     {
-        var module = await this.GetJsModuleAsync();
-        await module.InvokeVoidAsync("focusAndSelect", this._input);
+        await this._input.FocusAsync();
+        // The input is the focused element by now. "HTMLInputElement.prototype.select.call" fails,
+        // since .NET 10 resolves an identifier only through objects, and HTMLInputElement is a function.
+        await this.JSRuntime.InvokeVoidAsync("document.activeElement.select");
     }
 
     /// <summary>
@@ -302,7 +303,5 @@
         this._debounceCancellation?.Cancel();
         this._debounceCancellation?.Dispose();
         this._warmUpWait?.Dispose();
-        if (this._hotKeysContext is not null) await this._hotKeysContext.DisposeAsync();
-        if (this._jsModule is not null) await this._jsModule.DisposeAsync();
-    }
+        if (this._hotKeysContext is not null) await this._hotKeysContext.DisposeAsync();    }
 }
