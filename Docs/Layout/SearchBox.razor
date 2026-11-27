@@ -143,9 +143,9 @@
         // Only the lowercase "k" is registered, since Ctrl + Shift + K opens the web console of Firefox.
         var description = "Focus the search box";
         this._hotKeysContext = this.HotKeys.CreateContext()
-            .Add(ModKey.Ctrl, Key.k, this.FocusAsync, new() { Description = description, Exclude = Exclude.None })
-            .Add(ModKey.Meta, Key.k, this.FocusAsync, new() { Description = description, Exclude = Exclude.None })
-            .Add(ModKey.None, Key.Slash, this.FocusAsync, new() { Description = description });
+            .Add(ModCode.Ctrl, Code.K, this.FocusAsync, new() { Description = description, Exclude = Exclude.None })
+            .Add(ModCode.Meta, Code.K, this.FocusAsync, new() { Description = description, Exclude = Exclude.None })
+            .Add(ModCode.None, Code.Slash, this.FocusAsync, new() { Description = description });
 
         var platform = await this.JSRuntime.GetValueAsync<string>("navigator.platform");
         this._shortcutHint = ApplePlatforms.Any(platform.Contains) ? "⌘ K" : "Ctrl K";
@@ -303,5 +303,6 @@
         this._debounceCancellation?.Cancel();
         this._debounceCancellation?.Dispose();
         this._warmUpWait?.Dispose();
-        if (this._hotKeysContext is not null) await this._hotKeysContext.DisposeAsync();    }
+        if (this._hotKeysContext is not null) await this._hotKeysContext.DisposeAsync();
+    }
 }
